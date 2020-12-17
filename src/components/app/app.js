@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {useEffect} from 'react';
 import styled from 'styled-components';
 import g from '../../globals.js';
 import TypeGame from '../game/game.js';
@@ -12,9 +12,9 @@ const Main = styled.main`
 	background-color: ${g.bgcolor}; /* ??? */
 `
 
-class App extends Component {
+const App = () => {
 
-	componentDidMount() {
+	useEffect(() => {
 		document.body.addEventListener('mousedown', function() {
 			document.body.classList.add('no-outline');
 		});
@@ -24,17 +24,16 @@ class App extends Component {
 				document.body.classList.remove('no-outline');
 			}
 		});
-	}
+	});
 
-	render() {
-		return(
-			<>
-				<Main>
-					<TypeGame />
-				</Main>
-			</>
-		);
-	}
+	return(
+		<>
+			<Main>
+				<TypeGame />
+			</Main>
+		</>
+	);
+
 } 
 
 export default App;

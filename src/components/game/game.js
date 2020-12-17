@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import styled from 'styled-components';
 import g from '../../globals.js';
 import words from '../../assets/game/words.js';
@@ -10,7 +10,7 @@ const TypeTestWrapper = styled.div`
   justify-content: center;
   width: 100%;
   min-height: 500px;
-  border: 2px solid #222;
+  /* border: 2px solid ${props => props.focused ? '#0f0' : '#f00'}; */
   margin: 0 auto;
   font-family: 'Roboto Mono', monospace;
   color: #fff;
@@ -27,7 +27,8 @@ const TypeTestWrapper = styled.div`
 `
 
 const Text = styled.div`
-
+  color: ${props => props.focused ? '#fff' : 'transparent'};
+  text-shadow: ${props => props.focused ? 'none' : '0 0 0.4rem #fff'};
 `
 
 const StyledInput = styled.input`
@@ -35,25 +36,21 @@ const StyledInput = styled.input`
 `
 
 const Input = () => {
-  let textInput = null;
+  let textInput = useRef(null);
   useEffect(() => {
-    textInput.focus();
+    textInput.current.focus();
   });
 
   return(
     <StyledInput
       type="text"
-      id="hidden-input"
       aria-label="Type test input"
-      ref={(input) => {
-        textInput = input;
-      }}
+      ref={textInput}
       onBlur={() => {
-        setInterval(() => {
-          textInput.focus();}, 50);
+        setInterval(() => {textInput.current.focus()}, 100);        
       }}
       onChange={() => {
-        console.log(textInput.value); // gör nått vettigt här
+        console.log(textInput.current.value); // gör nått vettigt här
       }}
     />
   );
@@ -69,14 +66,25 @@ let wordArr = getWord(words);
 
 const TypeTest = () => {
 
+  /* Initialize state to keep track of whether document (page) 
+     or any element inside it is focused */
+  const [documentFocused, checkDocumentFocus] = useState(false);
+
+  // Set how often component checks if document is focused
+  const FOCUS_CHECK_INTERVAL = 100;
+
+  useEffect(() => {
+    setInterval(() => {
+      checkDocumentFocus(document.hasFocus());
+    }, FOCUS_CHECK_INTERVAL);
+  });
+  
   return(
-    <TypeTestWrapper>
-      <Text>
-        {
-          wordArr.map((letter, i) => {
-            return <span key={i}>{letter}</span>
-          })
-        }
+    <TypeTestWrapper focused={documentFocused}>
+      <Text focused={documentFocused}>
+        {wordArr.map((letter, i) => {
+          return <span key={i}>{letter}</span>
+        })}
       </Text>
       <Input />
     </TypeTestWrapper>
