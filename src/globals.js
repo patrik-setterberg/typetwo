@@ -21,6 +21,8 @@ export default g;
 const GlobalStyle = createGlobalStyle`
 	:root {
     --default-padding: 1.5rem;
+    
+    --default-timing: cubic-bezier(0.78, 0.2, 0.05, 1.0);
 	}
 
   * {
