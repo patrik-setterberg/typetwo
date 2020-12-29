@@ -188,8 +188,26 @@ const Text = (props) => {
 const [rowArr, setRowArr] = useState(props.rows);
 
   useEffect(() => {
-    setRowArr(props.rows);
-  }, [props.rows]);
+    const anotherHandleKeypress = (event) => {
+      
+      if (event.keyCode === 13) {
+
+        console.log(props.rows[0][0]);
+
+        props.myFunc();
+        setRowArr(props.rows);
+
+        console.log(props.rows[0][0]);
+      }
+    };
+    window.addEventListener('keypress', anotherHandleKeypress);
+
+    return () => {
+      window.removeEventListener('keypress', anotherHandleKeypress);
+    }
+
+  }, [rowArr]);
+
 
   return (
     <TextWrapper focused={props.focused}>
@@ -230,9 +248,24 @@ const TypeTest = () => {
 
   const [rowsArrState, setRowsArrState] = useState(rowsArr);
 
+  function shiftAndPush() {
+    let tempArr = rowsArrState;
+    tempArr.shift();
+    tempArr.push(loadRow(words));
+    setRowsArrState(tempArr);
+  }
+
   /* Initialize state to keep track of whether document (page)
      or any element inside it is focused */
   const [documentFocused, setDocumentFocus] = useState(false);
+
+
+  // This is what actually made it work, somehow
+  const [randomState, setRandomState] = useState(false);
+
+  function toggleRandomState() {
+    setRandomState((randomState) => !randomState);
+  }
 
   // Set how often component checks if document is focused
   const FOCUS_CHECK_INTERVAL = 66;
@@ -271,27 +304,18 @@ const TypeTest = () => {
         console.log('space');
       }
 
-      // handle Enter maybe temp
-      if (event.keyCode === 13) {
-
-        rowsArr.shift();
-        rowsArr.push(loadRow(words));
-
-        console.log(rowsArr);
-        console.log(currentWord);
-      }
-
     
       console.log(`playing is ${playing}`);
       
       if (playing === 0) {
         if (/[a-z]/i.test(event.key)) {
           console.log('START PLAYING');
-          startPlaying();          
+          startPlaying();
         }
       }
-      
-        
+  
+      // This is what actually made it work, somehow
+      toggleRandomState();
 
     };
     window.addEventListener('keypress', handleKeypress);
@@ -303,12 +327,15 @@ const TypeTest = () => {
   }, []);
 
 
+
+
   return(
     <TypeTestWrapper focused={documentFocused}>
       <Text 
         focused={documentFocused}
         currentWord={rowsArr[0][currentWord]}
-        rows={rowsArr}
+        rows={rowsArrState}
+        myFunc={shiftAndPush}
         />
       <Input
         currentWord={rowsArr[0][currentWord]}
