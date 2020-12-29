@@ -6,7 +6,6 @@ import words from '../../assets/game/words.js';
 const TypeTestWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
   width: 100%;
   min-height: 500px;
@@ -15,10 +14,6 @@ const TypeTestWrapper = styled.div`
   font-family: 'Roboto Mono', monospace;
   color: #fff;
   font-size: 1.5rem;
-
-  & > div:last-of-type { // TEMP
-    align-self: flex-start; // TEMP
-  }  // TEMP
 
   @media ${g.medium} {
     width: 90vw;
@@ -30,34 +25,58 @@ const TypeTestWrapper = styled.div`
 
 `
 
-const Text = styled.div`
-  font-size: 1.3rem;
-  color: ${props => props.focused ? '#fff' : 'transparent'};
-  text-shadow: ${props => props.focused ? 'none' : '0 0 0.4rem #fff'};
-  transition: color 0.225s ease, text-shadow 0.225s ease;
-
-  & > span {
-    display: inline-block;
-    line-height: 1.6;
-  }
+const StyledRow = styled.span`
+  display: block;
 `
 
-// Retrieves a random word from imported array of words, return array of letters
+const Row = (props) => {
+
+  return (
+    <StyledRow className="row">
+      {props.children}
+    </StyledRow>
+  );
+}
+
+const StyledWord = styled.span`
+
+`
+
+const Word = (props) => {
+
+  return (
+    <StyledWord className="word">
+      {props.children}
+    </StyledWord>
+  );
+}
+
+const StyledLetter = styled.span`
+
+`
+
+const Letter = (props) => {
+
+  return (
+    <StyledLetter className="letter">
+      {props.children}
+    </StyledLetter>
+  );
+}
+
+
+// Retrieves a random word from array of words, return array of letters
 const getWord = (words) => {
   return words[Math.floor(Math.random() * words.length)].split('');
 }
 
-const compareInput = (word, str) => {
-  str = str.replace(/[^a-zA-Z-' ]/g, "").toLowerCase().replace(/\s+/g, " ").trim().split('');
-  console.log(str);
-  console.log(word);
+const compareInput = (word, inputStr) => {
+  let inputArr = inputStr.trim().split('');
+
+  // ehhhhhhh
+  console.log(`input is ${inputArr.toString()}`);
+  console.log(`currentWord is ${word.toString()}`);
 }
-
-const WORD_COUNT = 80;
-
-let wordsArr = Array.from(Array(WORD_COUNT)).map((_) => {
-  return getWord(words);
-});
 
 const StyledInput = styled.input`
   margin-top: 1rem;
@@ -67,7 +86,7 @@ const StyledInput = styled.input`
   width: 50%;
   padding: 0.7rem 0.6rem;
   border-radius: 0.6rem;
-  align-self: flex-start;
+  
   opacity: ${props => props.focused ? '1' : '0.5'};
   transition: opacity 0.225s ease;
 
@@ -78,12 +97,16 @@ const StyledInput = styled.input`
 
 const Input = (props) => {
   let textInput = useRef(null);
-
+  let focusTimer = null;
   useEffect(() => {
     textInput.current.focus();
   });
 
-  
+  function focusInput(elem) {
+    elem.current.focus();
+    console.log('focusn');
+  }
+
 
   return(
     <StyledInput
@@ -96,30 +119,116 @@ const Input = (props) => {
           (props.playing ? 'Test paused, focus to resume' : 'Click document to focus')
       }
       onChange={(e) => {
-        let value = e.target.value.replace(/[^a-zA-Z1-9-' ]/g, "").replace(/\s+/g, " ").trim();
-        compareInput(wordsArr[props.currentWord], value);
-        
+        // filter input
+        let value = e.target.value.replace(/[^a-zA-Z0-9-.,'!? ]/g, "").replace(/\s+/g, " ");
+        e.target.value = value;
+
+        // do processing
+        compareInput(props.currentWord, value);
       }}
 
       aria-label="Type test input"
       ref={textInput}
       onBlur={() => {
-        setInterval(() => {textInput.current.focus()}, 100);
+        if (props.playing === true) {
+          focusTimer = window.setInterval(focusInput(textInput), 100);
+        }
+      }}
+      onFocus={() => {
+        window.clearInterval(focusTimer);
       }}
     />
   );
 }
 
+let usedWords = [];
+
+const ROW_COUNT = 5;
+const WORDS_PER_ROW = 8;
+
+const loadRow = (wordArr) => {
+
+  let rowArr = [];
+
+  while (rowArr.length < WORDS_PER_ROW) {
+    let word = getWord(wordArr);
+    if (!usedWords.includes(word)) {
+      rowArr.push(word);
+      usedWords.push(word);
+    }
+  }
+
+  return rowArr;
+}
+
+const loadRows = (wordArr) => {
+  return Array.from(Array(ROW_COUNT)).map((_) => {
+    return loadRow(wordArr);
+  });
+}
+
+const TextWrapper = styled.div`
+  font-size: 1.3rem;
+  color: ${props => props.focused ? '#fff' : 'transparent'};
+  text-shadow: ${props => props.focused ? 'none' : '0 0 0.4rem #fff'};
+  transition: color 0.225s ease, text-shadow 0.225s ease;
+
+  & > span {
+    line-height: 1.6;
+  }
+`
+
+/**
+ * Text component displays test's words on screen. Text is blurred when document loses focus.
+ * Uses styled component Textwrapper. Uses components Row, Word, Letter.
+ * Iterates through prop "rows" and prints its contents
+ */
+const Text = (props) => {
+
+const [rowArr, setRowArr] = useState(props.rows);
+
+  useEffect(() => {
+    setRowArr(props.rows);
+  }, [props.rows]);
+
+  return (
+    <TextWrapper focused={props.focused}>
+      {rowArr.map((row, i) => {
+        return (
+          <Row key={i}>
+            {row.map((word, j) => {
+              return (
+                <Word key={j}>
+                  {word.map((letter, k) => {
+                    return (
+                      <Letter key={k}>{letter}</Letter>
+                    );
+                  })}
+                &nbsp;</Word>
+              );
+            })}
+          </Row>
+        );
+      })}
+    </TextWrapper>        
+  );
+}
+
+let rowsArr = loadRows(words);
+
 const TypeTest = () => {
 
+  
+
   // Initialize playing state
-  const [playing, setPlaying] = useState(false);
+  const [playing, setPlaying] = useState(0);
+
+  const stopPlaying = () => {setPlaying(0)};
+  const startPlaying = () => {setPlaying(1)};
 
   const [currentWord, setCurrentWord] = useState(0);
 
-
-
-  // On game end, kanske finalScore = currentWord;? Den borde hålla reda på hur många ord man skrivit
+  const [rowsArrState, setRowsArrState] = useState(rowsArr);
 
   /* Initialize state to keep track of whether document (page)
      or any element inside it is focused */
@@ -137,12 +246,16 @@ const TypeTest = () => {
     const handleKeyup = (event) => {
 
       // handle Escape
-      if (event.keyCode === 27) {
-    
-        console.log('# TEST STOPPED #');
-        setPlaying(false);
-        event.target.value = '';
+      if (event.key === 'Escape') {
+
+          stopPlaying();
+         
+          // console.log('# TEST STOPPED #'); // remove probably
+
+          // Stop test, clear input and load a new set of words);
+          
         
+        event.target.value = '';
       }
     };
     window.addEventListener('keyup', handleKeyup);
@@ -150,8 +263,36 @@ const TypeTest = () => {
     // handle other keys
     const handleKeypress = (event) => {
 
-      setPlaying(true); // (;;  NOT GREAT 
+      // handle spacebar: check input  
+      if (event.keyCode === 32) {
+        if (playing === true && document.hasFocus()) {
+          // not sure
+        }
+        console.log('space');
+      }
+
+      // handle Enter maybe temp
+      if (event.keyCode === 13) {
+
+        rowsArr.shift();
+        rowsArr.push(loadRow(words));
+
+        console.log(rowsArr);
+        console.log(currentWord);
+      }
+
+    
+      console.log(`playing is ${playing}`);
       
+      if (playing === 0) {
+        if (/[a-z]/i.test(event.key)) {
+          console.log('START PLAYING');
+          startPlaying();          
+        }
+      }
+      
+        
+
     };
     window.addEventListener('keypress', handleKeypress);
 
@@ -164,24 +305,15 @@ const TypeTest = () => {
 
   return(
     <TypeTestWrapper focused={documentFocused}>
-      <Text focused={documentFocused}>
-        {wordsArr.map((word, i) => {
-          return(
-            <span key={i}>
-              {word.map((letter, j) => {
-                return(
-                  <span key={j}>{letter}</span>
-                )})
-              }&nbsp;
-            </span>
-          );
-        })}
-      </Text>
-      <Input
-        currentWord={currentWord}
-        playing={playing}
+      <Text 
         focused={documentFocused}
-      
+        currentWord={rowsArr[0][currentWord]}
+        rows={rowsArr}
+        />
+      <Input
+        currentWord={rowsArr[0][currentWord]}
+        playing={playing}
+        focused={documentFocused}  
       />
       <div>{playing ? 'playing' : 'not playing'}</div>
     </TypeTestWrapper>
