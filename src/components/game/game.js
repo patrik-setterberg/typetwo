@@ -25,7 +25,6 @@ const TypeTestWrapper = styled.div`
   @media ${g.large} {
     width: 70vw;
   }
-
 `
 
 const TypeTest = () => {  
@@ -41,7 +40,9 @@ const TypeTest = () => {
   
     while (rowArr.length < g.WORDS_PER_ROW) {
       let word = getWord(wordArr);
-      // Check that word hasn't already been chosen for current row. TODO IMPROVE
+      // Check that word hasn't already been chosen for current row.
+      // THIS PROBABLY DOES NOT WORK
+      // TODO "IMPROVE" (FIX)
       if (rowArr.indexOf(word) === -1) {
         rowArr.push(word);
       }
@@ -56,7 +57,7 @@ const TypeTest = () => {
     });
   };
 
-  // Initialize playing state
+  // Playing state
   const [playing, setPlaying] = useState(false);
 
   /* Keep track of currentWord.
@@ -64,7 +65,8 @@ const TypeTest = () => {
      Resets after full row has been matched. */
   const [currentWord, setCurrentWord] = useState(0);
 
-  /* Array of rows. Each row consists of arrays of words. Each word is an array of letters */
+  /* Array of rows. Each row consists of arrays of words.
+     Each word is an array of letters. */
   const [textRows, setTextRows] = useState(loadRows(words));
 
   /* Update TextRows state.
@@ -76,8 +78,7 @@ const TypeTest = () => {
     setTextRows(tempArr);
   }
 
-  /* Initialize state to keep track of whether document (page)
-     or any element inside it is focused */
+  // Keep track of whether document (or any element inside it) is focused
   const [documentFocused, setDocumentFocus] = useState(false);
 
   /* Some state change needed to trigger re-render.
@@ -109,7 +110,7 @@ const TypeTest = () => {
       setDocumentFocus(document.hasFocus())}, g.FOCUS_CHECK_INTERVAL
     );
 
-    // Start test on detecting of alphanumeric characters being input
+    // Start test on detecting letters being input
     const handleKeypress = (e) => {
       if (playing === false) {
         if (/[a-z|A-Z]/g.test(e.key) && e.key !== 'Enter') {
@@ -125,7 +126,7 @@ const TypeTest = () => {
     // Keyup listener needed because 'keypress' doesn't detect Escape
     const handleKeyup = (e) => {
       if (e.key === 'Escape') {
-        // Stop test and load a new set of words
+        // Stop test and load a new set of rows of words
         setPlaying(false);
         setTextRows(loadRows(words));        
       }

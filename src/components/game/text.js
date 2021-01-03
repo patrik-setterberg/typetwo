@@ -81,4 +81,5 @@ const Text = (props) => {
   );
 }
 
+// Does this work just like this?
 export default React.memo(Text);
