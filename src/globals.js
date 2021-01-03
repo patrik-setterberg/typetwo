@@ -14,6 +14,15 @@ const g = {
   large: `only screen and (min-width: ${largestMedium+1}px)`,
   
   bgcolor: '#333',
+
+
+  // TYPE TEST CONFIGURATION VARIABLES
+  WORDS_PER_ROW: 8,
+  ROW_COUNT: 5,
+
+  // Set how often component checks if document is focused
+  FOCUS_CHECK_INTERVAL: 66,
+
 }
 
 export default g;
