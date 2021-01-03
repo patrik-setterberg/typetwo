@@ -6,11 +6,11 @@ const largestMedium = 1299; // px
 
 const g = {
 
-	// Media breakpoints
-	small: `only screen and (max-width: ${largestSmall}px)`,
-	medium: `only screen and (min-width: ${largestSmall+1}px) and (max-width: ${largestMedium}px)`,
-	atMostMedium: `only screen and (max-width: ${largestMedium}px)`,
-	atleastMedium: `only screen and (min-width: ${largestSmall+1}px)`,
+  // Media breakpoints
+  small: `only screen and (max-width: ${largestSmall}px)`,
+  medium: `only screen and (min-width: ${largestSmall+1}px) and (max-width: ${largestMedium}px)`,
+  atMostMedium: `only screen and (max-width: ${largestMedium}px)`,
+  atleastMedium: `only screen and (min-width: ${largestSmall+1}px)`,
   large: `only screen and (min-width: ${largestMedium+1}px)`,
   
   bgcolor: '#333',
@@ -28,11 +28,11 @@ const g = {
 export default g;
 
 const GlobalStyle = createGlobalStyle`
-	:root {
+  :root {
     --default-padding: 1.5rem;
     
     --default-timing: cubic-bezier(0.78, 0.2, 0.05, 1.0);
-	}
+  }
 
   * {
     margin: 0;
@@ -45,7 +45,7 @@ const GlobalStyle = createGlobalStyle`
     box-sizing: border-box;
   }
 
-	body {
+  body {
     
   }
   
