@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import styled from 'styled-components';
+import styled, {css} from 'styled-components';
 // import g from '../../globals.js';
 
 /* STYLES */
@@ -19,7 +19,9 @@ const StyledRow = styled.span`
 `
 
 const StyledWord = styled.span`
-
+  ${props => props.isCorrect && css`
+    color: #888;`
+  }
 `
 
 const StyledLetter = styled.span`
@@ -35,7 +37,7 @@ const Row = (props) => {
 
 const Word = (props) => {
   return (
-    <StyledWord className="word">{props.children}</StyledWord>
+    <StyledWord isCorrect={props.isCorrect} className="word">{props.children}</StyledWord>
   );
 }
 
@@ -65,7 +67,7 @@ const Text = (props) => {
           <Row key={i}>
             {row.map((word, j) => {
               return (
-                <Word key={j}>
+                <Word key={j} isCorrect={props.currentWordInd > j && i === 0}>
                   {word.map((letter, k) => {
                     return (
                       <Letter key={k}>{letter}</Letter>

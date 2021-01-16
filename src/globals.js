@@ -18,7 +18,7 @@ const g = {
 
   // TYPE TEST CONFIGURATION VARIABLES
   WORDS_PER_ROW: 8,
-  ROW_COUNT: 5,
+  ROW_COUNT: 4,
 
   // Set how often component checks if document is focused
   FOCUS_CHECK_INTERVAL: 66,

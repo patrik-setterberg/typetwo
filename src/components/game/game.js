@@ -128,7 +128,8 @@ const TypeTest = () => {
       if (e.key === 'Escape') {
         // Stop test and load a new set of rows of words
         setPlaying(false);
-        setTextRows(loadRows(words));        
+        setTextRows(loadRows(words));
+        setCurrentWord(0);  
       }
     };
     window.addEventListener('keyup', handleKeyup);
@@ -144,6 +145,7 @@ const TypeTest = () => {
       <Text 
         focused={documentFocused}
         currentWord={textRows[0][currentWord]}
+        currentWordInd={currentWord}
         rows={textRows}
         playing={playing}
         />
