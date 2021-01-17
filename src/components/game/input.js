@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef} from 'react';
 import styled from 'styled-components';
 // import g from '../../globals.js';
 
@@ -12,7 +12,7 @@ const StyledInput = styled.input`
   padding: 0.7rem 0.6rem;
   border-radius: 0.6rem;
 
-  opacity: ${props => props.focused ? '1' : '0.5'};
+  opacity: 0;
   transition: opacity 0.225s ease;
 
   &:focus {
@@ -20,9 +20,9 @@ const StyledInput = styled.input`
   }
 `
 
-const Input = (props) => {
 
-  const [inputValue, setInputValue] = useState('');
+
+const Input = (props) => {
 
   // initiate reference to textinput element
   let textInput = useRef(null);
@@ -32,19 +32,18 @@ const Input = (props) => {
   useEffect(() => {
     // Focus on load and change
     textInput.current.focus();
-
-    // Clear text-input when escape is pressed
-    const keyUpHandler = (e) => {
-      if (e.key === 'Escape') {
-        setInputValue('');
-      }
-    };
-    document.addEventListener('keyup', keyUpHandler);
-
-    return () => {
-      document.removeEventListener('keyup', keyUpHandler);
-    };
   });
+
+/* Filter text-input. 
+Remove everything except chars inside square brackets.
+Also remove whitespaces, incl. tabs, newlines.
+Finally, trim chars that exceed length of currentWord. */
+const filterInput = (input, maxLen) => {
+  return input
+    .replace(/[^a-zA-Z0-9-.,'!?]/g, "")
+    .replace(/\s+/g, "")
+    .substring(0, maxLen);
+  }
 
   return(
     <StyledInput
@@ -56,22 +55,10 @@ const Input = (props) => {
           // not focused && playing : not focused && not playing
           (props.playing ? 'Test paused, focus to resume' : 'Click document to focus')
       }
-      value={inputValue}
+      value={props.inputValue}
       onInput={(e) => {
-        /* Filter text-input. 
-           Remove everything except chars inside square brackets.
-           Also remove whitespaces, incl. tabs, newlines. */
-        let text = e.target.value.replace(/[^a-zA-Z0-9-.,'!?]/g, "").replace(/\s+/g, "");
-        setInputValue(text);
-      
-        // Detect space weirdly???
-        if (e.nativeEvent.data === ' ') {
-          // Check if input matches currentWord
-          if (props.checkWord(props.currentWord, text)) {
-            props.updateCurrentWord();
-            setInputValue('');
-          } 
-        }
+        let text = filterInput(e.target.value, props.currentWord.length);
+        props.setInputValue(text);
       }}
       id="text-input"
       aria-label="Type test input"

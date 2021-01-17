@@ -17,8 +17,8 @@ const g = {
 
 
   // TYPE TEST CONFIGURATION VARIABLES
-  WORDS_PER_ROW: 8,
-  ROW_COUNT: 4,
+  WORDS_PER_ROW: 9,
+  ROW_COUNT: 3,
 
   // Set how often component checks if document is focused
   FOCUS_CHECK_INTERVAL: 66,
@@ -32,6 +32,8 @@ const GlobalStyle = createGlobalStyle`
     --default-padding: 1.5rem;
     
     --default-timing: cubic-bezier(0.78, 0.2, 0.05, 1.0);
+
+    --caret-opacity: 0.8;
   }
 
   * {
@@ -66,6 +68,29 @@ const GlobalStyle = createGlobalStyle`
   @media ${g.large} {
     :root {
       --default-padding: 2rem;
+    }
+  }
+
+  /* ANIMATIONS */
+  @keyframes caret-blink {
+    0% {
+      opacity: var(---caret-opacity);
+    }
+
+    45% {
+      opacity: var(---caret-opacity);
+    }
+
+    50% {
+      opacity: 0;
+    }
+
+    95% {
+      opacity: 0;
+    }
+
+    100% {
+      opacity: var(---caret-opacity);
     }
   }
 `

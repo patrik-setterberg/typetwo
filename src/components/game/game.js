@@ -12,7 +12,6 @@ const TypeTestWrapper = styled.div`
   justify-content: center;
   width: 100%;
   min-height: 500px;
-  /* border: 2px solid ${props => props.focused ? '#0f0' : '#f00'}; */
   margin: 0 auto;
   font-family: 'Roboto Mono', monospace;
   color: #fff;
@@ -63,7 +62,10 @@ const TypeTest = () => {
   /* Keep track of currentWord.
      Input is compared with currentWord to progress in test.
      Resets after full row has been matched. */
-  const [currentWord, setCurrentWord] = useState(0);
+  const [currentWordInd, setCurrentWordInd] = useState(0);
+
+  // Track progress on row for caret positioning
+  const [rowProgress, setRowProgress] = useState(0);
 
   /* Array of rows. Each row consists of arrays of words.
      Each word is an array of letters. */
@@ -76,32 +78,35 @@ const TypeTest = () => {
     tempArr.shift();
     tempArr.push(loadRow(words));
     setTextRows(tempArr);
+    setRowProgress(0);
   }
 
   // Keep track of whether document (or any element inside it) is focused
   const [documentFocused, setDocumentFocus] = useState(false);
 
-  /* Some state change needed to trigger re-render.
-     Please come up with something nicer. */
-  const [randomState, setRandomState] = useState(false);
-  function toggleRandomState() {
-    setRandomState((randomState) => !randomState);
-  }
+  const [inputValue, setInputValue] = useState('');
 
-  // Compare array currentWord with str from text-input
-  const checkFullWord = (currentWord, input) => {
-    console.log(currentWord.join(''));
-    console.log(input);
-    return currentWord.join('') === input;
+  // Compare array word with str from text-input
+  const checkFullWord = (word, input) => {
+    return word.join('') === input;
   }
 
   /* Handle currentWord.
      Increases currentWord and resets it if it reaches global WORDS_PER_ROW constant */
-  const updateCurrentWord = () => {
-    if (currentWord === (g.WORDS_PER_ROW - 1)) {
+  const updateCurrentWordInd = () => {
+    if (currentWordInd === (g.WORDS_PER_ROW - 1)) {
       updateTextRows();
     }
-    setCurrentWord((currentWord) => (currentWord + 1) % g.WORDS_PER_ROW);
+    setCurrentWordInd((currentWordInd) => (currentWordInd + 1) % g.WORDS_PER_ROW);
+  }
+
+  // End test: Stop test, clear input, reset currentWord and load a new set of rows of words
+  const endTest = () => {
+    setPlaying(false);
+    setInputValue('');
+    setCurrentWordInd(0);
+    setTextRows(loadRows(words));
+    setRowProgress(0);
   }
 
   useEffect(() => {
@@ -117,19 +122,23 @@ const TypeTest = () => {
           setPlaying(true);
         }
       }
-  
-      // State change needed to trigger rerender :(
-      toggleRandomState();
+
+      // Detect spacebar pressed
+      if (e.key === ' ') {
+        // Check if input matches currentWord
+        if (checkFullWord(textRows[0][currentWordInd], inputValue)) {
+          setRowProgress((rowProgress) => (rowProgress + textRows[0][currentWordInd].length) + 1);
+          updateCurrentWordInd();
+          setInputValue('');
+        }
+      }
     };
     window.addEventListener('keypress', handleKeypress);
 
     // Keyup listener needed because 'keypress' doesn't detect Escape
     const handleKeyup = (e) => {
       if (e.key === 'Escape') {
-        // Stop test and load a new set of rows of words
-        setPlaying(false);
-        setTextRows(loadRows(words));
-        setCurrentWord(0);  
+        endTest();
       }
     };
     window.addEventListener('keyup', handleKeyup);
@@ -144,17 +153,21 @@ const TypeTest = () => {
     <TypeTestWrapper focused={documentFocused}>
       <Text 
         focused={documentFocused}
-        currentWord={textRows[0][currentWord]}
-        currentWordInd={currentWord}
+        currentWord={textRows[0][currentWordInd]}
+        currentWordInd={currentWordInd}
         rows={textRows}
         playing={playing}
+        inputValue={inputValue}
+        caretOffset={rowProgress + inputValue.length}
         />
       <Input
-        currentWord={textRows[0][currentWord]}
+        currentWord={textRows[0][currentWordInd]}
         playing={playing}
         focused={documentFocused}
         checkWord={checkFullWord}
-        updateCurrentWord={updateCurrentWord}
+        inputValue={inputValue}
+        setInputValue={setInputValue}
+        updateCurrentWord={updateCurrentWordInd}
       />
       <div>{playing ? 'playing' : 'not playing'}</div>
     </TypeTestWrapper>
