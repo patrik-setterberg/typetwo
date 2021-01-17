@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import styled from 'styled-components';
 import g from '../../globals.js';
-import TypeGame from '../game/game.js';
+import TypeTest from '../game/game.js';
 
 
 const Main = styled.main`
@@ -15,6 +15,7 @@ const Main = styled.main`
 const App = () => {
 
 	useEffect(() => {
+		// Only show focus outline when using keyboard.
 		document.body.addEventListener('mousedown', function() {
 			document.body.classList.add('no-outline');
 		});
@@ -29,7 +30,7 @@ const App = () => {
 	return(
 		<>
 			<Main>
-				<TypeGame />
+				<TypeTest />
 			</Main>
 		</>
 	);

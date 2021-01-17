@@ -2,25 +2,23 @@ import React, {useEffect, useRef} from 'react';
 import styled from 'styled-components';
 // import g from '../../globals.js';
 
-/* STYLES */
 const StyledInput = styled.input`
+/*
   margin-top: 1rem;
-  margin-bottom: 1rem; // Temp probably
+  margin-bottom: 1rem;
   font-family: 'Roboto Mono', monospace;
   font-size: 1.2rem;
   width: 50%;
   padding: 0.7rem 0.6rem;
   border-radius: 0.6rem;
-
-  opacity: 0;
   transition: opacity 0.225s ease;
+*/
+  opacity: 0;  
 
   &:focus {
     outline: none;
   }
 `
-
-
 
 const Input = (props) => {
 
@@ -37,7 +35,7 @@ const Input = (props) => {
 /* Filter text-input. 
 Remove everything except chars inside square brackets.
 Also remove whitespaces, incl. tabs, newlines.
-Finally, trim chars that exceed length of currentWord. */
+Finally, trim chars which exceed length of 2nd parameter (currentWord). */
 const filterInput = (input, maxLen) => {
   return input
     .replace(/[^a-zA-Z0-9-.,'!?]/g, "")
@@ -72,7 +70,7 @@ const filterInput = (input, maxLen) => {
         }
       }}
       onFocus={() => {
-      window.clearInterval(focusTimer);
+        window.clearInterval(focusTimer);
       }}
     />
   );

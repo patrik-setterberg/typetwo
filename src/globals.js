@@ -15,14 +15,12 @@ const g = {
   
   bgcolor: '#333',
 
-
   // TYPE TEST CONFIGURATION VARIABLES
   WORDS_PER_ROW: 9,
   ROW_COUNT: 3,
 
   // Set how often component checks if document is focused
   FOCUS_CHECK_INTERVAL: 66,
-
 }
 
 export default g;

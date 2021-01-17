@@ -5,17 +5,16 @@ import words from '../../assets/game/words.js';
 import Input from './input.js';
 import Text from './text.js';
 
-/* STYLES */
 const TypeTestWrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
   width: 100%;
-  min-height: 500px;
   margin: 0 auto;
   font-family: 'Roboto Mono', monospace;
   color: #fff;
   font-size: 1.5rem;
+  margin-top: 200px; /* temp positioning */
 
   @media ${g.medium} {
     width: 90vw;
@@ -59,20 +58,26 @@ const TypeTest = () => {
   // Playing state
   const [playing, setPlaying] = useState(false);
 
-  /* Keep track of currentWord.
-     Input is compared with currentWord to progress in test.
-     Resets after full row has been matched. */
+  /**
+   * Keep track of currentWord.
+   * Input is compared with currentWord to progress in test.
+   * Resets after full row has been matched.
+   */
   const [currentWordInd, setCurrentWordInd] = useState(0);
 
   // Track progress on row for caret positioning
   const [rowProgress, setRowProgress] = useState(0);
 
-  /* Array of rows. Each row consists of arrays of words.
-     Each word is an array of letters. */
+  /**
+   * Array of rows. Each row consists of arrays of words.
+   * Each word is an array of letters.
+   */ 
   const [textRows, setTextRows] = useState(loadRows(words));
 
-  /* Update TextRows state.
-     Remove row from front of array, load a new row and push it onto array. */
+  /**
+   * Update TextRows state.
+   * Remove row from front of array, load a new row and push it onto array.
+   */
   function updateTextRows() {
     let tempArr = textRows;
     tempArr.shift();
@@ -91,8 +96,10 @@ const TypeTest = () => {
     return word.join('') === input;
   }
 
-  /* Handle currentWord.
-     Increases currentWord and resets it if it reaches global WORDS_PER_ROW constant */
+  /**
+   * Handle currentWord.
+   * Increases currentWord and resets it if it reaches global WORDS_PER_ROW constant.
+   */
   const updateCurrentWordInd = () => {
     if (currentWordInd === (g.WORDS_PER_ROW - 1)) {
       updateTextRows();
@@ -100,7 +107,11 @@ const TypeTest = () => {
     setCurrentWordInd((currentWordInd) => (currentWordInd + 1) % g.WORDS_PER_ROW);
   }
 
-  // End test: Stop test, clear input, reset currentWord and load a new set of rows of words
+  /**
+   * End test when timer expires or escape is pressed.
+   * Stops test, clears input, resets currentWord,
+   * loads a new set of rows of words and rewinds caret.
+   */  
   const endTest = () => {
     setPlaying(false);
     setInputValue('');
@@ -123,7 +134,7 @@ const TypeTest = () => {
         }
       }
 
-      // Detect spacebar pressed
+      // Detect spacebar press
       if (e.key === ' ') {
         // Check if input matches currentWord
         if (checkFullWord(textRows[0][currentWordInd], inputValue)) {
