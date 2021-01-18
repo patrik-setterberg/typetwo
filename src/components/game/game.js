@@ -123,8 +123,8 @@ const TypeTest = () => {
   useEffect(() => {
     // Check page focus
     setInterval(() => {
-      setDocumentFocus(document.hasFocus())}, g.FOCUS_CHECK_INTERVAL
-    );
+      setDocumentFocus(document.hasFocus());
+    }, g.FOCUS_CHECK_INTERVAL);
 
     // Start test on detecting letters being input
     const handleKeypress = (e) => {
