@@ -1,18 +1,29 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const StyledTimer = styled.div`
-
+const TimerWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
 `
 
+const Numbers = styled.span`
+  color: #fff;
+  font-size: 3rem;
+`
 
-const testTimer = () => {
+/**
+ * Countdown timer
+ */
+const TestTimer = (props) => {
 
   return(
-    <StyledTimer>
-      
-    </StyledTimer>
+    <TimerWrapper>
+      <Numbers>
+        {props.timeLeft}
+      </Numbers>      
+    </TimerWrapper>
   );
 }
 
-export default testTimer;
+export default TestTimer;

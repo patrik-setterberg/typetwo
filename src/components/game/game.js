@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import g from '../../globals.js';
 import words from '../../assets/game/words.js';
 import Input from './input.js';
+import TestTimer from './testTimer.js';
 import Text from './text.js';
 
 const TypeTestWrapper = styled.div`
@@ -57,6 +58,12 @@ const TypeTest = () => {
 
   // Playing state
   const [playing, setPlaying] = useState(false);
+
+  /**
+   * Stores selected test duration, get default from global settings
+   */
+  const [testDuration, setTestDuration] = useState(g.DEFAULT_TEST_DURATION);
+  const [timeLeft, setTimeLeft] = useState(testDuration);
 
   /**
    * Keep track of currentWord.
@@ -118,9 +125,11 @@ const TypeTest = () => {
     setCurrentWordInd(0);
     setTextRows(loadRows(words));
     setRowProgress(0);
+    setTimeLeft(testDuration);
   }
 
   useEffect(() => {
+
     // Check page focus
     setInterval(() => {
       setDocumentFocus(document.hasFocus());
@@ -131,6 +140,7 @@ const TypeTest = () => {
       if (playing === false) {
         if (/[a-z|A-Z]/g.test(e.key) && e.key !== 'Enter') {
           setPlaying(true);
+          setTimeLeft((timeLeft) => (timeLeft - 1));   
         }
       }
 
@@ -158,10 +168,30 @@ const TypeTest = () => {
       window.removeEventListener('keypress', handleKeypress);
       window.removeEventListener('keyup', handleKeyup);
     };
-  }, [loadRows, playing, textRows]);
+  }, [loadRows, textRows]);
+
+  // Timer for test duration.
+  useEffect(() => {
+    let timerInterval;
+    if (playing === true) {
+      timerInterval = setInterval(() => setTimeLeft((timeLeft) => (timeLeft - 1)), 1000);
+    }
+
+    return () => {
+      clearInterval(timerInterval);
+    }
+  }, [playing]);
+
+  // End test when timer reaches zero.
+  useEffect(() => {
+    if (timeLeft <= 0) {
+      endTest();
+    }
+  }, [timeLeft, endTest]);
 
   return(
     <TypeTestWrapper focused={documentFocused}>
+      <TestTimer timeLeft={timeLeft}/>
       <Text 
         focused={documentFocused}
         currentWord={textRows[0][currentWordInd]}

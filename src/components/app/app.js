@@ -8,7 +8,7 @@ const Main = styled.main`
 	height: 100%;
 	width: 100%;
 	position: fixed;
-	padding: var(--default-padding);
+	/* padding: var(--default-padding); */
 	background-color: ${g.bgcolor}; /* ??? */
 `
 

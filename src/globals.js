@@ -1,9 +1,14 @@
 import {createGlobalStyle} from 'styled-components';
 
-// MEDIA BREAKPOINT VARS TWEAK HERE
+/**
+ * MEDIA BREAKPOINT VARS TWEAK HERE
+ */
 const largestSmall = 767; // px
 const largestMedium = 1299; // px
 
+/**
+ * GLOBAL VARS
+ */
 const g = {
 
   // Media breakpoints
@@ -15,9 +20,10 @@ const g = {
   
   bgcolor: '#333',
 
-  // TYPE TEST CONFIGURATION VARIABLES
+  // TYPE TEST CONFIGURATION VARS
   WORDS_PER_ROW: 9,
   ROW_COUNT: 3,
+  DEFAULT_TEST_DURATION: 20,
 
   // Set how often component checks if document is focused
   FOCUS_CHECK_INTERVAL: 66,
