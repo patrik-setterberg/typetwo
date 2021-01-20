@@ -65,14 +65,14 @@ const TypeTest = () => {
   const [playing, setPlaying] = useState(false);
 
   /**
-   * Stores selected test duration, get default from global settings.
+   * Stores selected test length, get default from global settings.
    */
-  const [testDuration, setTestDuration] = useState(g.DEFAULT_TEST_DURATION);
+  const [testLength, setTestLength] = useState(g.TEST_LENGTH_DEFAULT);
 
   /**
    * Track time left
    */
-  const [timeLeft, setTimeLeft] = useState(testDuration);
+  const [timeLeft, setTimeLeft] = useState(testLength);
 
   /**
    * Keep track of currentWord.
@@ -134,7 +134,7 @@ const TypeTest = () => {
     setCurrentWordInd(0);
     setTextRows(loadRows(words));
     setRowProgress(0);
-    setTimeLeft(testDuration);
+    setTimeLeft(testLength);
   }
 
   useEffect(() => {
@@ -199,8 +199,8 @@ const TypeTest = () => {
   }, [timeLeft, endTest]);
 
   useEffect(() => {
-    setTimeLeft(testDuration);
-  }, [testDuration]);
+    setTimeLeft(testLength);
+  }, [testLength]);
 
   return(
     <TypeTestWrapper focused={documentFocused}>
@@ -225,7 +225,7 @@ const TypeTest = () => {
       />
       <div>{playing ? 'playing' : 'not playing'}</div>
       <TimeControls
-        setTestDuration={setTestDuration}
+        setTestLength={setTestLength}
         playing={playing}
       />
     </TypeTestWrapper>

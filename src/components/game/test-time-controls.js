@@ -22,12 +22,8 @@ const StyledTimeControls = styled.div`
 
 const Button = (props) => {
 
-  const handleClick = (duration) => {
-    props.setTestDuration(duration);
-  }
-
   return (
-    <StyledButton onClick={() => handleClick(props.duration)}>
+    <StyledButton onClick={() => props.setTestLength(props.testLengthOption)}>
       {props.children}
     </StyledButton>
   );
@@ -35,19 +31,19 @@ const Button = (props) => {
 
 const TimeControls = (props) => {
 
-  const durationOptions = [
-    g.TEST_DURATION_SHORT,
-    g.TEST_DURATION_MEDIUM,
-    g.TEST_DURATION_LONG,
+  const testLengthOptions = [
+    g.TEST_LENGTH_SHORT,
+    g.TEST_LENGTH_MEDIUM,
+    g.TEST_LENGTH_LONG,
   ];
 
   return (
     <StyledTimeControls playing={props.playing}>
-      {durationOptions.map((option, key) => {
+      {testLengthOptions.map((option, key) => {
         return (
           <Button
-            setTestDuration={props.setTestDuration}
-            duration={option}
+            setTestLength={props.setTestLength}
+            testLengthOption={option}
             key={key}
           >
             {option}
