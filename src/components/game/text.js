@@ -1,3 +1,9 @@
+/**
+ * TYPE TEST TEXT COMPONENT
+ * Displays type test's words on screen.
+ * Incorrectly input characters are highlighted in **PROBABLY RED**.
+ */
+
 import React, {useEffect, useState} from 'react';
 import styled, {css} from 'styled-components';
 // import g from '../../globals.js';
@@ -18,6 +24,12 @@ const StyledRow = styled.span`
   align-items: center;
   font-size: 1.5rem;
 
+  /**
+   * Blinking caret
+   * Absolutely positioned on first row, offset from left edge set by adding length
+   * of completed words and current length of input. Offset uses margin-left and the ch unit:
+   * (width of char '0' in current font, works because we're using monospace font).
+   */
   &.first-row::before {
     position: absolute;
     left: 0;
@@ -128,7 +140,7 @@ const Text = (props) => {
         return (
           <Row
             key={rowInd}
-            // caretOffset positions caret on top.
+            // caretOffset positions caret on top row.
             caretOffset={props.caretOffset}
             first={rowInd === 0}
           >

@@ -1,3 +1,8 @@
+/**
+ * TYPE TEST INPUT FIELD COMPONENT
+ * Automatically focused text-input which is visually hidden.
+ */
+
 import React, {useEffect, useRef} from 'react';
 import styled from 'styled-components';
 // import g from '../../globals.js';

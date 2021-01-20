@@ -1,10 +1,15 @@
+/**
+ * TYPE TEST MAIN COMPONENT
+ */
+
 import React, {useEffect, useState} from 'react';
 import styled from 'styled-components';
 import g from '../../globals.js';
 import words from '../../assets/game/words.js';
 import Input from './input.js';
-import TestTimer from './testTimer.js';
+import TestTimer from './test-countdown.js';
 import Text from './text.js';
+import TimeControls from './test-time-controls.js';
 
 const TypeTestWrapper = styled.div`
   display: flex;
@@ -60,9 +65,13 @@ const TypeTest = () => {
   const [playing, setPlaying] = useState(false);
 
   /**
-   * Stores selected test duration, get default from global settings
+   * Stores selected test duration, get default from global settings.
    */
   const [testDuration, setTestDuration] = useState(g.DEFAULT_TEST_DURATION);
+
+  /**
+   * Track time left
+   */
   const [timeLeft, setTimeLeft] = useState(testDuration);
 
   /**
@@ -72,7 +81,7 @@ const TypeTest = () => {
    */
   const [currentWordInd, setCurrentWordInd] = useState(0);
 
-  // Track progress on row for caret positioning
+  // Track progress on row for caret positioning.
   const [rowProgress, setRowProgress] = useState(0);
 
   /**
@@ -189,6 +198,10 @@ const TypeTest = () => {
     }
   }, [timeLeft, endTest]);
 
+  useEffect(() => {
+    setTimeLeft(testDuration);
+  }, [testDuration]);
+
   return(
     <TypeTestWrapper focused={documentFocused}>
       <TestTimer timeLeft={timeLeft}/>
@@ -211,6 +224,10 @@ const TypeTest = () => {
         updateCurrentWord={updateCurrentWordInd}
       />
       <div>{playing ? 'playing' : 'not playing'}</div>
+      <TimeControls
+        setTestDuration={setTestDuration}
+        playing={playing}
+      />
     </TypeTestWrapper>
   );
 }

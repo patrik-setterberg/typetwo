@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import styled from 'styled-components';
 
 const TimerWrapper = styled.div`
@@ -16,7 +16,6 @@ const Numbers = styled.span`
  * Countdown timer
  */
 const TestTimer = (props) => {
-
   return(
     <TimerWrapper>
       <Numbers>
