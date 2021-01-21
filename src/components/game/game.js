@@ -61,16 +61,15 @@ const TypeTest = () => {
     });
   };
 
-  // Playing state
   const [playing, setPlaying] = useState(false);
 
   /**
-   * Stores selected test length, get default from global settings.
+   * Stores selected test length (in seconds)
    */
   const [testLength, setTestLength] = useState(g.TEST_LENGTH_DEFAULT);
 
   /**
-   * Track time left
+   * Track time left. Uses testLength state to get user selected test length
    */
   const [timeLeft, setTimeLeft] = useState(testLength);
 
@@ -80,6 +79,8 @@ const TypeTest = () => {
    * Resets after full row has been matched.
    */
   const [currentWordInd, setCurrentWordInd] = useState(0);
+
+  const [currentRow, setCurrentRow] = useState(0);
 
   // Track progress on row for caret positioning.
   const [rowProgress, setRowProgress] = useState(0);
@@ -113,8 +114,8 @@ const TypeTest = () => {
   }
 
   /**
-   * Handle currentWord.
-   * Increases currentWord and resets it if it reaches global WORDS_PER_ROW constant.
+   * Increases currentWord and resets it if it reaches end of row.
+   * Also triggers text row shifting.
    */
   const updateCurrentWordInd = () => {
     if (currentWordInd === (g.WORDS_PER_ROW - 1)) {
@@ -198,13 +199,14 @@ const TypeTest = () => {
     }
   }, [timeLeft, endTest]);
 
+  // Rerender when test-time-controls button is clicked
   useEffect(() => {
     setTimeLeft(testLength);
   }, [testLength]);
 
   return(
     <TypeTestWrapper focused={documentFocused}>
-      <TestTimer timeLeft={timeLeft}/>
+      <TestTimer timeLeft={timeLeft} />
       <Text 
         focused={documentFocused}
         currentWord={textRows[0][currentWordInd]}

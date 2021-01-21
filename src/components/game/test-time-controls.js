@@ -21,7 +21,6 @@ const StyledTimeControls = styled.div`
 `
 
 const Button = (props) => {
-
   return (
     <StyledButton onClick={() => props.setTestLength(props.testLengthOption)}>
       {props.children}
@@ -30,7 +29,7 @@ const Button = (props) => {
 }
 
 const TimeControls = (props) => {
-
+  
   const testLengthOptions = [
     g.TEST_LENGTH_SHORT,
     g.TEST_LENGTH_MEDIUM,
