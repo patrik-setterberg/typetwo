@@ -26,15 +26,15 @@ const StyledRow = styled.span`
 
   /**
    * Blinking caret
-   * Absolutely positioned on first row, offset from left edge set by adding length
-   * of completed words and current length of input. Offset uses margin-left and the ch unit:
+   * Absolutely positioned on current row, offset from left edge set by adding length
+   * of completed words on row and current length of input. Offset uses margin-left and the ch unit:
    * (width of char '0' in current font, works because we're using monospace font).
    */
-  &.first-row::before {
+  &.first-row::before,
+  &.second-row::before {
     position: absolute;
     left: 0;
     content: '';
-    display: inline-block;
     height: 75%;
     width: 3px;
     background-color: orange;
@@ -44,8 +44,22 @@ const StyledRow = styled.span`
     }
   }
 
+  &.first-row::before {
+    display: ${props => props.currentRow === 0 ? 'inline-block' : 'none'};
+  }
+
+  &.second-row::before {
+    display: ${props => props.currentRow === 1 ? 'inline-block' : 'none'};
+  }
+
   &.animate::before {
     animation: 1.8s cubic-bezier(0.78, 0.2, 0.05, 1.0) 0s infinite forwards caret-blink;
+  }
+
+  &.first-row {
+    ${props => props.currentRow === 1 && css`
+      color: #888;`
+    }
   }
 `
 
@@ -70,9 +84,18 @@ const StyledLetter = styled.span`
 `
 
 const Row = (props) => {
-  let rowClasses = props.first ? 'row first-row animate' : 'row';
+  const rowClasses = [
+    'first-row animate',
+    'second-row animate',
+    '',
+  ];
+
   return (
-    <StyledRow caretOffset={props.caretOffset} className={rowClasses}>
+    <StyledRow
+      caretOffset={props.caretOffset}
+      className={rowClasses[props.ind]}
+      currentRow={props.currentRow}
+    >
       {props.children}
     </StyledRow>
   );
@@ -103,9 +126,11 @@ const Text = (props) => {
 
   const [rowArr, setRowArr] = useState(props.rows);
 
+  const rowsToHightlight = ['.first-row', '.second-row'];
+
   // Restart caret animation when key is pressed.
   const restartCaretAnimation = () => {
-    let rowElem = document.querySelector('.first-row');
+    let rowElem = document.querySelector(rowsToHightlight[props.currentRow]);
     rowElem.classList.remove('animate');
     // Trigger reflow to allow animation to restart.
     void rowElem.offsetHeight;
@@ -140,16 +165,16 @@ const Text = (props) => {
         return (
           <Row
             key={rowInd}
-            // caretOffset positions caret on top row.
+            ind={rowInd}
             caretOffset={props.caretOffset}
-            first={rowInd === 0}
+            currentRow={props.currentRow}
           >
             {row.map((word, wordInd) => {
               return (
                 <Word
                   key={wordInd}
-                  isCurrent={rowInd === 0 && wordInd === props.currentWordInd}
-                  isCorrect={rowInd === 0 && props.currentWordInd > wordInd}
+                  isCurrent={rowInd === props.currentRow && wordInd === props.currentWordInd}
+                  isCorrect={rowInd === props.currentRow && props.currentWordInd > wordInd}
                 >
                   {word.map((letter, letterInd) => {
                     return (
@@ -157,14 +182,14 @@ const Text = (props) => {
                         key={letterInd}
                         // Highlight that letter has been input
                         entered={
-                          rowInd === 0 &&
+                          rowInd === props.currentRow &&
                           props.inputValue.length > letterInd &&
                           wordInd === props.currentWordInd
                         }
                         // Highlights incorrectly input letter
                         isIncorrect={
                           props.currentWord[letterInd] !== props.inputValue[letterInd] && // Match letter
-                          rowInd === 0 &&
+                          rowInd === props.currentRow &&
                           wordInd === props.currentWordInd && // Check only currentWord
                           props.inputValue.length > letterInd // Don't check letters not yet input
                         }

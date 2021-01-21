@@ -100,7 +100,6 @@ const TypeTest = () => {
     tempArr.shift();
     tempArr.push(loadRow(words));
     setTextRows(tempArr);
-    setRowProgress(0);
   }
 
   // Keep track of whether document (or any element inside it) is focused
@@ -118,15 +117,21 @@ const TypeTest = () => {
    * Also triggers text row shifting.
    */
   const updateCurrentWordInd = () => {
+    console.log(currentRow);
     if (currentWordInd === (g.WORDS_PER_ROW - 1)) {
-      updateTextRows();
+      if (currentRow < 1) {
+        setCurrentRow(1);
+      } else {
+        updateTextRows();
+      }
+      setRowProgress(0);
     }
     setCurrentWordInd((currentWordInd) => (currentWordInd + 1) % g.WORDS_PER_ROW);
   }
 
   /**
    * End test when timer expires or escape is pressed.
-   * Stops test, clears input, resets currentWord,
+   * Stops test, clears input, resets currentWord and currentRow,
    * loads a new set of rows of words and rewinds caret.
    */  
   const endTest = () => {
@@ -134,6 +139,7 @@ const TypeTest = () => {
     setInputValue('');
     setCurrentWordInd(0);
     setTextRows(loadRows(words));
+    setCurrentRow(0);
     setRowProgress(0);
     setTimeLeft(testLength);
   }
@@ -157,8 +163,8 @@ const TypeTest = () => {
       // Detect spacebar press
       if (e.key === ' ') {
         // Check if input matches currentWord
-        if (checkFullWord(textRows[0][currentWordInd], inputValue)) {
-          setRowProgress((rowProgress) => (rowProgress + textRows[0][currentWordInd].length) + 1);
+        if (checkFullWord(textRows[currentRow][currentWordInd], inputValue)) {
+          setRowProgress((rowProgress) => (rowProgress + textRows[currentRow][currentWordInd].length) + 1);
           updateCurrentWordInd();
           setInputValue('');
         }
@@ -209,7 +215,8 @@ const TypeTest = () => {
       <TestTimer timeLeft={timeLeft} />
       <Text 
         focused={documentFocused}
-        currentWord={textRows[0][currentWordInd]}
+        currentRow={currentRow}
+        currentWord={textRows[currentRow][currentWordInd]}
         currentWordInd={currentWordInd}
         rows={textRows}
         playing={playing}
@@ -217,7 +224,7 @@ const TypeTest = () => {
         caretOffset={rowProgress + inputValue.length}
         />
       <Input
-        currentWord={textRows[0][currentWordInd]}
+        currentWord={textRows[currentRow][currentWordInd]}
         playing={playing}
         focused={documentFocused}
         checkWord={checkFullWord}
