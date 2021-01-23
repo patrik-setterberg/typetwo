@@ -83,7 +83,7 @@ const TypeTest = (props) => {
   }
 
   // Keep track of whether document (or any element inside it) is focused.
-  const [documentFocused, setDocumentFocus] = useState(false);
+  const [documentIsFocused, setDocumentIsFocused] = useState(false);
 
   const [inputValue, setInputValue] = useState('');
 
@@ -132,7 +132,7 @@ const TypeTest = (props) => {
   // Check page focus
   useEffect(() => {
     let focusInterval = setInterval(() => {
-      setDocumentFocus(document.hasFocus());
+      setDocumentIsFocused(document.hasFocus());
     }, g.FOCUS_CHECK_INTERVAL);
 
     return () => {
@@ -192,15 +192,32 @@ const TypeTest = (props) => {
 
   // Timer for test duration countdown.
   useEffect(() => {
+
     let timerInterval;
+    let testDuration = 0;
+
     if (props.playing === true) {
-      timerInterval = setInterval(() => setTimeLeft((timeLeft) => (timeLeft - 1)), 1000);
-    }
+      /**
+       * Runs a clock which decreases timeLeft by 1 every second.
+       * Timer clears if document loses focus. Restarts when focus is regained.
+       * Technically inaccurate because it gives a < 1s leeway when regaining focus.
+       */
+      timerInterval = setInterval(() => {
+        
+        // "Pauses" (at least, do nothing) if focus is lost.
+        if (documentIsFocused === true) {
+          testDuration += g.TEST_TICK_SPEED;
+          if (testDuration % 1000 === 0) {
+            setTimeLeft((timeLeft) => (timeLeft - 1));
+          }
+        }
+      }, g.TEST_TICK_SPEED);
+    };
 
     return () => {
       clearInterval(timerInterval);
     }
-  }, [props.playing]);
+  }, [props.playing, documentIsFocused]);
 
   // End test when timer reaches zero.
   useEffect(() => {
@@ -217,10 +234,10 @@ const TypeTest = (props) => {
   }, [props.testLength]);
 
   return(
-    <StyledTypeTest focused={documentFocused}>
+    <StyledTypeTest focused={documentIsFocused}>
       <TestTimer timeLeft={timeLeft} />
       <Text 
-        focused={documentFocused}
+        focused={documentIsFocused}
         currentRow={currentRow}
         currentWord={textRows[currentRow][currentWordInd]}
         currentWordInd={currentWordInd}
@@ -233,7 +250,7 @@ const TypeTest = (props) => {
       <Input
         currentWord={textRows[currentRow][currentWordInd]}
         playing={props.playing}
-        focused={documentFocused}
+        focused={documentIsFocused}
         checkWord={checkFullWord}
         inputValue={inputValue}
         setInputValue={setInputValue}

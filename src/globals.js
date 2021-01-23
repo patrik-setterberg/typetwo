@@ -34,6 +34,9 @@ const g = {
 
   // Set how often component checks if document is focused
   FOCUS_CHECK_INTERVAL: 66,
+
+  // Test tick speed used for countdown clock (in ms)
+  TEST_TICK_SPEED: 25,
 }
 
 export default g;
