@@ -30,27 +30,32 @@ const Input = (props) => {
   // initiate reference to textinput element
   let textInput = useRef(null);
 
-  let focusTimer = null;
-
+  // Keep input focused. Good or nah?
   useEffect(() => {
-    // Focus on load and change
-    textInput.current.focus();
-  });
+    let focusTimer = setInterval(() => {
+      textInput.current.focus();
+    }, 200);
 
-/* Filter text-input. 
-Remove everything except chars inside square brackets.
-Also remove whitespaces, incl. tabs, newlines.
-Finally, trim chars which exceed length of 2nd parameter (currentWord). */
-const filterInput = (input, maxLen) => {
-  return input
-    .replace(/[^a-zA-Z0-9-.,'!?]/g, "")
-    .replace(/\s+/g, "")
-    .substring(0, maxLen);
+    return () => {
+      clearInterval(focusTimer);
+    }
+  }, []);
+
+  /* Filter text-input. 
+  Remove everything except chars inside square brackets.
+  Also remove whitespaces, incl. tabs, newlines.
+  Finally, trim chars which exceed length of 2nd parameter (currentWord). */
+  const filterInput = (input, maxLen) => {
+    return input
+      .replace(/[^a-zA-Z0-9-.,'!?]/g, "")
+      .replace(/\s+/g, "")
+      .substring(0, maxLen);
   }
 
   return(
     <StyledInput
       type="text"
+      // MAYBE REMOVE PLACEHOLDER SINCE INPUT IS HIDDEN?
       placeholder={
         props.focused ? 
           // focused && playing : focused && not playing
@@ -69,13 +74,8 @@ const filterInput = (input, maxLen) => {
       onBlur={() => {
         if (props.playing === true) {
           // Try to focus
-          focusTimer = window.setInterval(() => {
-            textInput.current.focus()
-          }, 100);
+          textInput.current.focus();
         }
-      }}
-      onFocus={() => {
-        window.clearInterval(focusTimer);
       }}
     />
   );

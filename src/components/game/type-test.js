@@ -11,27 +11,15 @@ import TestTimer from './test-countdown.js';
 import Text from './text.js';
 import TimeControls from './test-time-controls.js';
 
-const TypeTestWrapper = styled.div`
+const StyledTypeTest = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  width: 100%;
-  margin: 0 auto;
-  font-family: 'Roboto Mono', monospace;
   color: #fff;
   font-size: 1.5rem;
-  margin-top: 200px; /* temp positioning */
-
-  @media ${g.medium} {
-    width: 90vw;
-  }
-
-  @media ${g.large} {
-    width: 70vw;
-  }
 `
 
-const TypeTest = () => {  
+const TypeTest = (props) => {  
 
   // Retrieve a random word from array of words, return array of letters
   const getWord = (words) => {
@@ -61,17 +49,10 @@ const TypeTest = () => {
     });
   };
 
-  const [playing, setPlaying] = useState(false);
-
-  /**
-   * Stores selected test length (in seconds)
-   */
-  const [testLength, setTestLength] = useState(g.TEST_LENGTH_DEFAULT);
-
   /**
    * Track time left. Uses testLength state to get user selected test length
    */
-  const [timeLeft, setTimeLeft] = useState(testLength);
+  const [timeLeft, setTimeLeft] = useState(props.testLength);
 
   /**
    * Keep track of currentWord.
@@ -102,10 +83,13 @@ const TypeTest = () => {
     setTextRows(tempArr);
   }
 
-  // Keep track of whether document (or any element inside it) is focused
+  // Keep track of whether document (or any element inside it) is focused.
   const [documentFocused, setDocumentFocus] = useState(false);
 
   const [inputValue, setInputValue] = useState('');
+
+  // Keep track of correctly input words for calculating score.
+  const [correctWordsCount, setCorrectWordsCount] = useState(0);
 
   // Compare array word with str from text-input
   const checkFullWord = (word, input) => {
@@ -117,7 +101,6 @@ const TypeTest = () => {
    * Also triggers text row shifting.
    */
   const updateCurrentWordInd = () => {
-    console.log(currentRow);
     if (currentWordInd === (g.WORDS_PER_ROW - 1)) {
       if (currentRow < 1) {
         setCurrentRow(1);
@@ -135,27 +118,32 @@ const TypeTest = () => {
    * loads a new set of rows of words and rewinds caret.
    */  
   const endTest = () => {
-    setPlaying(false);
+    props.setPlaying(false);
     setInputValue('');
     setCurrentWordInd(0);
     setTextRows(loadRows(words));
     setCurrentRow(0);
     setRowProgress(0);
-    setTimeLeft(testLength);
+    setTimeLeft(props.testLength);
   }
 
+  // Check page focus
   useEffect(() => {
-
-    // Check page focus
-    setInterval(() => {
+    let focusInterval = setInterval(() => {
       setDocumentFocus(document.hasFocus());
     }, g.FOCUS_CHECK_INTERVAL);
 
+    return () => {
+      clearInterval(focusInterval);
+    }
+  }, []);
+
+  useEffect(() => {
     // Start test on detecting letters being input
     const handleKeypress = (e) => {
-      if (playing === false) {
+      if (props.playing === false) {
         if (/[a-z|A-Z]/g.test(e.key) && e.key !== 'Enter') {
-          setPlaying(true);
+          props.setPlaying(true);
           setTimeLeft((timeLeft) => (timeLeft - 1));   
         }
       }
@@ -164,6 +152,7 @@ const TypeTest = () => {
       if (e.key === ' ') {
         // Check if input matches currentWord
         if (checkFullWord(textRows[currentRow][currentWordInd], inputValue)) {
+          setCorrectWordsCount((correctWordsCount) => (correctWordsCount + 1));
           setRowProgress((rowProgress) => (rowProgress + textRows[currentRow][currentWordInd].length) + 1);
           updateCurrentWordInd();
           setInputValue('');
@@ -184,34 +173,38 @@ const TypeTest = () => {
       window.removeEventListener('keypress', handleKeypress);
       window.removeEventListener('keyup', handleKeyup);
     };
-  }, [loadRows, textRows]);
+  }, [loadRows, textRows, currentRow, currentWordInd, inputValue, endTest, updateCurrentWordInd]);
 
   // Timer for test duration.
   useEffect(() => {
     let timerInterval;
-    if (playing === true) {
+    if (props.playing === true) {
       timerInterval = setInterval(() => setTimeLeft((timeLeft) => (timeLeft - 1)), 1000);
     }
 
     return () => {
       clearInterval(timerInterval);
     }
-  }, [playing]);
+  }, [props.playing]);
+
+  
 
   // End test when timer reaches zero.
   useEffect(() => {
     if (timeLeft <= 0) {
+      props.calcTestScore(correctWordsCount);
       endTest();
+      props.setTestConcluded(true);
     }
-  }, [timeLeft, endTest]);
+  }, [props.calcTestScore, props.setTestConcluded, endTest, timeLeft, correctWordsCount]);
 
   // Rerender when test-time-controls button is clicked
   useEffect(() => {
-    setTimeLeft(testLength);
-  }, [testLength]);
+    setTimeLeft(props.testLength);
+  }, [props.testLength]);
 
   return(
-    <TypeTestWrapper focused={documentFocused}>
+    <StyledTypeTest focused={documentFocused}>
       <TestTimer timeLeft={timeLeft} />
       <Text 
         focused={documentFocused}
@@ -219,25 +212,25 @@ const TypeTest = () => {
         currentWord={textRows[currentRow][currentWordInd]}
         currentWordInd={currentWordInd}
         rows={textRows}
-        playing={playing}
+        playing={props.playing}
         inputValue={inputValue}
         caretOffset={rowProgress + inputValue.length}
         />
       <Input
         currentWord={textRows[currentRow][currentWordInd]}
-        playing={playing}
+        playing={props.playing}
         focused={documentFocused}
         checkWord={checkFullWord}
         inputValue={inputValue}
         setInputValue={setInputValue}
         updateCurrentWord={updateCurrentWordInd}
       />
-      <div>{playing ? 'playing' : 'not playing'}</div>
+      <div>{props.playing ? 'playing' : 'not playing'}</div>
       <TimeControls
-        setTestLength={setTestLength}
-        playing={playing}
+        setTestLength={props.setTestLength}
+        playing={props.playing}
       />
-    </TypeTestWrapper>
+    </StyledTypeTest>
   );
 }
 

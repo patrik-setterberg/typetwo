@@ -4,7 +4,7 @@
  * Incorrectly input characters are highlighted in **PROBABLY RED**.
  */
 
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useMemo, useEffect, useState} from 'react';
 import styled, {css} from 'styled-components';
 // import g from '../../globals.js';
 
@@ -53,7 +53,7 @@ const StyledRow = styled.span`
   }
 
   &.animate::before {
-    animation: 1.8s cubic-bezier(0.78, 0.2, 0.05, 1.0) 0s infinite forwards caret-blink;
+    animation: 1.6s cubic-bezier(0.78, 0.2, 0.05, 1.0) 0s infinite forwards caret-blink;
   }
 
   &.first-row {
@@ -84,6 +84,7 @@ const StyledLetter = styled.span`
 `
 
 const Row = (props) => {
+  // Row classes necessary for caret positioning and animation.
   const rowClasses = [
     'first-row animate',
     'second-row animate',
@@ -126,16 +127,19 @@ const Text = (props) => {
 
   const [rowArr, setRowArr] = useState(props.rows);
 
-  const rowsToHightlight = ['.first-row', '.second-row'];
+  const rowsToHightlight = useMemo(() => {
+    return(
+      ['.first-row', '.second-row']
+    )}, []);
 
   // Restart caret animation when key is pressed.
-  const restartCaretAnimation = () => {
+  const restartCaretAnimation = useCallback (() => {
     let rowElem = document.querySelector(rowsToHightlight[props.currentRow]);
     rowElem.classList.remove('animate');
     // Trigger reflow to allow animation to restart.
     void rowElem.offsetHeight;
     rowElem.classList.add('animate');
-  }
+  }, [rowsToHightlight, props.currentRow]);
 
   useEffect(() => {
     setRowArr(props.rows);
@@ -157,7 +161,7 @@ const Text = (props) => {
       window.removeEventListener('keypress', handleKeypress);
       window.removeEventListener('keyup', handleKeyup);
     };
-  }, [props.rows, props.inputValue]);
+  }, [props.rows, props.inputValue, restartCaretAnimation]);
 
   return (
     <TextWrapper focused={props.focused}>
@@ -189,7 +193,7 @@ const Text = (props) => {
                         // Highlights incorrectly input letter
                         isIncorrect={
                           props.currentWord[letterInd] !== props.inputValue[letterInd] && // Match letter
-                          rowInd === props.currentRow &&
+                          rowInd === props.currentRow && // Check only currentRow
                           wordInd === props.currentWordInd && // Check only currentWord
                           props.inputValue.length > letterInd // Don't check letters not yet input
                         }

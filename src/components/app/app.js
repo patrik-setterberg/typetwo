@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import styled from 'styled-components';
 import g from '../../globals.js';
-import TypeTest from '../game/game.js';
+import TypeTestHandler from '../game/type-test-handler.js';
 
 
 const Main = styled.main`
@@ -10,6 +10,7 @@ const Main = styled.main`
 	position: fixed;
 	/* padding: var(--default-padding); */
 	background-color: ${g.bgcolor}; /* ??? */
+	font-family: 'Roboto Mono', monospace;
 `
 
 const App = () => {
@@ -30,7 +31,7 @@ const App = () => {
 	return(
 		<>
 			<Main>
-				<TypeTest />
+				<TypeTestHandler />
 			</Main>
 		</>
 	);

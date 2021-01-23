@@ -1,4 +1,9 @@
-import React, {useEffect} from 'react';
+/**
+ * TYPE TEST COUNTDOWN TIME
+ * Prints time left on screen.
+ */
+
+import React from 'react';
 import styled from 'styled-components';
 
 const TimerWrapper = styled.div`
@@ -12,9 +17,6 @@ const Numbers = styled.span`
   font-size: 3rem;
 `
 
-/**
- * Countdown timer
- */
 const TestTimer = (props) => {
   return(
     <TimerWrapper>

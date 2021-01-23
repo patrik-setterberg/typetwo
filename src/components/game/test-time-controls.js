@@ -13,7 +13,7 @@ const StyledButton = styled.button`
 
 const StyledTimeControls = styled.div`
   opacity: ${props => props.playing ? '0' : '1'};
-  transition: opacity 0.2s ease; // EHHHHHHHHHHH
+  transition: opacity 0.2s ease;
   
   & button + button {
     margin-left: 0.5rem;
@@ -29,7 +29,7 @@ const Button = (props) => {
 }
 
 const TimeControls = (props) => {
-  
+
   const testLengthOptions = [
     g.TEST_LENGTH_SHORT,
     g.TEST_LENGTH_MEDIUM,
