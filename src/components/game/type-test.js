@@ -42,16 +42,14 @@ const TypeTest = (props) => {
     return rowArr;
   }, []);
 
-  // Load and return an array of rows of words
+  // Load and return an array of rows of words.
   const loadRows = useCallback((wordArr) => {
     return Array.from(Array(g.ROW_COUNT)).map((_) => {
       return loadRow(wordArr);
     });
   }, [loadRow]);
 
-  /**
-   * Track time left. Uses testLength state to get user selected test length
-   */
+  // Track time left. Uses testLength state to get user selected test length.
   const [timeLeft, setTimeLeft] = useState(props.testLength);
 
   /**
@@ -61,6 +59,7 @@ const TypeTest = (props) => {
    */
   const [currentWordInd, setCurrentWordInd] = useState(0);
 
+  // Test uses first and second row of text for input.
   const [currentRow, setCurrentRow] = useState(0);
 
   // Track progress on row for caret positioning.
@@ -87,6 +86,9 @@ const TypeTest = (props) => {
   const [documentFocused, setDocumentFocus] = useState(false);
 
   const [inputValue, setInputValue] = useState('');
+
+  // Used to flash highlight incorrect letters when word is checked.
+  const [wordIncorrect, setWordIncorrect] = useState(false);
 
   // Keep track of correctly input words for calculating score.
   const [correctWordsCount, setCorrectWordsCount] = useState(0);
@@ -137,14 +139,15 @@ const TypeTest = (props) => {
       clearInterval(focusInterval);
     }
   }, []);
+ 
+  useEffect(() => { 
 
-  useEffect(() => {
     // Start test on detecting letters being input
     const handleKeypress = (e) => {
       if (props.playing === false) {
         if (/[a-z|A-Z]/g.test(e.key) && e.key !== 'Enter') {
           props.setPlaying(true);
-          setTimeLeft((timeLeft) => (timeLeft - 1));   
+          setTimeLeft((timeLeft) => (timeLeft - 1));
         }
       }
 
@@ -156,6 +159,12 @@ const TypeTest = (props) => {
           updateCurrentWordInd();
           setInputValue('');
           setCorrectWordsCount((correctWordsCount) => (correctWordsCount + 1));
+        } else {
+          setWordIncorrect(true);
+          // PROBLEM: WILL THROW ERROR IF TEST ENDS DURING TIMEOUT.
+          setTimeout(() => {
+            setWordIncorrect(false);
+          }, 200);
         }
       }
     };
@@ -164,6 +173,7 @@ const TypeTest = (props) => {
     return () => {
       window.removeEventListener('keypress', handleKeypress);
     };
+    // PROBLEM: LISTENERS ADDED AND REMOVED EVERY TIME THINGS IN DEPENDENCY ARRAY ARE UPDATED
   }, [loadRows, textRows, currentRow, currentWordInd, inputValue, updateCurrentWordInd]);
 
   // Abort game if Escape is pressed.
@@ -180,7 +190,7 @@ const TypeTest = (props) => {
     }
   }, [endTest]);
 
-  // Timer for test duration.
+  // Timer for test duration countdown.
   useEffect(() => {
     let timerInterval;
     if (props.playing === true) {
@@ -191,8 +201,6 @@ const TypeTest = (props) => {
       clearInterval(timerInterval);
     }
   }, [props.playing]);
-
-  
 
   // End test when timer reaches zero.
   useEffect(() => {
@@ -220,6 +228,7 @@ const TypeTest = (props) => {
         playing={props.playing}
         inputValue={inputValue}
         caretOffset={rowProgress + inputValue.length}
+        wordIncorrect={wordIncorrect}
         />
       <Input
         currentWord={textRows[currentRow][currentWordInd]}

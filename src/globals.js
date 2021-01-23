@@ -84,24 +84,20 @@ const GlobalStyle = createGlobalStyle`
 
   /* ANIMATIONS */
   @keyframes caret-blink {
-    0% {
+    from {
       opacity: var(---caret-opacity);
     }
 
-    45% {
+    47% {
       opacity: var(---caret-opacity);
     }
 
-    50% {
+    53% {
       opacity: 0;
     }
 
-    95% {
+    to {
       opacity: 0;
-    }
-
-    100% {
-      opacity: var(---caret-opacity);
     }
   }
 `
