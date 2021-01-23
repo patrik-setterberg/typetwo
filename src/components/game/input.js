@@ -33,7 +33,11 @@ const Input = (props) => {
   // Keep input focused. Good or nah?
   useEffect(() => {
     let focusTimer = setInterval(() => {
-      textInput.current.focus();
+      if (textInput.current === null) {
+        clearInterval(focusTimer);
+      } else {
+        textInput.current.focus();
+      }
     }, 200);
 
     return () => {

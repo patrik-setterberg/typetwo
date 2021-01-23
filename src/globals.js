@@ -30,7 +30,7 @@ const g = {
   TEST_LENGTH_MEDIUM: 30,
   TEST_LENGTH_LONG: 60,
 
-  TEST_LENGTH_DEFAULT: 30,
+  TEST_LENGTH_DEFAULT: 15,
 
   // Set how often component checks if document is focused
   FOCUS_CHECK_INTERVAL: 66,

@@ -143,7 +143,9 @@ const Text = (props) => {
 
   useEffect(() => {
     setRowArr(props.rows);
+  }, [props.rows]);
 
+  useEffect(() => {
     const handleKeypress = () => {
       restartCaretAnimation();
     };

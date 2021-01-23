@@ -2,7 +2,7 @@
  * TYPE TEST MAIN COMPONENT
  */
 
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useCallback} from 'react';
 import styled from 'styled-components';
 import g from '../../globals.js';
 import words from '../../assets/game/words.js';
@@ -27,7 +27,7 @@ const TypeTest = (props) => {
   }
 
   // Load a row (array) of words
-  const loadRow = (wordArr) => {
+  const loadRow = useCallback((wordArr) => {
     let rowArr = [];
   
     while (rowArr.length < g.WORDS_PER_ROW) {
@@ -40,14 +40,14 @@ const TypeTest = (props) => {
       }
     }
     return rowArr;
-  };
+  }, []);
 
   // Load and return an array of rows of words
-  const loadRows = (wordArr) => {
+  const loadRows = useCallback((wordArr) => {
     return Array.from(Array(g.ROW_COUNT)).map((_) => {
       return loadRow(wordArr);
     });
-  };
+  }, [loadRow]);
 
   /**
    * Track time left. Uses testLength state to get user selected test length
@@ -117,7 +117,7 @@ const TypeTest = (props) => {
    * Stops test, clears input, resets currentWord and currentRow,
    * loads a new set of rows of words and rewinds caret.
    */  
-  const endTest = () => {
+  const endTest = useCallback(() => {
     props.setPlaying(false);
     setInputValue('');
     setCurrentWordInd(0);
@@ -125,7 +125,7 @@ const TypeTest = (props) => {
     setCurrentRow(0);
     setRowProgress(0);
     setTimeLeft(props.testLength);
-  }
+  }, [props, loadRows]);
 
   // Check page focus
   useEffect(() => {
@@ -152,28 +152,33 @@ const TypeTest = (props) => {
       if (e.key === ' ') {
         // Check if input matches currentWord
         if (checkFullWord(textRows[currentRow][currentWordInd], inputValue)) {
-          setCorrectWordsCount((correctWordsCount) => (correctWordsCount + 1));
           setRowProgress((rowProgress) => (rowProgress + textRows[currentRow][currentWordInd].length) + 1);
           updateCurrentWordInd();
           setInputValue('');
+          setCorrectWordsCount((correctWordsCount) => (correctWordsCount + 1));
         }
       }
     };
     window.addEventListener('keypress', handleKeypress);
 
-    // Keyup listener needed because 'keypress' doesn't detect Escape
+    return () => {
+      window.removeEventListener('keypress', handleKeypress);
+    };
+  }, [loadRows, textRows, currentRow, currentWordInd, inputValue, updateCurrentWordInd]);
+
+  // Abort game if Escape is pressed.
+  useEffect(() => {
     const handleKeyup = (e) => {
       if (e.key === 'Escape') {
         endTest();
       }
     };
     window.addEventListener('keyup', handleKeyup);
-    
+
     return () => {
-      window.removeEventListener('keypress', handleKeypress);
       window.removeEventListener('keyup', handleKeyup);
-    };
-  }, [loadRows, textRows, currentRow, currentWordInd, inputValue, endTest, updateCurrentWordInd]);
+    }
+  }, [endTest]);
 
   // Timer for test duration.
   useEffect(() => {
