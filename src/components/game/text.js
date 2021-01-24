@@ -75,7 +75,7 @@ const StyledWord = styled.span`
 `
 
 const StyledLetter = styled.span`
-  transition: color 0.1s var(--default-timing), text-shadow 0.2s ease;;
+  transition: color 0.03s var(--default-timing), text-shadow 0.2s ease;;
   text-shadow: ${props => props.focused ? 'none' : '0 0 0.4rem #fff'};
 
   ${props => props.entered && css`
@@ -87,8 +87,11 @@ const StyledLetter = styled.span`
   }
 
   ${props => props.isIncorrect && props.focused === false && css`
-    color: transparent;
     text-shadow: 0 0 0.4rem darkred;`
+  }
+
+  ${props => props.focused === false && css`
+    color: transparent;`
   }
 
   /**

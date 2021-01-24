@@ -50,10 +50,7 @@ const TypeTest = (props) => {
   }, [loadRow]);
 
   // Time left printed on screen
-  const [timeLeft, setTimeLeft] = useState((props.testLength / 1000));
-
-  // Actual time left used for countdown
-  const [actualTimeLeft, setActualTimeLeft] = useState(props.testLength);
+  const [timeLeft, setTimeLeft] = useState((props.testLength));
 
   /**
    * Keep track of currentWord.
@@ -84,9 +81,6 @@ const TypeTest = (props) => {
     tempArr.push(loadRow(words));
     setTextRows(tempArr);
   }
-
-  // Keep track of whether document (or any element inside it) is focused.
-  const [documentIsFocused, setDocumentIsFocused] = useState(false);
 
   const [inputValue, setInputValue] = useState('');
 
@@ -131,17 +125,6 @@ const TypeTest = (props) => {
     setRowProgress(0);
     setTimeLeft(props.testLength);
   }, [props, loadRows]);
-
-  // Check page focus
-  useEffect(() => {
-    let focusInterval = setInterval(() => {
-      setDocumentIsFocused(document.hasFocus());
-    }, g.FOCUS_CHECK_INTERVAL);
-
-    return () => {
-      clearInterval(focusInterval);
-    }
-  }, []);
  
   useEffect(() => { 
 
@@ -149,8 +132,8 @@ const TypeTest = (props) => {
     const handleKeypress = (e) => {
       if (props.playing === false) {
         if (/[a-z|A-Z]/g.test(e.key) && e.key !== 'Enter') {
+          setTimeLeft((timeLeft) => (timeLeft - 1));
           props.setPlaying(true);
-          //setTimeLeft((timeLeft) => (timeLeft - 1));
         }
       }
 
@@ -198,53 +181,43 @@ const TypeTest = (props) => {
 
     let timerInterval;
 
-    if (props.playing === true) {
+    if (props.playing === true && props.documentIsFocused === true) {
       /**
        * Runs a clock which decreases timeLeft by 1 every second.
        * Timer clears if document loses focus. Restarts when focus is regained.
-       * Technically inaccurate because it gives a < 1s leeway when regaining focus.
-       * BAD
-       * INSTEAD create an.. actualTimeLeft state, maybe, and update that every tick
-       * ALSO BAD
-       * Timed 15s is actually around 17s so very inaccurate due to state being 
-       * async operations I'd guess so they take a little while to execute.
+       * BAD SOLUTION:
+       * Drifts - These "seconds" are slightly longer than normal seconds, about ~1s over 30s
+       * Inaccurate / bad because it gives a < 1s leeway when regaining focus.
        */
       timerInterval = setInterval(() => {
-        console.log(documentIsFocused);
-        // "Pauses" (at least, do nothing) if focus is lost.
-        if (documentIsFocused === true) {
-          setActualTimeLeft((actualTimeLeft) => (actualTimeLeft - g.TEST_TICK_SPEED));
-          if (actualTimeLeft % 1000 === 0) {
-            setTimeLeft((timeLeft) => (timeLeft - 1));
-          }
-        }
-      }, g.TEST_TICK_SPEED);
+        setTimeLeft((timeLeft) => (timeLeft - 1));
+      }, 1000);
     };
 
     return () => {
       clearInterval(timerInterval);
     }
-  }, [props.playing, documentIsFocused, actualTimeLeft]);
+  }, [props.playing, props.documentIsFocused, timeLeft]);
 
   // End test when timer reaches zero.
   useEffect(() => {
-    if (actualTimeLeft <= 0) {
+    if (timeLeft <= 0) {
       props.calcTestScore(correctWordsCount);
       endTest();
       props.setTestConcluded(true);
     }
-  }, [props.calcTestScore, props.setTestConcluded, endTest, actualTimeLeft, correctWordsCount]);
+  }, [props.calcTestScore, props.setTestConcluded, endTest, timeLeft, correctWordsCount]);
 
   // Rerender when test-time-controls button is clicked
   useEffect(() => {
-    setActualTimeLeft(props.testLength);
+    setTimeLeft(props.testLength);
   }, [props.testLength]);
 
   return(
-    <StyledTypeTest focused={documentIsFocused}>
+    <StyledTypeTest focused={props.documentIsFocused}>
       <TestTimer timeLeft={timeLeft} />
       <Text 
-        focused={documentIsFocused}
+        focused={props.documentIsFocused}
         currentRow={currentRow}
         currentWord={textRows[currentRow][currentWordInd]}
         currentWordInd={currentWordInd}
@@ -257,7 +230,7 @@ const TypeTest = (props) => {
       <Input
         currentWord={textRows[currentRow][currentWordInd]}
         playing={props.playing}
-        focused={documentIsFocused}
+        focused={props.documentIsFocused}
         checkWord={checkFullWord}
         inputValue={inputValue}
         setInputValue={setInputValue}

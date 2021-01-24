@@ -22,7 +22,7 @@ const TypeTestWrapper = styled.div`
   }
 `
 
-const TypeTestHandler = () => {
+const TypeTestHandler = (props) => {
 
   const [playing, setPlaying] = useState(false);
 
@@ -55,6 +55,7 @@ const TypeTestHandler = () => {
           testLength={testLength}
           setTestLength={setTestLength}
           setTestConcluded={setTestConcluded}
+          documentIsFocused={props.documentIsFocused}
         />
       }
     </TypeTestWrapper>
