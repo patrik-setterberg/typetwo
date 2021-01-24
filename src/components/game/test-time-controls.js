@@ -45,7 +45,7 @@ const TimeControls = (props) => {
             testLengthOption={option}
             key={key}
           >
-            {option}
+            {option / 1000}
           </Button>
         );
       })}

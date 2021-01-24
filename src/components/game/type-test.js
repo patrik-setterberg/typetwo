@@ -49,8 +49,11 @@ const TypeTest = (props) => {
     });
   }, [loadRow]);
 
-  // Track time left. Uses testLength state to get user selected test length.
-  const [timeLeft, setTimeLeft] = useState(props.testLength);
+  // Time left printed on screen
+  const [timeLeft, setTimeLeft] = useState((props.testLength / 1000));
+
+  // Actual time left used for countdown
+  const [actualTimeLeft, setActualTimeLeft] = useState(props.testLength);
 
   /**
    * Keep track of currentWord.
@@ -147,7 +150,7 @@ const TypeTest = (props) => {
       if (props.playing === false) {
         if (/[a-z|A-Z]/g.test(e.key) && e.key !== 'Enter') {
           props.setPlaying(true);
-          setTimeLeft((timeLeft) => (timeLeft - 1));
+          //setTimeLeft((timeLeft) => (timeLeft - 1));
         }
       }
 
@@ -194,20 +197,24 @@ const TypeTest = (props) => {
   useEffect(() => {
 
     let timerInterval;
-    let testDuration = 0;
 
     if (props.playing === true) {
       /**
        * Runs a clock which decreases timeLeft by 1 every second.
        * Timer clears if document loses focus. Restarts when focus is regained.
        * Technically inaccurate because it gives a < 1s leeway when regaining focus.
+       * BAD
+       * INSTEAD create an.. actualTimeLeft state, maybe, and update that every tick
+       * ALSO BAD
+       * Timed 15s is actually around 17s so very inaccurate due to state being 
+       * async operations I'd guess so they take a little while to execute.
        */
       timerInterval = setInterval(() => {
-        
+        console.log(documentIsFocused);
         // "Pauses" (at least, do nothing) if focus is lost.
         if (documentIsFocused === true) {
-          testDuration += g.TEST_TICK_SPEED;
-          if (testDuration % 1000 === 0) {
+          setActualTimeLeft((actualTimeLeft) => (actualTimeLeft - g.TEST_TICK_SPEED));
+          if (actualTimeLeft % 1000 === 0) {
             setTimeLeft((timeLeft) => (timeLeft - 1));
           }
         }
@@ -217,20 +224,20 @@ const TypeTest = (props) => {
     return () => {
       clearInterval(timerInterval);
     }
-  }, [props.playing, documentIsFocused]);
+  }, [props.playing, documentIsFocused, actualTimeLeft]);
 
   // End test when timer reaches zero.
   useEffect(() => {
-    if (timeLeft <= 0) {
+    if (actualTimeLeft <= 0) {
       props.calcTestScore(correctWordsCount);
       endTest();
       props.setTestConcluded(true);
     }
-  }, [props.calcTestScore, props.setTestConcluded, endTest, timeLeft, correctWordsCount]);
+  }, [props.calcTestScore, props.setTestConcluded, endTest, actualTimeLeft, correctWordsCount]);
 
   // Rerender when test-time-controls button is clicked
   useEffect(() => {
-    setTimeLeft(props.testLength);
+    setActualTimeLeft(props.testLength);
   }, [props.testLength]);
 
   return(

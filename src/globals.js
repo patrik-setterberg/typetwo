@@ -24,19 +24,19 @@ const g = {
   WORDS_PER_ROW: 9,
   ROW_COUNT: 3,
 
-  // TEST DURATION OPTIONS (in seconds)
+  // TEST DURATION OPTIONS (in ms)
   
-  TEST_LENGTH_SHORT: 15,
-  TEST_LENGTH_MEDIUM: 30,
-  TEST_LENGTH_LONG: 60,
+  TEST_LENGTH_SHORT: 15000,
+  TEST_LENGTH_MEDIUM: 30000,
+  TEST_LENGTH_LONG: 60000,
 
-  TEST_LENGTH_DEFAULT: 15,
+  TEST_LENGTH_DEFAULT: 30000,
 
   // Set how often component checks if document is focused
   FOCUS_CHECK_INTERVAL: 66,
 
   // Test tick speed used for countdown clock (in ms)
-  TEST_TICK_SPEED: 25,
+  TEST_TICK_SPEED: 250,
 }
 
 export default g;

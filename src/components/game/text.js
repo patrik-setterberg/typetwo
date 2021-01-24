@@ -10,8 +10,7 @@ import styled, {css} from 'styled-components';
 
 const TextWrapper = styled.div`
   color: ${props => props.focused ? '#fff' : 'transparent'};
-  text-shadow: ${props => props.focused ? 'none' : '0 0 0.4rem #fff'};
-  transition: color 0.225s ease, text-shadow 0.225s ease;
+  transition: color 0.2s ease;
 
   & > span {
     line-height: 1.6;
@@ -39,6 +38,7 @@ const StyledRow = styled.span`
     width: 3px;
     background-color: darkorange;
     opacity: 0.7;
+    visibility: ${props => props.focused ? 'visible' : 'hidden'};
 
     ${props => props.caretOffset && css`
       margin-left: ${props.caretOffset}ch;`
@@ -75,7 +75,8 @@ const StyledWord = styled.span`
 `
 
 const StyledLetter = styled.span`
-  transition: color 0.1s var(--default-timing);
+  transition: color 0.1s var(--default-timing), text-shadow 0.2s ease;;
+  text-shadow: ${props => props.focused ? 'none' : '0 0 0.4rem #fff'};
 
   ${props => props.entered && css`
     color: #888; /* Use a variable */`
@@ -83,6 +84,11 @@ const StyledLetter = styled.span`
 
   ${props => props.isIncorrect && css`
     color: darkred;`
+  }
+
+  ${props => props.isIncorrect && props.focused === false && css`
+    color: transparent;
+    text-shadow: 0 0 0.4rem darkred;`
   }
 
   /**
@@ -107,6 +113,7 @@ const Row = (props) => {
       caretOffset={props.caretOffset}
       className={rowClasses[props.ind]}
       currentRow={props.currentRow}
+      focused={props.focused}
     >
       {props.children}
     </StyledRow>
@@ -131,6 +138,7 @@ const Letter = (props) => {
       entered={props.entered}
       isIncorrect={props.isIncorrect}
       wordIncorrect={props.wordIncorrect}
+      focused={props.focused}
       className="letter"
     >
       {props.children}
@@ -186,6 +194,11 @@ const Text = (props) => {
     };
   }, [props.inputValue, restartCaretAnimation]);
 
+  // Restart caret animation when focus is regained.  
+  useEffect(() => {
+    restartCaretAnimation();
+  },[restartCaretAnimation, props.focused]);
+
   return (
     <TextWrapper focused={props.focused}>
       {rowArr.map((row, rowInd) => {
@@ -195,6 +208,7 @@ const Text = (props) => {
             ind={rowInd}
             caretOffset={props.caretOffset}
             currentRow={props.currentRow}
+            focused={props.focused}
           >
             {row.map((word, wordInd) => {
               return (
@@ -221,6 +235,7 @@ const Text = (props) => {
                           props.inputValue.length > letterInd // Don't check letters not yet input
                         }
                         wordIncorrect={props.wordIncorrect}
+                        focused={props.focused}
                       >
                         {letter}
                       </Letter>
