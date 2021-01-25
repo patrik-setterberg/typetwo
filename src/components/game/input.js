@@ -56,6 +56,28 @@ const Input = (props) => {
       .substring(0, maxLen);
   }
 
+  const handleKeyDown = (e) => {
+
+    // Start game if key is a letter, i.e. if user started typing
+    if (/[a-z|A-Z]/g.test(e.key) && e.key !== 'Enter' && props.playing === false) {
+      props.setPlaying(true);
+    }
+
+    // Abort test if Escape is pressed
+    if (e.key === 'Escape') {
+      props.endTest();
+    }
+
+    if (e.key === ' ') {
+      props.handleSpace();
+    }
+  }
+
+  const handleInput = (e) => {
+    let text = filterInput(e.target.value, props.currentWord.length);
+    props.setInputValue(text);
+  }
+
   return(
     <StyledInput
       type="text"
@@ -68,9 +90,9 @@ const Input = (props) => {
           (props.playing ? 'Test paused, focus to resume' : 'Click document to focus')
       }
       value={props.inputValue}
+      onKeyDown={(e) => {handleKeyDown(e)}}
       onInput={(e) => {
-        let text = filterInput(e.target.value, props.currentWord.length);
-        props.setInputValue(text);
+        if (props.playing === true) handleInput(e);
       }}
       id="text-input"
       aria-label="Type test input"

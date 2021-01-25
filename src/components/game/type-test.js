@@ -91,8 +91,8 @@ const TypeTest = (props) => {
   const [correctWordsCount, setCorrectWordsCount] = useState(0);
 
   // Compare array word with str from text-input
-  const checkFullWord = (word, input) => {
-    return word.join('') === input;
+  const checkFullWord = () => {
+    return textRows[currentRow][currentWordInd].join('') === inputValue;
   }
 
   /**
@@ -125,56 +125,30 @@ const TypeTest = (props) => {
     setRowProgress(0);
     setTimeLeft(props.testLength);
   }, [props, loadRows]);
- 
-  useEffect(() => { 
 
-    // Start test on detecting letters being input
-    const handleKeypress = (e) => {
-      if (props.playing === false) {
-        if (/[a-z|A-Z]/g.test(e.key) && e.key !== 'Enter') {
-          setTimeLeft((timeLeft) => (timeLeft - 1));
-          props.setPlaying(true);
-        }
+    /*
+    useEffect(() => {
+      if (props.playing === true) {
+        // Do thing when test starts
       }
+    }, [props.playing])
+    */
 
-      // Detect spacebar press
-      if (e.key === ' ') {
-        // Check if input matches currentWord
-        if (checkFullWord(textRows[currentRow][currentWordInd], inputValue)) {
-          setRowProgress((rowProgress) => (rowProgress + textRows[currentRow][currentWordInd].length) + 1);
-          updateCurrentWordInd();
-          setInputValue('');
-          setCorrectWordsCount((correctWordsCount) => (correctWordsCount + 1));
-        } else {
-          setWordIncorrect(true);
-          // PROBLEM: WILL THROW ERROR IF TEST ENDS DURING TIMEOUT.
-          setTimeout(() => {
-            setWordIncorrect(false);
-          }, 200);
-        }
-      }
-    };
-    window.addEventListener('keypress', handleKeypress);
-
-    return () => {
-      window.removeEventListener('keypress', handleKeypress);
-    };
-    // PROBLEM: LISTENERS ADDED AND REMOVED EVERY TIME THINGS IN DEPENDENCY ARRAY ARE UPDATED
-  }, [loadRows, textRows, currentRow, currentWordInd, inputValue, updateCurrentWordInd]);
-
-  // Abort game if Escape is pressed.
-  useEffect(() => {
-    const handleKeyup = (e) => {
-      if (e.key === 'Escape') {
-        endTest();
-      }
-    };
-    window.addEventListener('keyup', handleKeyup);
-
-    return () => {
-      window.removeEventListener('keyup', handleKeyup);
+  const handleSpace = () => {
+    // Check if input matches currentWord.
+    if (checkFullWord()) {
+      setRowProgress((rowProgress) => (rowProgress + textRows[currentRow][currentWordInd].length) + 1);
+      updateCurrentWordInd();
+      setInputValue('');
+      setCorrectWordsCount((correctWordsCount) => (correctWordsCount + 1));
+    } else {
+      setWordIncorrect(true);
+      // PROBLEM: WILL THROW ERROR IF TEST ENDS DURING TIMEOUT.
+      setTimeout(() => {
+        setWordIncorrect(false);
+      }, 200);
     }
-  }, [endTest]);
+  }
 
   // Timer for test duration countdown.
   useEffect(() => {
@@ -188,6 +162,7 @@ const TypeTest = (props) => {
        * BAD SOLUTION:
        * Drifts - These "seconds" are slightly longer than normal seconds, about ~1s over 30s
        * Inaccurate / bad because it gives a < 1s leeway when regaining focus.
+       * FIX A BETTER TIMER AND TIME HANDLING STRATEGY
        */
       timerInterval = setInterval(() => {
         setTimeLeft((timeLeft) => (timeLeft - 1));
@@ -230,11 +205,14 @@ const TypeTest = (props) => {
       <Input
         currentWord={textRows[currentRow][currentWordInd]}
         playing={props.playing}
+        setPlaying={props.setPlaying}
         focused={props.documentIsFocused}
-        checkWord={checkFullWord}
         inputValue={inputValue}
         setInputValue={setInputValue}
+        handleSpace={handleSpace}
+        checkWord={checkFullWord}
         updateCurrentWord={updateCurrentWordInd}
+        endTest={endTest}
       />
       <div>{props.playing ? 'playing' : 'not playing'}</div>
       <TimeControls
