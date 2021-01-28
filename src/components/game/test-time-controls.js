@@ -8,15 +8,30 @@ import styled from 'styled-components';
 import g from '../../globals.js';
 
 const StyledButton = styled.button`
-
+  
 `
 
 const StyledTimeControls = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 0.5rem;
   opacity: ${props => props.playing ? '0' : '1'};
   transition: opacity 0.2s ease;
   
   & button + button {
     margin-left: 0.5rem;
+  }
+
+  & span {
+    font-size: 1.3rem;
+    display: inline-block;
+  }
+
+  & div {
+    display: flex;
+    justify-content: center;
+    margin-top: 1.5rem;
   }
 `
 
@@ -38,17 +53,20 @@ const TimeControls = (props) => {
 
   return (
     <StyledTimeControls playing={props.playing}>
-      {testLengthOptions.map((option, key) => {
-        return (
-          <Button
-            setTestLength={props.setTestLength}
-            testLengthOption={option}
-            key={key}
-          >
-            {option}
-          </Button>
-        );
-      })}
+      <span>Set test duration</span>
+      <div>
+        {testLengthOptions.map((option, key) => {
+          return (
+            <Button
+              setTestLength={props.setTestLength}
+              testLengthOption={option}
+              key={key}
+            >
+              {option}
+            </Button>
+          );
+        })}
+      </div>  
     </StyledTimeControls>
   );
 }

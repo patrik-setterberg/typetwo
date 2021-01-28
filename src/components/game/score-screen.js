@@ -28,10 +28,9 @@ const StyledScoreScreen = styled.div`
 const ScoreScreen = (props) => {
 
   useEffect(() => {
-
     const handleKeypress = (e) => {
-      if (e.key === 'Enter') {
-        props.setTestConcluded(false);
+      if (e.key === 'Enter' && props.testConcluded === true) {
+        props.setTestConcluded(!props.testConcluded);
       }
     }
     window.addEventListener('keyup', handleKeypress);
@@ -39,7 +38,7 @@ const ScoreScreen = (props) => {
     return () => {
       window.removeEventListener('keyup', handleKeypress);
     };
-  }, [props]);
+  }, [props.setTestConcluded, props.testConcluded]);
 
   return (
     <StyledScoreScreen>

@@ -46,6 +46,7 @@ const TypeTestHandler = (props) => {
         <ScoreScreen
         testScore={testScore}
         setTestConcluded={setTestConcluded}
+        testConcluded={testConcluded}
         />
         : /* Otherwise render type test. */
         <TypeTest
@@ -54,6 +55,7 @@ const TypeTestHandler = (props) => {
           calcTestScore={calcTestScore}
           testLength={testLength}
           setTestLength={setTestLength}
+          testConcluded={testConcluded}
           setTestConcluded={setTestConcluded}
           documentIsFocused={props.documentIsFocused}
         />

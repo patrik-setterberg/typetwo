@@ -58,9 +58,13 @@ const Input = (props) => {
 
   const handleKeyDown = (e) => {
 
-    // Start game if key is a letter, i.e. if user started typing
-    if (/[a-z|A-Z]/g.test(e.key) && e.key !== 'Enter' && props.playing === false) {
-      props.setPlaying(true);
+    /**
+     * START TEST.
+     * Start test if key is a letter, i.e. if user started typing
+     * and if e.key is longer than 1 (i.e. do not trigger on e.g. 'Control', 'Enter').
+     */
+    if (/[a-z|A-Z]/g.test(e.key) && props.playing === false && e.key.length === 1) {
+      props.setPlaying(!props.playing);
     }
 
     // Abort test if Escape is pressed
@@ -81,14 +85,6 @@ const Input = (props) => {
   return(
     <StyledInput
       type="text"
-      // MAYBE REMOVE PLACEHOLDER SINCE INPUT IS HIDDEN?
-      placeholder={
-        props.focused ? 
-          // focused && playing : focused && not playing
-          (props.playing ? '' : 'Begin typing to start test') :
-          // not focused && playing : not focused && not playing
-          (props.playing ? 'Test paused, focus to resume' : 'Click document to focus')
-      }
       value={props.inputValue}
       onKeyDown={(e) => {handleKeyDown(e)}}
       onInput={(e) => {

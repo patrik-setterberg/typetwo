@@ -10,6 +10,7 @@ import Input from './input.js';
 import TestTimer from './test-countdown.js';
 import Text from './text.js';
 import TimeControls from './test-time-controls.js';
+import TestInstructions from './test-instructions.js';
 
 const StyledTypeTest = styled.div`
   display: flex;
@@ -190,6 +191,10 @@ const TypeTest = (props) => {
 
   return(
     <StyledTypeTest focused={props.documentIsFocused}>
+      <TestInstructions
+        playing={props.playing}
+        focused={props.documentIsFocused}
+      />
       <TestTimer timeLeft={timeLeft} />
       <Text 
         focused={props.documentIsFocused}
@@ -214,7 +219,7 @@ const TypeTest = (props) => {
         updateCurrentWord={updateCurrentWordInd}
         endTest={endTest}
       />
-      <div>{props.playing ? 'playing' : 'not playing'}</div>
+      {/*<div>{props.playing ? 'playing' : 'not playing'}</div>*/}
       <TimeControls
         setTestLength={props.setTestLength}
         playing={props.playing}

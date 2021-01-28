@@ -43,6 +43,10 @@ const StyledRow = styled.span`
     ${props => props.caretOffset && css`
       margin-left: ${props.caretOffset}ch;`
     }
+
+    ${props => props.wordIncorrect && css`
+      background-color: red;`
+    }
   }
 
   &.first-row::before {
@@ -117,6 +121,7 @@ const Row = (props) => {
       className={rowClasses[props.ind]}
       currentRow={props.currentRow}
       focused={props.focused}
+      wordIncorrect={props.wordIncorrect}
     >
       {props.children}
     </StyledRow>
@@ -212,6 +217,7 @@ const Text = (props) => {
             caretOffset={props.caretOffset}
             currentRow={props.currentRow}
             focused={props.focused}
+            wordIncorrect={props.wordIncorrect}
           >
             {row.map((word, wordInd) => {
               return (
