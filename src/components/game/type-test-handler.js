@@ -3,9 +3,10 @@
  * Wrapper component for TYPE TEST. Handles rendering of the test and the score screen.
  */
 
-import React, {useState} from 'react';
+import React, {useState, useCallback} from 'react';
 import styled from 'styled-components';
 import g from '../../globals.js';
+import words from '../../assets/game/words.js';
 import TypeTest from './type-test.js';
 import ScoreScreen from './score-screen.js';
 
@@ -40,6 +41,21 @@ const TypeTestHandler = (props) => {
     setTestScore(wpm);
   }
 
+  // Retrieve a random word from array of words, return array of letters
+  const getWord = useCallback((words) => {
+    return words[Math.floor(Math.random() * words.length)].split('');
+  },[]);
+
+  // Load an array of words. Removes duplicates before returning.
+  const loadWords = useCallback(() => {
+    let wordArr = Array.from(Array(g.TEST_WORD_COUNT)).map((_) => {
+      return getWord(words);
+    });
+    return ([...new Set(wordArr)]);
+  },[]);
+
+  const [testWords, setTestWords] = useState(loadWords());
+
   return (
     <TypeTestWrapper>
       {testConcluded ? /* Render score screen if test has concluded. */
@@ -58,6 +74,9 @@ const TypeTestHandler = (props) => {
           testConcluded={testConcluded}
           setTestConcluded={setTestConcluded}
           documentIsFocused={props.documentIsFocused}
+          testWords={testWords}
+          setTestWords={setTestWords}
+          loadWords={loadWords}
         />
       }
     </TypeTestWrapper>

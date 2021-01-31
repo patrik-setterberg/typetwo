@@ -18,7 +18,6 @@ const StyledInstructions = styled.span`
 `
 
 const TestInstructions = (props) => {
-
   return (
     <InstructionsContainer>
       <StyledInstructions playing={props.playing} focused={props.focused}>

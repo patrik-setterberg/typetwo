@@ -4,31 +4,24 @@
  * Incorrectly input characters are highlighted in **PROBABLY RED**.
  */
 
-import React, {useCallback, useMemo, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import styled, {css} from 'styled-components';
 // import g from '../../globals.js';
 
-const TextWrapper = styled.div`
-  color: ${props => props.focused ? '#fff' : 'transparent'};
-  transition: color 0.2s ease;
 
-  & > span {
-    line-height: 1.6;
-  }
-`
-
+/*
 const StyledRow = styled.span`
   display: flex;
   position: relative;
   align-items: center;
   font-size: 1.5rem;
-
+*/
   /**
    * Blinking caret
    * Absolutely positioned on current row, offset from left edge set by adding length
    * of completed words on row and current length of input. Offset uses margin-left and the ch unit:
    * (width of character '0' in current font, works because we're using monospace font).
-   */
+   
   &.first-row::before,
   &.second-row::before {
     position: absolute;
@@ -67,16 +60,29 @@ const StyledRow = styled.span`
     }
   }
 `
+*/
+
+const TextWrapper = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 100%;
+  color: ${props => props.focused ? '#fff' : 'transparent'};
+  transition: color 0.2s ease;
+  position: relative;
+
+  & > span {
+    line-height: 1.6;
+  }
+`;
 
 const StyledWord = styled.span`
-  ${props => props.isCurrent && css`
-    `
-  }
+  display: inline-flex;
+  margin-right: 1ch;
 
   ${props => props.isCorrect && css`
     color: #888; /* Use a variable */`
   }
-`
+`;
 
 const StyledLetter = styled.span`
   transition: color 0.03s var(--default-timing), text-shadow 0.2s ease;;
@@ -94,6 +100,10 @@ const StyledLetter = styled.span`
     text-shadow: 0 0 0.4rem darkred;`
   }
 
+  ${props => props.wordIncorrect && css`
+    text-decoration: underline;`
+  }
+
   ${props => props.focused === false && css`
     color: transparent;`
   }
@@ -105,10 +115,30 @@ const StyledLetter = styled.span`
   ${props => props.wordIncorrect && props.isIncorrect && css`
     color: red;`
   }
-`
+`;
 
+const StyledCaret = styled.div`
+  height: calc(1.6 * 1.5rem); /* 1.6 is line height of text */
+  font-size: 1.5rem;
+  width: 3px;
+  background-color: orange;
+  opacity: 0.7;
+  position: absolute;
+  z-index: 1;
+  left: ${props => props.currentWordLeft}px;
+  top: ${props => props.currentWordTop}px;
+  transform: translateX(${props => props.caretPosition}ch);
+`;
+
+const Caret = (props) => {
+  return (
+    <StyledCaret {...props} />
+  );
+}
+
+/*
 const Row = (props) => {
-  // Row classes necessary for caret positioning and animation.
+  // Row classes for caret positioning and animation.
   const rowClasses = [
     'first-row animate',
     'second-row animate',
@@ -127,13 +157,12 @@ const Row = (props) => {
     </StyledRow>
   );
 }
-
+*/
 const Word = (props) => {
   return (
     <StyledWord
-      isCurrent={props.isCurrent}
       isCorrect={props.isCorrect}
-      className="word"
+      className={props.isCurrent === true ? 'current' : ''}
     >
       {props.children}
     </StyledWord>
@@ -145,8 +174,8 @@ const Letter = (props) => {
     <StyledLetter
       entered={props.entered}
       isIncorrect={props.isIncorrect}
-      wordIncorrect={props.wordIncorrect}
       focused={props.focused}
+      wordIncorrect={props.wordIncorrect}
       className="letter"
     >
       {props.children}
@@ -161,6 +190,21 @@ const Letter = (props) => {
 */
 const Text = (props) => {
 
+  
+const [currentWordLeft, setCurrentWordLeft] = useState(0);
+const [currentWordTop, setCurrentWordTop] = useState(0);
+
+
+useEffect(() => {
+
+  let currentWordElem = document.querySelector('.current');
+
+  setCurrentWordLeft(currentWordElem.offsetLeft);
+  setCurrentWordTop(currentWordElem.offsetTop);
+
+}, [props.currentWordInd]);
+
+/*
   const [rowArr, setRowArr] = useState(props.rows);
 
   const rowsToHightlight = useMemo(() => {
@@ -168,10 +212,12 @@ const Text = (props) => {
       '.first-row',
       '.second-row',
     ])}, []);
+*/
 
+/*
   // Restart caret animation when key is pressed.
   const restartCaretAnimation = useCallback (() => {
-    let rowElem = document.querySelector(rowsToHightlight[props.currentRow]);
+    let rowElem = document.querySelector(rowsToHightlight[props.currentRow]); // Rows-shit here
     rowElem.classList.remove('animate');
     // Trigger reflow to allow animation to restart.
     void rowElem.offsetHeight;
@@ -206,56 +252,43 @@ const Text = (props) => {
   useEffect(() => {
     restartCaretAnimation();
   },[restartCaretAnimation, props.focused]);
-
+*/
   return (
     <TextWrapper focused={props.focused}>
-      {rowArr.map((row, rowInd) => {
+
+      {props.testWords.map((word, wordInd) => {
         return (
-          <Row
-            key={rowInd}
-            ind={rowInd}
-            caretOffset={props.caretOffset}
-            currentRow={props.currentRow}
-            focused={props.focused}
-            wordIncorrect={props.wordIncorrect}
+          <Word
+            key={wordInd}
+            isCurrent={wordInd === props.currentWordInd}
+            isCorrect={props.currentWordInd > wordInd}
           >
-            {row.map((word, wordInd) => {
+            {word.map((letter, letterInd) => {
               return (
-                <Word
-                  key={wordInd}
-                  isCurrent={rowInd === props.currentRow && wordInd === props.currentWordInd}
-                  isCorrect={rowInd === props.currentRow && props.currentWordInd > wordInd}
+                <Letter
+                  key={letterInd}
+                  // Highlight that letter has been input
+                  entered={
+                    props.inputValue.length > letterInd &&
+                    wordInd === props.currentWordInd
+                  }
+                  // Highlights incorrectly input letter
+                  isIncorrect={
+                    props.currentWord[letterInd] !== props.inputValue[letterInd] && // Match letter
+                    wordInd === props.currentWordInd && // Check only currentWord
+                    props.inputValue.length > letterInd // Don't check letters not yet input
+                  }
+                  wordIncorrect={props.wordIncorrect && props.currentWordInd === wordInd && letterInd >= props.inputValue.length }
+                  focused={props.focused}
                 >
-                  {word.map((letter, letterInd) => {
-                    return (
-                      <Letter
-                        key={letterInd}
-                        // Highlight that letter has been input
-                        entered={
-                          rowInd === props.currentRow &&
-                          props.inputValue.length > letterInd &&
-                          wordInd === props.currentWordInd
-                        }
-                        // Highlights incorrectly input letter
-                        isIncorrect={
-                          props.currentWord[letterInd] !== props.inputValue[letterInd] && // Match letter
-                          rowInd === props.currentRow && // Check only currentRow
-                          wordInd === props.currentWordInd && // Check only currentWord
-                          props.inputValue.length > letterInd // Don't check letters not yet input
-                        }
-                        wordIncorrect={props.wordIncorrect}
-                        focused={props.focused}
-                      >
-                        {letter}
-                      </Letter>
-                    );
-                  })}
-                &nbsp;</Word>
+                  {letter}
+                </Letter>
               );
             })}
-          </Row>
+          </Word>
         );
       })}
+      <Caret currentWordLeft={currentWordLeft} currentWordTop={currentWordTop} inputValue={props.inputValue} caretPosition={props.caretPosition} />
     </TextWrapper>        
   );
 }

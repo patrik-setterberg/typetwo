@@ -38,7 +38,7 @@ const ScoreScreen = (props) => {
     return () => {
       window.removeEventListener('keyup', handleKeypress);
     };
-  }, [props.setTestConcluded, props.testConcluded]);
+  }, [props, props.setTestConcluded, props.testConcluded]);
 
   return (
     <StyledScoreScreen>

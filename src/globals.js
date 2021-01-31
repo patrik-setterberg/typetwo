@@ -24,6 +24,8 @@ const g = {
   WORDS_PER_ROW: 9,
   ROW_COUNT: 3,
 
+  TEST_WORD_COUNT: 30,
+
   // TEST DURATION OPTIONS (in seconds)
   
   TEST_LENGTH_SHORT: 15,

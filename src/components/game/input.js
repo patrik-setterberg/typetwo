@@ -18,7 +18,7 @@ const StyledInput = styled.input`
   border-radius: 0.6rem;
   transition: opacity 0.225s ease;
 */
-  opacity: 0;  
+    
 
   &:focus {
     outline: none;
@@ -61,7 +61,6 @@ const Input = (props) => {
     /**
      * START TEST.
      * Start test if key is a letter, i.e. if user started typing
-     * and if e.key is longer than 1 (i.e. do not trigger on e.g. 'Control', 'Enter').
      */
     if (/[a-z|A-Z]/g.test(e.key) && props.playing === false && e.key.length === 1) {
       props.setPlaying(!props.playing);
@@ -77,9 +76,22 @@ const Input = (props) => {
     }
   }
 
+  const handleKeyUp = (e) => {
+
+    console.log(e.key);
+    if (['ArrowLeft', 'ArrowRight', 'Control', 'Home', 'End'].includes(e.key)) {
+      props.setCaretPosition(e.target.selectionStart);
+      console.log(e.target.selectionStart);
+    }
+  }
+
   const handleInput = (e) => {
+    
     let text = filterInput(e.target.value, props.currentWord.length);
     props.setInputValue(text);
+    
+    props.setCaretPosition(e.target.selectionStart);
+    
   }
 
   return(
@@ -87,8 +99,9 @@ const Input = (props) => {
       type="text"
       value={props.inputValue}
       onKeyDown={(e) => {handleKeyDown(e)}}
+      onKeyUp={(e) => {handleKeyUp(e)}}
       onInput={(e) => {
-        if (props.playing === true) handleInput(e);
+        if (props.playing === true && e.key !== ' ') handleInput(e);
       }}
       id="text-input"
       aria-label="Type test input"

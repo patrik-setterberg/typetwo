@@ -5,7 +5,6 @@
 import React, {useEffect, useState, useCallback} from 'react';
 import styled from 'styled-components';
 import g from '../../globals.js';
-import words from '../../assets/game/words.js';
 import Input from './input.js';
 import TestTimer from './test-countdown.js';
 import Text from './text.js';
@@ -20,13 +19,10 @@ const StyledTypeTest = styled.div`
   font-size: 1.5rem;
 `
 
+
 const TypeTest = (props) => {  
 
-  // Retrieve a random word from array of words, return array of letters
-  const getWord = (words) => {
-    return words[Math.floor(Math.random() * words.length)].split('');
-  }
-
+  /*
   // Load a row (array) of words
   const loadRow = useCallback((wordArr) => {
     let rowArr = [];
@@ -49,6 +45,7 @@ const TypeTest = (props) => {
       return loadRow(wordArr);
     });
   }, [loadRow]);
+  */
 
   // Time left printed on screen
   const [timeLeft, setTimeLeft] = useState((props.testLength));
@@ -61,27 +58,30 @@ const TypeTest = (props) => {
   const [currentWordInd, setCurrentWordInd] = useState(0);
 
   // Test uses first and second row of text for input.
-  const [currentRow, setCurrentRow] = useState(0);
+  // const [currentRow, setCurrentRow] = useState(0);
 
   // Track progress on row for caret positioning.
-  const [rowProgress, setRowProgress] = useState(0);
+  // const [rowProgress, setRowProgress] = useState(0);
 
   /**
    * Array of rows. Each row consists of arrays of words.
    * Each word is an array of letters.
    */ 
-  const [textRows, setTextRows] = useState(loadRows(words));
+  // const [textRows, setTextRows] = useState(loadRows(words));
 
   /**
    * Update TextRows state.
    * Remove row from front of array, load a new row and push it onto array.
-   */
+   *
   function updateTextRows() {
     let tempArr = textRows;
     tempArr.shift();
     tempArr.push(loadRow(words));
     setTextRows(tempArr);
   }
+  */
+
+  const [caretPosition, setCaretPosition] = useState(0);
 
   const [inputValue, setInputValue] = useState('');
 
@@ -93,23 +93,12 @@ const TypeTest = (props) => {
 
   // Compare array word with str from text-input
   const checkFullWord = () => {
-    return textRows[currentRow][currentWordInd].join('') === inputValue;
+    return props.testWords[currentWordInd].join('') === inputValue;
   }
 
-  /**
-   * Increases currentWord and resets it if it reaches end of row.
-   * Also triggers text row shifting.
-   */
+  // Bump currentWord
   const updateCurrentWordInd = () => {
-    if (currentWordInd === (g.WORDS_PER_ROW - 1)) {
-      if (currentRow < 1) {
-        setCurrentRow(1);
-      } else {
-        updateTextRows();
-      }
-      setRowProgress(0);
-    }
-    setCurrentWordInd((currentWordInd) => (currentWordInd + 1) % g.WORDS_PER_ROW);
+    setCurrentWordInd((currentWordInd) => (currentWordInd + 1));
   }
 
   /**
@@ -121,11 +110,12 @@ const TypeTest = (props) => {
     props.setPlaying(false);
     setInputValue('');
     setCurrentWordInd(0);
-    setTextRows(loadRows(words));
-    setCurrentRow(0);
-    setRowProgress(0);
+    props.setTestWords(props.loadWords())
+    //setTextRows(loadRows(words));
+    //setCurrentRow(0);
+    //setRowProgress(0);
     setTimeLeft(props.testLength);
-  }, [props, loadRows]);
+  }, []);
 
     /*
     useEffect(() => {
@@ -138,7 +128,7 @@ const TypeTest = (props) => {
   const handleSpace = () => {
     // Check if input matches currentWord.
     if (checkFullWord()) {
-      setRowProgress((rowProgress) => (rowProgress + textRows[currentRow][currentWordInd].length) + 1);
+      //setRowProgress((rowProgress) => (rowProgress + textRows[currentRow][currentWordInd].length) + 1); // rows shit
       updateCurrentWordInd();
       setInputValue('');
       setCorrectWordsCount((correctWordsCount) => (correctWordsCount + 1));
@@ -153,7 +143,6 @@ const TypeTest = (props) => {
 
   // Timer for test duration countdown.
   useEffect(() => {
-
     let timerInterval;
 
     if (props.playing === true && props.documentIsFocused === true) {
@@ -196,19 +185,19 @@ const TypeTest = (props) => {
         focused={props.documentIsFocused}
       />
       <TestTimer timeLeft={timeLeft} />
-      <Text 
+      <Text
+        testWords={props.testWords}
         focused={props.documentIsFocused}
-        currentRow={currentRow}
-        currentWord={textRows[currentRow][currentWordInd]}
+        currentWord={props.testWords[currentWordInd]}
         currentWordInd={currentWordInd}
-        rows={textRows}
         playing={props.playing}
         inputValue={inputValue}
-        caretOffset={rowProgress + inputValue.length}
+        caretPosition={caretPosition}
+        //caretOffset={rowProgress + inputValue.length}
         wordIncorrect={wordIncorrect}
         />
       <Input
-        currentWord={textRows[currentRow][currentWordInd]}
+        currentWord={props.testWords[currentWordInd]}
         playing={props.playing}
         setPlaying={props.setPlaying}
         focused={props.documentIsFocused}
@@ -216,8 +205,9 @@ const TypeTest = (props) => {
         setInputValue={setInputValue}
         handleSpace={handleSpace}
         checkWord={checkFullWord}
-        updateCurrentWord={updateCurrentWordInd}
         endTest={endTest}
+        caretPosition={caretPosition}
+        setCaretPosition={setCaretPosition}
       />
       {/*<div>{props.playing ? 'playing' : 'not playing'}</div>*/}
       <TimeControls
