@@ -18,24 +18,39 @@ const App = () => {
   // Keep track of whether document is focused.
   const [documentIsFocused, setDocumentIsFocused] = useState(document.hasFocus());
 
+  const handleBlur = () => {
+    setDocumentIsFocused(false);
+  }
+
+  const handleFocus = () => {
+    setDocumentIsFocused(true);
+  }
+
+  const handleMouseDown = () => {
+    document.body.classList.add('no-outline');
+  }
+
+  const handleKeyDown = (event) => {
+    if (event.key === 'Tab') {
+      document.body.classList.remove('no-outline');
+    }
+  }
+
   useEffect(() => {
-    document.addEventListener('blur', () => {
-      setDocumentIsFocused(false);
-    });
-    document.addEventListener('focus', () => {
-      setDocumentIsFocused(true);
-    });
+    // Handle document focus.
+    window.addEventListener('blur', handleBlur);
+    window.addEventListener('focus', handleFocus);
 
     // Only show focus outline when using keyboard.
-		document.body.addEventListener('mousedown', function() {
-			document.body.classList.add('no-outline');
-		});
-
-		document.body.addEventListener('keydown', function(event) {
-			if (event.key === 'Tab') {
-				document.body.classList.remove('no-outline');
-			}
-		});
+		document.body.addEventListener('mousedown', handleMouseDown);
+		document.body.addEventListener('keydown', handleKeyDown);
+  
+    return () => {
+      window.removeEventListener('blur', handleBlur);
+      window.removeEventListener('focus', handleFocus);
+      document.removeEventListener('mousedown', handleMouseDown);
+      document.removeEventListener('keydown', handleKeyDown);
+    }
   }, []);
 
 	return(
@@ -45,7 +60,6 @@ const App = () => {
 			</Main>
 		</>
 	);
-
 } 
 
 export default App;

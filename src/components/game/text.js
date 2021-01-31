@@ -6,7 +6,8 @@
 
 import React, {useEffect, useState} from 'react';
 import styled, {css} from 'styled-components';
-// import g from '../../globals.js';
+import g from '../../globals.js';
+import {debounce} from '../../utilities.js';
 
 
 /*
@@ -85,8 +86,11 @@ const StyledWord = styled.span`
 `;
 
 const StyledLetter = styled.span`
-  transition: color 0.03s var(--default-timing), text-shadow 0.2s ease;;
-  text-shadow: ${props => props.focused ? 'none' : '0 0 0.4rem #fff'};
+  transition: color 0.03s var(--default-timing), text-shadow 0.2s ease;
+
+  ${props => props.entered === false && props.wordIsCorrect === false && props.focused === false && css`
+    text-shadow: 0 0 0.4rem #fff;`
+  }
 
   ${props => props.entered && css`
     color: #888; /* Use a variable */`
@@ -96,16 +100,24 @@ const StyledLetter = styled.span`
     color: darkred;`
   }
 
-  ${props => props.isIncorrect && props.focused === false && css`
-    text-shadow: 0 0 0.4rem darkred;`
-  }
-
   ${props => props.wordIncorrect && props.entered === false && css`
     text-decoration: underline;`
   }
 
   ${props => props.focused === false && css`
     color: transparent;`
+  }
+
+  ${props => props.focused === false && props.entered && css`
+    text-shadow: 0 0 0.4rem #666;`
+  }
+
+  ${props => props.focused === false && props.wordIsCorrect && css`
+    text-shadow: 0 0 0.4rem #666;`
+  }
+
+  ${props => props.isIncorrect && props.focused === false && css`
+    text-shadow: 0 0 0.4rem darkred;`
   }
 
   /**
@@ -127,15 +139,16 @@ const StyledCaret = styled.div`
   z-index: 1;
   left: ${props => props.currentWordLeft}px;
   top: ${props => props.currentWordTop}px;
-  transform: translateX( min(${props => props.caretPosition}ch, ${props => props.inputValue.length}ch));
 `;
 
 const Caret = (props) => {
   return (
-    <StyledCaret {...props} />
+    <StyledCaret
+      {...props}
+    />
   );
 }
-
+// transform: `translateX(min(${props => props.caretPosition}ch, ${props => props.inputValue.length}ch))`,
 /*
 const Row = (props) => {
   // Row classes for caret positioning and animation.
@@ -187,10 +200,21 @@ const Letter = (props) => {
 */
 const Text = (props) => {
 
-  
 const [currentWordLeft, setCurrentWordLeft] = useState(0);
 const [currentWordTop, setCurrentWordTop] = useState(0);
 
+const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+useEffect(() => {
+  const debouncedHandleResize = debounce(function handleResize() {
+    setWindowWidth(window.innerWidth);
+  }, g.RESIZE_CHECK_INTERVAL);
+  window.addEventListener('resize', debouncedHandleResize);
+
+  return _ => {
+    window.removeEventListener('resize', debouncedHandleResize);
+  }
+}, []);
 
 useEffect(() => {
 
@@ -199,7 +223,7 @@ useEffect(() => {
   setCurrentWordLeft(currentWordElem.offsetLeft);
   setCurrentWordTop(currentWordElem.offsetTop);
 
-}, [props.currentWordInd]);
+}, [props.currentWordInd, windowWidth]);
 
 /*
   const [rowArr, setRowArr] = useState(props.rows);
@@ -277,6 +301,7 @@ useEffect(() => {
                   }
                   wordIncorrect={props.wordIncorrect && props.currentWordInd === wordInd}
                   focused={props.focused}
+                  wordIsCorrect={props.currentWordInd > wordInd}
                 >
                   {letter}
                 </Letter>
@@ -290,6 +315,9 @@ useEffect(() => {
         currentWordTop={currentWordTop}
         inputValue={props.inputValue}
         caretPosition={props.caretPosition}
+        style={{
+          transform: `translateX(min(${props.caretPosition}ch, ${props.inputValue.length}ch))`,
+        }}
       />
     </TextWrapper>        
   );

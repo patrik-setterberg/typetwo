@@ -18,7 +18,7 @@ const StyledInput = styled.input`
   border-radius: 0.6rem;
   transition: opacity 0.225s ease;
 */
-    
+  opacity: 0;
 
   &:focus {
     outline: none;
@@ -91,6 +91,7 @@ const Input = (props) => {
   return(
     <StyledInput
       type="text"
+      autoComplete="off"
       value={props.inputValue}
       onKeyDown={(e) => {handleKeyDown(e)}}
       onKeyUp={(e) => {handleKeyUp(e)}}

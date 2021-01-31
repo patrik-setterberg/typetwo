@@ -10,7 +10,7 @@ const InstructionsContainer = styled.div`
 const StyledInstructions = styled.span`
   opacity: 1;
   ${props => props.playing === true && props.focused === true && css`
-    transition: opacity 1s var(--default-timing) 0.3s, color 1.3s linear;
+    transition: opacity 1s var(--default-timing) 1s, color 1.5s linear;
     font-size: 1.3rem;
     opacity: 0;
     color: #888;`

@@ -11,15 +11,15 @@ import TypeTest from './type-test.js';
 import ScoreScreen from './score-screen.js';
 
 const TypeTestWrapper = styled.div`
-  width: 100%;
   margin: 200px auto 0;
+  padding: 1.5rem;
 
   @media ${g.medium} {
-    width: 90vw;
+    width: min(80vw, 900px);
   }
 
   @media ${g.large} {
-    width: 70vw;
+    width: 900px;
   }
 `
 
@@ -52,7 +52,7 @@ const TypeTestHandler = (props) => {
       return getWord(words);
     });
     return ([...new Set(wordArr)]);
-  },[]);
+  },[getWord]);
 
   const [testWords, setTestWords] = useState(loadWords());
 

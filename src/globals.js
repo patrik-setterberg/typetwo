@@ -27,7 +27,6 @@ const g = {
   TEST_WORD_COUNT: 30,
 
   // TEST DURATION OPTIONS (in seconds)
-  
   TEST_LENGTH_SHORT: 15,
   TEST_LENGTH_MEDIUM: 30,
   TEST_LENGTH_LONG: 60,
@@ -36,6 +35,8 @@ const g = {
 
   // Set how often component checks if document is focused
   FOCUS_CHECK_INTERVAL: 66,
+
+  RESIZE_CHECK_INTERVAL: 50,
 }
 
 export default g;
