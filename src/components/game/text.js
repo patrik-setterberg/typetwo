@@ -100,7 +100,7 @@ const StyledLetter = styled.span`
     text-shadow: 0 0 0.4rem darkred;`
   }
 
-  ${props => props.wordIncorrect && css`
+  ${props => props.wordIncorrect && props.entered === false && css`
     text-decoration: underline;`
   }
 
@@ -127,7 +127,7 @@ const StyledCaret = styled.div`
   z-index: 1;
   left: ${props => props.currentWordLeft}px;
   top: ${props => props.currentWordTop}px;
-  transform: translateX(${props => props.caretPosition}ch);
+  transform: translateX( min(${props => props.caretPosition}ch, ${props => props.inputValue.length}ch));
 `;
 
 const Caret = (props) => {
@@ -158,13 +158,13 @@ const Row = (props) => {
   );
 }
 */
-const Word = (props) => {
+const Word = ({isCurrent, children, ...rest}) => {
   return (
     <StyledWord
-      isCorrect={props.isCorrect}
-      className={props.isCurrent === true ? 'current' : ''}
+      className={isCurrent === true ? 'current' : ''}
+      {...rest}
     >
-      {props.children}
+      {children}
     </StyledWord>
   );
 }
@@ -172,10 +172,7 @@ const Word = (props) => {
 const Letter = (props) => {
   return (
     <StyledLetter
-      entered={props.entered}
-      isIncorrect={props.isIncorrect}
-      focused={props.focused}
-      wordIncorrect={props.wordIncorrect}
+      {...props}
       className="letter"
     >
       {props.children}
@@ -278,7 +275,7 @@ useEffect(() => {
                     wordInd === props.currentWordInd && // Check only currentWord
                     props.inputValue.length > letterInd // Don't check letters not yet input
                   }
-                  wordIncorrect={props.wordIncorrect && props.currentWordInd === wordInd && letterInd >= props.inputValue.length }
+                  wordIncorrect={props.wordIncorrect && props.currentWordInd === wordInd}
                   focused={props.focused}
                 >
                   {letter}
@@ -288,7 +285,12 @@ useEffect(() => {
           </Word>
         );
       })}
-      <Caret currentWordLeft={currentWordLeft} currentWordTop={currentWordTop} inputValue={props.inputValue} caretPosition={props.caretPosition} />
+      <Caret
+        currentWordLeft={currentWordLeft}
+        currentWordTop={currentWordTop}
+        inputValue={props.inputValue}
+        caretPosition={props.caretPosition}
+      />
     </TextWrapper>        
   );
 }

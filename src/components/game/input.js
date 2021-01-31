@@ -57,7 +57,6 @@ const Input = (props) => {
   }
 
   const handleKeyDown = (e) => {
-
     /**
      * START TEST.
      * Start test if key is a letter, i.e. if user started typing
@@ -77,21 +76,16 @@ const Input = (props) => {
   }
 
   const handleKeyUp = (e) => {
-
-    console.log(e.key);
     if (['ArrowLeft', 'ArrowRight', 'Control', 'Home', 'End'].includes(e.key)) {
-      props.setCaretPosition(e.target.selectionStart);
-      console.log(e.target.selectionStart);
+     props.setCaretPosition(e.target.selectionStart);
     }
   }
 
   const handleInput = (e) => {
-    
     let text = filterInput(e.target.value, props.currentWord.length);
     props.setInputValue(text);
-    
+
     props.setCaretPosition(e.target.selectionStart);
-    
   }
 
   return(
@@ -101,7 +95,7 @@ const Input = (props) => {
       onKeyDown={(e) => {handleKeyDown(e)}}
       onKeyUp={(e) => {handleKeyUp(e)}}
       onInput={(e) => {
-        if (props.playing === true && e.key !== ' ') handleInput(e);
+        if (props.playing === true && e.nativeEvent.data !== ' ') handleInput(e);
       }}
       id="text-input"
       aria-label="Type test input"

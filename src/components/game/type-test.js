@@ -134,6 +134,7 @@ const TypeTest = (props) => {
       setCorrectWordsCount((correctWordsCount) => (correctWordsCount + 1));
     } else {
       setWordIncorrect(true);
+      setCaretPosition(inputValue.length);
       // PROBLEM: WILL THROW ERROR IF TEST ENDS DURING TIMEOUT.
       setTimeout(() => {
         setWordIncorrect(false);
