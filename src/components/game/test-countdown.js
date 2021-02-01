@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import styled from 'styled-components';
+import styled, {css} from 'styled-components';
 
 const TimerWrapper = styled.div`
   display: flex;
@@ -14,13 +14,19 @@ const TimerWrapper = styled.div`
 
 const Numbers = styled.span`
   color: #fff;
-  font-size: 3rem;
+  font-size: 3.5rem;
+  transition: color 0.2s var(--default-timing);
+
+  ${props => props.playing && css`
+    color: #888;
+    transition: color 1.5s linear;`
+  }
 `
 
 const TestTimer = (props) => {
   return(
     <TimerWrapper>
-      <Numbers>
+      <Numbers playing={props.playing}>
         {props.timeLeft}
       </Numbers>      
     </TimerWrapper>

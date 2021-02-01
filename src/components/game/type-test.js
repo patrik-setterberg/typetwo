@@ -91,6 +91,15 @@ const TypeTest = (props) => {
   // Keep track of correctly input words for calculating score.
   const [correctWordsCount, setCorrectWordsCount] = useState(0);
 
+  const [typedRecently, setTypedRecently] = useState(false);
+
+  const updateTypedRecently = () => {
+    setTypedRecently(true);
+    setTimeout(() => {
+      setTypedRecently(false);
+    }, 1);
+  }
+
   // Compare array word with str from text-input
   const checkFullWord = () => {
     return props.testWords[currentWordInd].join('') === inputValue;
@@ -185,7 +194,10 @@ const TypeTest = (props) => {
         playing={props.playing}
         focused={props.documentIsFocused}
       />
-      <TestTimer timeLeft={timeLeft} />
+      <TestTimer
+        playing={props.playing}
+        timeLeft={timeLeft}
+      />
       <Text
         testWords={props.testWords}
         focused={props.documentIsFocused}
@@ -195,6 +207,8 @@ const TypeTest = (props) => {
         inputValue={inputValue}
         caretPosition={caretPosition}
         //caretOffset={rowProgress + inputValue.length}
+        typedRecently={typedRecently}
+        updateTypedRecently={updateTypedRecently}
         wordIncorrect={wordIncorrect}
         />
       <Input
@@ -209,6 +223,7 @@ const TypeTest = (props) => {
         endTest={endTest}
         caretPosition={caretPosition}
         setCaretPosition={setCaretPosition}
+        updateTypedRecently={updateTypedRecently}
       />
       {/*<div>{props.playing ? 'playing' : 'not playing'}</div>*/}
       <TimeControls

@@ -100,7 +100,7 @@ const StyledLetter = styled.span`
     color: darkred;`
   }
 
-  ${props => props.wordIncorrect && props.entered === false && css`
+  ${props => props.wordIncorrect && props.entered === false && props.playing && css`
     text-decoration: underline;`
   }
 
@@ -134,11 +134,17 @@ const StyledCaret = styled.div`
   font-size: 1.5rem;
   width: 3px;
   background-color: orange;
-  opacity: 0.7;
+  opacity: var(--caret-opacity);
   position: absolute;
   z-index: 1;
+  animation: ${props => props.typedRecently ? '' : '1.3s cubic-bezier(0.78, 0.2, 0.05, 1.0) 0s infinite forwards caret-blink'};
+  visibility: ${props => props.focused ? 'visible' : 'hidden'};
   left: ${props => props.currentWordLeft}px;
   top: ${props => props.currentWordTop}px;
+
+  ${props => props.playing === true && props.focused === false && css`
+    opacity: 0;`
+  }
 `;
 
 const Caret = (props) => {
@@ -268,12 +274,12 @@ useEffect(() => {
       window.removeEventListener('keyup', handleKeyup);
     };
   }, [props.inputValue, restartCaretAnimation]);
-
+*/
   // Restart caret animation when focus is regained.  
   useEffect(() => {
-    restartCaretAnimation();
-  },[restartCaretAnimation, props.focused]);
-*/
+    if (props.focused === true) props.updateTypedRecently();
+  },[props.focused]);
+
   return (
     <TextWrapper focused={props.focused}>
 
@@ -287,6 +293,7 @@ useEffect(() => {
             {word.map((letter, letterInd) => {
               return (
                 <Letter
+                  playing={props.playing}
                   key={letterInd}
                   // Highlight that letter has been input
                   entered={
@@ -311,10 +318,13 @@ useEffect(() => {
         );
       })}
       <Caret
+        playing={props.playing}
+        focused={props.focused}
         currentWordLeft={currentWordLeft}
         currentWordTop={currentWordTop}
         inputValue={props.inputValue}
         caretPosition={props.caretPosition}
+        typedRecently={props.typedRecently}
         style={{
           transform: `translateX(min(${props.caretPosition}ch, ${props.inputValue.length}ch))`,
         }}

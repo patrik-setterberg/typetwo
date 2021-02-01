@@ -72,19 +72,21 @@ const Input = (props) => {
 
     if (e.key === ' ') {
       props.handleSpace();
+      props.updateTypedRecently();
     }
   }
 
   const handleKeyUp = (e) => {
     if (['ArrowLeft', 'ArrowRight', 'Control', 'Home', 'End'].includes(e.key)) {
      props.setCaretPosition(e.target.selectionStart);
+     props.updateTypedRecently();
     }
   }
 
   const handleInput = (e) => {
     let text = filterInput(e.target.value, props.currentWord.length);
     props.setInputValue(text);
-
+    props.updateTypedRecently();
     props.setCaretPosition(e.target.selectionStart);
   }
 

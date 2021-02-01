@@ -24,7 +24,7 @@ const g = {
   WORDS_PER_ROW: 9,
   ROW_COUNT: 3,
 
-  TEST_WORD_COUNT: 30,
+  TEST_WORD_COUNT: 20,
 
   // TEST DURATION OPTIONS (in seconds)
   TEST_LENGTH_SHORT: 15,
@@ -47,7 +47,7 @@ const GlobalStyle = createGlobalStyle`
     
     --default-timing: cubic-bezier(0.78, 0.2, 0.05, 1.0);
 
-    --caret-opacity: 0.8;
+    --caret-opacity: 0.7;
   }
 
   * {
