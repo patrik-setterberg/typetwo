@@ -16,7 +16,7 @@ const StyledScoreScreen = styled.div`
     font-size: 2rem;
     margin-top: 1.5rem;
     & > span {
-      color: #888;
+      color: ${props => props.highestScore === props.testScore ? 'darkorange' : '#fff'};
     }
   }
   & span + span + span {
@@ -41,9 +41,17 @@ const ScoreScreen = (props) => {
   }, [props, props.setTestConcluded, props.testConcluded]);
 
   return (
-    <StyledScoreScreen>
+    <StyledScoreScreen
+      testScore={props.testScore}
+      highestScore={props.highestScore}
+    >
       <span>{props.testScore} WPM!</span>
-      <span>Best result: <span>n/a</span></span>
+      <span>Best result: <span>{props.highestScore}</span></span>
+      {props.highestScore === props.testScore ?
+        <span>New best result!</span>
+        :
+        <></>
+      }
       <span>Press ENTER to run test again</span>
     </StyledScoreScreen>
   )

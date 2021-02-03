@@ -3,7 +3,7 @@
  * Wrapper component for TYPE TEST. Handles rendering of the test and the score screen.
  */
 
-import React, {useState, useCallback} from 'react';
+import React, {useState, useCallback, useEffect} from 'react';
 import styled from 'styled-components';
 import g from '../../globals.js';
 import words from '../../assets/game/words.js';
@@ -30,16 +30,8 @@ const TypeTestHandler = (props) => {
   // Determines whether type test or score screen is displayed.
   const [testConcluded, setTestConcluded] = useState(false);
 
-  // Stores selected test length (in seconds)
+  // Stores selected test length (in seconds).
   const [testLength, setTestLength] = useState(g.TEST_LENGTH_DEFAULT);
-
-  const [testScore, setTestScore] = useState(0);    
-
-  function calcTestScore (correctWordCount) {
-    // Calculate words per minute.
-    let wpm = correctWordCount * (60 / testLength);
-    setTestScore(wpm);
-  }
 
   // Retrieve a random word from array of words, return array of letters
   const getWord = useCallback((words) => {
@@ -56,6 +48,39 @@ const TypeTestHandler = (props) => {
 
   const [testWords, setTestWords] = useState(loadWords());
 
+  const [highestScore, setHighestScore] = useState(() => {
+    // Check if there is a cookie with a key which matches COOKIE_NAME.
+    if (document.cookie.split(';').some((item) => item.trim().startsWith(g.COOKIE_NAME))) {
+      return (
+        // Return its value.
+        document.cookie.split(';').find(row => row.startsWith(g.COOKIE_NAME)).split('=')[1]
+      );
+    } else {
+      // If there is no matching cookie, set highestScore to 0.
+      return 0;
+    }
+  });
+
+  const [testScore, setTestScore] = useState(0);
+
+  function calcTestScore (correctWordCount) {
+    // Calculate words per minute.
+    let wpm = correctWordCount * (60 / testLength);
+    setTestScore(wpm);
+  }
+
+  useEffect(() => {
+    if (testConcluded === true && testScore > highestScore) {
+      setHighestScore(testScore);
+    }
+  }, [testConcluded, testScore, highestScore, setHighestScore]);
+
+  useEffect(() => {
+    if (highestScore > 0) {
+      document.cookie = `${g.COOKIE_NAME}=${highestScore};max-age=${g.COOKIE_MAX_AGE}`; // ALSO INCLUDE TIMESTAMP?
+    }
+  }, [highestScore]);
+
   return (
     <TypeTestWrapper>
       {testConcluded ? /* Render score screen if test has concluded. */
@@ -63,6 +88,7 @@ const TypeTestHandler = (props) => {
         testScore={testScore}
         setTestConcluded={setTestConcluded}
         testConcluded={testConcluded}
+        highestScore={highestScore}
         />
         : /* Otherwise render type test. */
         <TypeTest

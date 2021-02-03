@@ -31,12 +31,16 @@ const g = {
   TEST_LENGTH_MEDIUM: 30,
   TEST_LENGTH_LONG: 60,
 
-  TEST_LENGTH_DEFAULT: 30,
+  TEST_LENGTH_DEFAULT: 15,
 
   // Set how often component checks if document is focused
   FOCUS_CHECK_INTERVAL: 66,
 
   RESIZE_CHECK_INTERVAL: 50,
+
+  // COOKIE SETTINGS
+  COOKIE_NAME: 'highest_score',
+  COOKIE_MAX_AGE: 2592000, // 60'60*24*30 = 30 days
 }
 
 export default g;
