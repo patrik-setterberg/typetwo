@@ -8,6 +8,17 @@ import styled from 'styled-components';
 import g from '../../globals.js';
 
 const StyledButton = styled.button`
+  padding: 0.5rem 1rem;
+  background-color: transparent;
+  border: 2px solid #fff;
+  border-radius: 0.25rem;
+  color: #fff;
+  font-size: 1.1rem;
+
+  &:active {
+    background-color: #fff;
+    color: #888;
+  }
   
 `
 
@@ -20,7 +31,7 @@ const StyledTimeControls = styled.div`
   transition: opacity 0.2s ease;
   
   & button + button {
-    margin-left: 0.5rem;
+    margin-left: 1rem;
   }
 
   & span {
@@ -44,7 +55,6 @@ const Button = (props) => {
 }
 
 const TimeControls = (props) => {
-
   const testLengthOptions = [
     g.TEST_LENGTH_SHORT,
     g.TEST_LENGTH_MEDIUM,
@@ -62,7 +72,7 @@ const TimeControls = (props) => {
               testLengthOption={option}
               key={key}
             >
-              {option}
+              {option}s
             </Button>
           );
         })}

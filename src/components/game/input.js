@@ -5,19 +5,8 @@
 
 import React, {useEffect, useRef} from 'react';
 import styled from 'styled-components';
-// import g from '../../globals.js';
 
 const StyledInput = styled.input`
-/*
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-  font-family: 'Roboto Mono', monospace;
-  font-size: 1.2rem;
-  width: 50%;
-  padding: 0.7rem 0.6rem;
-  border-radius: 0.6rem;
-  transition: opacity 0.225s ease;
-*/
   opacity: 0;
 
   &:focus {

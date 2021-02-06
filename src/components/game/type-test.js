@@ -18,33 +18,7 @@ const StyledTypeTest = styled.div`
   font-size: 1.5rem;
 `
 
-
 const TypeTest = (props) => {  
-
-  /*
-  // Load a row (array) of words
-  const loadRow = useCallback((wordArr) => {
-    let rowArr = [];
-  
-    while (rowArr.length < g.WORDS_PER_ROW) {
-      let word = getWord(wordArr);
-      // Check that word hasn't already been chosen for current row.
-      // THIS PROBABLY DOES NOT WORK
-      // TODO "IMPROVE" (FIX)
-      if (rowArr.indexOf(word) === -1) {
-        rowArr.push(word);
-      }
-    }
-    return rowArr;
-  }, []);
-
-  // Load and return an array of rows of words.
-  const loadRows = useCallback((wordArr) => {
-    return Array.from(Array(g.ROW_COUNT)).map((_) => {
-      return loadRow(wordArr);
-    });
-  }, [loadRow]);
-  */
 
   // Time left printed on screen
   const [timeLeft, setTimeLeft] = useState((props.testLength));
@@ -52,7 +26,6 @@ const TypeTest = (props) => {
   /**
    * Keep track of currentWord.
    * Input is compared with currentWord to progress in test.
-   * Resets after full row has been matched.
    */
   const [currentWordInd, setCurrentWordInd] = useState(0);
 
@@ -64,32 +37,9 @@ const TypeTest = (props) => {
     setCurrentWordInd(currentWordInd => currentWordInd - count);
   }
 
-  // Test uses first and second row of text for input.
-  // const [currentRow, setCurrentRow] = useState(0);
-
-  // Track progress on row for caret positioning.
-  // const [rowProgress, setRowProgress] = useState(0);
-
-  /**
-   * Array of rows. Each row consists of arrays of words.
-   * Each word is an array of letters.
-   */ 
-  // const [textRows, setTextRows] = useState(loadRows(words));
-
-  /**
-   * Update TextRows state.
-   * Remove row from front of array, load a new row and push it onto array.
-   *
-  function updateTextRows() {
-    let tempArr = textRows;
-    tempArr.shift();
-    tempArr.push(loadRow(words));
-    setTextRows(tempArr);
-  }
-  */
-
   const [caretPosition, setCaretPosition] = useState(0);
 
+  // Value of test's hidden text-input
   const [inputValue, setInputValue] = useState('');
 
   // Used to flash highlight incorrect letters when word is checked.
@@ -98,6 +48,7 @@ const TypeTest = (props) => {
   // Keep track of correctly input words for calculating score.
   const [correctWordsCount, setCorrectWordsCount] = useState(0);
 
+  // Quickly flash a prop to Text component, used to reset caret animation.
   const [typedRecently, setTypedRecently] = useState(false);
 
   const updateTypedRecently = () => {
@@ -121,38 +72,30 @@ const TypeTest = (props) => {
     props.setPlaying(false);
     setInputValue('');
     setCurrentWordInd(0);
-    props.setTestWords(props.loadWords())
-    //setTextRows(loadRows(words));
-    //setCurrentRow(0);
-    //setRowProgress(0);
+    props.setTestWords(props.loadWords());
     setTimeLeft(props.testLength);
   }, []);
-
-    /*
-    useEffect(() => {
-      if (props.playing === true) {
-        // Do thing when test starts
-      }
-    }, [props.playing])
-    */
 
   const handleSpace = () => {
     // Check if input matches currentWord.
     if (checkFullWord()) {
-      //setRowProgress((rowProgress) => (rowProgress + textRows[currentRow][currentWordInd].length) + 1); // rows shit
       increaseCurrentWordInd();
       setInputValue('');
       setCorrectWordsCount((correctWordsCount) => (correctWordsCount + 1));
     } else {
       setWordIncorrect(true);
       setCaretPosition(inputValue.length);
-      // PROBLEM: WILL THROW ERROR IF TEST ENDS DURING TIMEOUT.
+      // PROBLEM: WILL THROW ERROR IF TEST ENDS DURING TIMEOUT. I THINK.
       setTimeout(() => {
         setWordIncorrect(false);
       }, 200);
     }
   }
 
+  /**
+   * Update which word index is current.
+   * Shift words from array, then add some new words to replace them,
+   */
   const [wordShiftCount, setWordShiftCount] = useState(0);
 
   useEffect(() => {
@@ -163,7 +106,6 @@ const TypeTest = (props) => {
       setWordShiftCount(0);
     }
   }, [wordShiftCount]);
-
 
   // Timer for test duration countdown.
   useEffect(() => {
@@ -197,7 +139,7 @@ const TypeTest = (props) => {
     }
   }, [props.calcTestScore, props.setTestConcluded, endTest, timeLeft, correctWordsCount]);
 
-  // Rerender when test-time-controls button is clicked
+  // Re-render when test-time-controls button is clicked
   useEffect(() => {
     setTimeLeft(props.testLength);
   }, [props.testLength]);
@@ -221,7 +163,6 @@ const TypeTest = (props) => {
         playing={props.playing}
         inputValue={inputValue}
         caretPosition={caretPosition}
-        //caretOffset={rowProgress + inputValue.length}
         typedRecently={typedRecently}
         updateTypedRecently={updateTypedRecently}
         wordIncorrect={wordIncorrect}

@@ -48,11 +48,12 @@ const TypeTestHandler = (props) => {
 
   const [testWords, setTestWords] = useState(loadWords());
 
-  // Remove words from the from of testWords array
+  // Remove words from the from of testWords array.
   const shiftWords = (count) => {
     setTestWords(testWords => testWords.slice(count));
   }
 
+  // Add some new words to the testWords array.
   const addWords = (count) => {
     let newWords = [];
     for (let i = 0; i < count; i++) {
@@ -96,7 +97,8 @@ const TypeTestHandler = (props) => {
 
   return (
     <TypeTestWrapper>
-      {testConcluded ? /* Render score screen if test has concluded. */
+      {testConcluded ?
+        /* Render score screen if test has concluded. */
         <ScoreScreen
         testScore={testScore}
         setTestConcluded={setTestConcluded}

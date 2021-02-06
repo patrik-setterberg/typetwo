@@ -9,60 +9,6 @@ import styled, {css} from 'styled-components';
 import g from '../../globals.js';
 import {debounce} from '../../utilities.js';
 
-
-/*
-const StyledRow = styled.span`
-  display: flex;
-  position: relative;
-  align-items: center;
-  font-size: 1.5rem;
-*/
-  /**
-   * Blinking caret
-   * Absolutely positioned on current row, offset from left edge set by adding length
-   * of completed words on row and current length of input. Offset uses margin-left and the ch unit:
-   * (width of character '0' in current font, works because we're using monospace font).
-   
-  &.first-row::before,
-  &.second-row::before {
-    position: absolute;
-    left: 0;
-    content: '';
-    height: 75%;
-    width: 3px;
-    background-color: darkorange;
-    opacity: 0.7;
-    visibility: ${props => props.focused ? 'visible' : 'hidden'};
-
-    ${props => props.caretOffset && css`
-      margin-left: ${props.caretOffset}ch;`
-    }
-
-    ${props => props.wordIncorrect && css`
-      background-color: red;`
-    }
-  }
-
-  &.first-row::before {
-    display: ${props => props.currentRow === 0 ? 'inline-block' : 'none'};
-  }
-
-  &.second-row::before {
-    display: ${props => props.currentRow === 1 ? 'inline-block' : 'none'};
-  }
-
-  &.animate::before {
-    animation: 1.3s cubic-bezier(0.78, 0.2, 0.05, 1.0) 0s infinite forwards caret-blink;
-  }
-
-  &.first-row {
-    ${props => props.currentRow === 1 && css`
-      color: #888;`
-    }
-  }
-`
-*/
-
 const TextWrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
@@ -105,7 +51,8 @@ const StyledLetter = styled.span`
   }
 
   ${props => props.focused === false && css`
-    color: transparent;`
+    color: transparent;
+    transition: color 0.2s var(--default-timing), text-shadow 0.2s var(--default-timing);`
   }
 
   ${props => props.focused === false && props.entered && css`
@@ -154,33 +101,10 @@ const Caret = (props) => {
     />
   );
 }
-// transform: `translateX(min(${props => props.caretPosition}ch, ${props => props.inputValue.length}ch))`,
-/*
-const Row = (props) => {
-  // Row classes for caret positioning and animation.
-  const rowClasses = [
-    'first-row animate',
-    'second-row animate',
-    '',
-  ];
 
-  return (
-    <StyledRow
-      caretOffset={props.caretOffset}
-      className={rowClasses[props.ind]}
-      currentRow={props.currentRow}
-      focused={props.focused}
-      wordIncorrect={props.wordIncorrect}
-    >
-      {props.children}
-    </StyledRow>
-  );
-}
-*/
 const Word = ({isCurrent, children, wordsRef, ...rest}) => {
   return (
     <StyledWord
-      className={isCurrent === true ? 'current' : ''}
       ref={wordsRef}
       {...rest}
     >
@@ -236,67 +160,26 @@ const Text = (props) => {
     setCurrentWordTop(wordsRef.current[props.currentWordInd].offsetTop);
   }, [props.currentWordInd, windowWidth]);
 
+  /**
+   * Compare current word's offsetTop with previous word's, to detect if current word just
+   * jumped to third or higher row. If true, it initiates removing and adding new words.
+   */
   useEffect(() => {
     if (props.currentWordInd > 0) {
       let prevElem = wordsRef.current[props.currentWordInd].previousElementSibling;
       let smallestOffsetTop = prevElem.offsetTop;
 
       if (wordsRef.current[props.currentWordInd].offsetTop > smallestOffsetTop && smallestOffsetTop > 0) {
-        let wordsToBeRemoved = 0;
+        let removeWordsCount = 0;
         while (prevElem) {
-          if (prevElem.offsetTop < smallestOffsetTop) wordsToBeRemoved += 1;
+          if (prevElem.offsetTop < smallestOffsetTop) removeWordsCount += 1;
           prevElem = prevElem.previousElementSibling;
         }
-        props.setWordShiftCount(wordsToBeRemoved);
+        props.setWordShiftCount(removeWordsCount);
       }
     }
   }, [props.currentWordInd]);
 
-
-/*
-  const [rowArr, setRowArr] = useState(props.rows);
-
-  const rowsToHightlight = useMemo(() => {
-    return([
-      '.first-row',
-      '.second-row',
-    ])}, []);
-*/
-
-/*
-  // Restart caret animation when key is pressed.
-  const restartCaretAnimation = useCallback (() => {
-    let rowElem = document.querySelector(rowsToHightlight[props.currentRow]); // Rows-shit here
-    rowElem.classList.remove('animate');
-    // Trigger reflow to allow animation to restart.
-    void rowElem.offsetHeight;
-    rowElem.classList.add('animate');
-  }, [rowsToHightlight, props.currentRow]);
-
-  useEffect(() => {
-    setRowArr(props.rows);
-  }, [props.rows]);
-
-  useEffect(() => {
-    const handleKeypress = () => {
-      restartCaretAnimation();
-    };
-    window.addEventListener('keypress', handleKeypress);
-
-    // Separate Keyup listener because keypress doesn't detect backspace.
-    const handleKeyup = (e) => {
-      if (e.key === 'Backspace') {
-        restartCaretAnimation();
-      }
-    };
-    window.addEventListener('keyup', handleKeyup);
-
-    return () => {
-      window.removeEventListener('keypress', handleKeypress);
-      window.removeEventListener('keyup', handleKeyup);
-    };
-  }, [props.inputValue, restartCaretAnimation]);
-*/
   // Restart caret animation when focus is regained.  
   useEffect(() => {
     if (props.focused === true) props.updateTypedRecently();
