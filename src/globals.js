@@ -24,14 +24,14 @@ const g = {
   WORDS_PER_ROW: 9,
   ROW_COUNT: 3,
 
-  TEST_WORD_COUNT: 20,
+  TEST_WORD_COUNT: 32,
 
   // TEST DURATION OPTIONS (in seconds)
   TEST_LENGTH_SHORT: 15,
   TEST_LENGTH_MEDIUM: 30,
   TEST_LENGTH_LONG: 60,
 
-  TEST_LENGTH_DEFAULT: 15,
+  TEST_LENGTH_DEFAULT: 60,
 
   // Set how often component checks if document is focused
   FOCUS_CHECK_INTERVAL: 66,

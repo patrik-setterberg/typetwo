@@ -4,7 +4,6 @@
 
 import React, {useEffect, useState, useCallback} from 'react';
 import styled from 'styled-components';
-import g from '../../globals.js';
 import Input from './input.js';
 import TestTimer from './test-countdown.js';
 import Text from './text.js';
@@ -57,6 +56,14 @@ const TypeTest = (props) => {
    */
   const [currentWordInd, setCurrentWordInd] = useState(0);
 
+  const increaseCurrentWordInd = () => {
+    setCurrentWordInd((currentWordInd) => (currentWordInd + 1));
+  }
+
+  const updateCurrentWordInd = (count) => {
+    setCurrentWordInd(currentWordInd => currentWordInd - count);
+  }
+
   // Test uses first and second row of text for input.
   // const [currentRow, setCurrentRow] = useState(0);
 
@@ -105,11 +112,6 @@ const TypeTest = (props) => {
     return props.testWords[currentWordInd].join('') === inputValue;
   }
 
-  // Bump currentWord
-  const updateCurrentWordInd = () => {
-    setCurrentWordInd((currentWordInd) => (currentWordInd + 1));
-  }
-
   /**
    * End test when timer expires or escape is pressed.
    * Stops test, clears input, resets currentWord and currentRow,
@@ -138,7 +140,7 @@ const TypeTest = (props) => {
     // Check if input matches currentWord.
     if (checkFullWord()) {
       //setRowProgress((rowProgress) => (rowProgress + textRows[currentRow][currentWordInd].length) + 1); // rows shit
-      updateCurrentWordInd();
+      increaseCurrentWordInd();
       setInputValue('');
       setCorrectWordsCount((correctWordsCount) => (correctWordsCount + 1));
     } else {
@@ -150,6 +152,18 @@ const TypeTest = (props) => {
       }, 200);
     }
   }
+
+  const [wordShiftCount, setWordShiftCount] = useState(0);
+
+  useEffect(() => {
+    if (wordShiftCount > 0) {
+      updateCurrentWordInd(wordShiftCount);
+      props.shiftWords(wordShiftCount);
+      props.addWords(wordShiftCount);
+      setWordShiftCount(0);
+    }
+  }, [wordShiftCount]);
+
 
   // Timer for test duration countdown.
   useEffect(() => {
@@ -203,6 +217,7 @@ const TypeTest = (props) => {
         focused={props.documentIsFocused}
         currentWord={props.testWords[currentWordInd]}
         currentWordInd={currentWordInd}
+        setWordShiftCount={setWordShiftCount}
         playing={props.playing}
         inputValue={inputValue}
         caretPosition={caretPosition}

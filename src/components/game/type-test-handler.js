@@ -48,6 +48,19 @@ const TypeTestHandler = (props) => {
 
   const [testWords, setTestWords] = useState(loadWords());
 
+  // Remove words from the from of testWords array
+  const shiftWords = (count) => {
+    setTestWords(testWords => testWords.slice(count));
+  }
+
+  const addWords = (count) => {
+    let newWords = [];
+    for (let i = 0; i < count; i++) {
+      newWords.push(getWord(words));
+    }
+    setTestWords(testWords => testWords.concat(newWords));
+  }
+
   const [highestScore, setHighestScore] = useState(() => {
     // Check if there is a cookie with a key which matches COOKIE_NAME.
     if (document.cookie.split(';').some((item) => item.trim().startsWith(g.COOKIE_NAME))) {
@@ -103,6 +116,8 @@ const TypeTestHandler = (props) => {
           testWords={testWords}
           setTestWords={setTestWords}
           loadWords={loadWords}
+          shiftWords={shiftWords}
+          addWords={addWords}
         />
       }
     </TypeTestWrapper>

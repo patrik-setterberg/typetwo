@@ -4,7 +4,7 @@
  * Incorrectly input characters are highlighted in **PROBABLY RED**.
  */
 
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import styled, {css} from 'styled-components';
 import g from '../../globals.js';
 import {debounce} from '../../utilities.js';
@@ -177,10 +177,11 @@ const Row = (props) => {
   );
 }
 */
-const Word = ({isCurrent, children, ...rest}) => {
+const Word = ({isCurrent, children, wordsRef, ...rest}) => {
   return (
     <StyledWord
       className={isCurrent === true ? 'current' : ''}
+      ref={wordsRef}
       {...rest}
     >
       {children}
@@ -201,35 +202,56 @@ const Letter = (props) => {
 
 /**
 * Text component displays test's words on screen. Text is blurred when document loses focus.
-* Uses styled component Textwrapper. Uses components Row, Word, Letter.
+* Uses styled component Textwrapper. Uses components Word, Letter, Caret.
 * Iterates through prop "rows" and prints its contents.
 */
 const Text = (props) => {
 
-const [currentWordLeft, setCurrentWordLeft] = useState(0);
-const [currentWordTop, setCurrentWordTop] = useState(0);
+  const wordsRef = useRef([]);
 
-const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  useEffect(() => {
+    // Update words' refs when words array changes.
+    wordsRef.current = wordsRef.current.slice(0, props.testWords.length);
+  }, [props.testWords]);
 
-useEffect(() => {
-  const debouncedHandleResize = debounce(function handleResize() {
-    setWindowWidth(window.innerWidth);
-  }, g.RESIZE_CHECK_INTERVAL);
-  window.addEventListener('resize', debouncedHandleResize);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
-  return _ => {
-    window.removeEventListener('resize', debouncedHandleResize);
-  }
-}, []);
+  useEffect(() => {
+    const debouncedHandleResize = debounce(function handleResize() {
+      setWindowWidth(window.innerWidth);
+    }, g.RESIZE_CHECK_INTERVAL);
+    window.addEventListener('resize', debouncedHandleResize);
 
-useEffect(() => {
+    return _ => {
+      window.removeEventListener('resize', debouncedHandleResize);
+    }
+  }, []);
 
-  let currentWordElem = document.querySelector('.current');
+  // Keep track of current word's position for caret positioning.
+  const [currentWordLeft, setCurrentWordLeft] = useState(0);
+  const [currentWordTop, setCurrentWordTop] = useState(0);
 
-  setCurrentWordLeft(currentWordElem.offsetLeft);
-  setCurrentWordTop(currentWordElem.offsetTop);
+  useEffect(() => {
+    setCurrentWordLeft(wordsRef.current[props.currentWordInd].offsetLeft);
+    setCurrentWordTop(wordsRef.current[props.currentWordInd].offsetTop);
+  }, [props.currentWordInd, windowWidth]);
 
-}, [props.currentWordInd, windowWidth]);
+  useEffect(() => {
+    if (props.currentWordInd > 0) {
+      let prevElem = wordsRef.current[props.currentWordInd].previousElementSibling;
+      let smallestOffsetTop = prevElem.offsetTop;
+
+      if (wordsRef.current[props.currentWordInd].offsetTop > smallestOffsetTop && smallestOffsetTop > 0) {
+        let wordsToBeRemoved = 0;
+        while (prevElem) {
+          if (prevElem.offsetTop < smallestOffsetTop) wordsToBeRemoved += 1;
+          prevElem = prevElem.previousElementSibling;
+        }
+        props.setWordShiftCount(wordsToBeRemoved);
+      }
+    }
+  }, [props.currentWordInd]);
+
 
 /*
   const [rowArr, setRowArr] = useState(props.rows);
@@ -287,6 +309,7 @@ useEffect(() => {
         return (
           <Word
             key={wordInd}
+            wordsRef={elem => wordsRef.current[wordInd] = elem}
             isCurrent={wordInd === props.currentWordInd}
             isCorrect={props.currentWordInd > wordInd}
           >
