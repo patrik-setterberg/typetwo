@@ -1,22 +1,22 @@
 {
   "files": {
     "main.css": "/typetwo/static/css/main.62ace4b5.chunk.css",
-    "main.js": "/typetwo/static/js/main.1e6067b3.chunk.js",
-    "main.js.map": "/typetwo/static/js/main.1e6067b3.chunk.js.map",
-    "runtime-main.js": "/typetwo/static/js/runtime-main.4c3464b7.js",
-    "runtime-main.js.map": "/typetwo/static/js/runtime-main.4c3464b7.js.map",
-    "static/js/2.0c0bc95f.chunk.js": "/typetwo/static/js/2.0c0bc95f.chunk.js",
-    "static/js/2.0c0bc95f.chunk.js.map": "/typetwo/static/js/2.0c0bc95f.chunk.js.map",
-    "static/js/3.0cb2024f.chunk.js": "/typetwo/static/js/3.0cb2024f.chunk.js",
-    "static/js/3.0cb2024f.chunk.js.map": "/typetwo/static/js/3.0cb2024f.chunk.js.map",
+    "main.js": "/typetwo/static/js/main.84d406f3.chunk.js",
+    "main.js.map": "/typetwo/static/js/main.84d406f3.chunk.js.map",
+    "runtime-main.js": "/typetwo/static/js/runtime-main.3b150005.js",
+    "runtime-main.js.map": "/typetwo/static/js/runtime-main.3b150005.js.map",
+    "static/js/2.70b12a8e.chunk.js": "/typetwo/static/js/2.70b12a8e.chunk.js",
+    "static/js/2.70b12a8e.chunk.js.map": "/typetwo/static/js/2.70b12a8e.chunk.js.map",
+    "static/js/3.92f64883.chunk.js": "/typetwo/static/js/3.92f64883.chunk.js",
+    "static/js/3.92f64883.chunk.js.map": "/typetwo/static/js/3.92f64883.chunk.js.map",
     "index.html": "/typetwo/index.html",
     "static/css/main.62ace4b5.chunk.css.map": "/typetwo/static/css/main.62ace4b5.chunk.css.map",
-    "static/js/2.0c0bc95f.chunk.js.LICENSE.txt": "/typetwo/static/js/2.0c0bc95f.chunk.js.LICENSE.txt"
+    "static/js/2.70b12a8e.chunk.js.LICENSE.txt": "/typetwo/static/js/2.70b12a8e.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.4c3464b7.js",
-    "static/js/2.0c0bc95f.chunk.js",
+    "static/js/runtime-main.3b150005.js",
+    "static/js/2.70b12a8e.chunk.js",
     "static/css/main.62ace4b5.chunk.css",
-    "static/js/main.1e6067b3.chunk.js"
+    "static/js/main.84d406f3.chunk.js"
   ]
 }
