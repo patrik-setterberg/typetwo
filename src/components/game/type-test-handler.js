@@ -91,7 +91,8 @@ const TypeTestHandler = (props) => {
 
   useEffect(() => {
     if (highestScore > 0) {
-      document.cookie = `${g.COOKIE_NAME}=${highestScore};max-age=${g.COOKIE_MAX_AGE}`; // ALSO INCLUDE TIMESTAMP?
+      document.cookie = `${g.SCORE_COOKIE_NAME}=${highestScore};max-age=${g.COOKIE_MAX_AGE}`;
+      document.cookie = `${g.TIMESTAMP_COOKIE_NAME}=${Date.now()};max-age=${g.COOKIE_MAX_AGE}`;
     }
   }, [highestScore]);
 

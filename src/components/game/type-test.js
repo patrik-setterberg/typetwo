@@ -33,13 +33,17 @@ const TypeTest = (props) => {
     setCurrentWordInd((currentWordInd) => (currentWordInd + 1));
   }
 
+  /**
+   * Subtract from currentWord's index.
+   * Called when word array is updated (old words shifted, new words pushed).
+   */
   const updateCurrentWordInd = (count) => {
     setCurrentWordInd(currentWordInd => currentWordInd - count);
   }
 
   const [caretPosition, setCaretPosition] = useState(0);
 
-  // Value of test's hidden text-input
+  // Value of test's hidden text-input.
   const [inputValue, setInputValue] = useState('');
 
   // Used to flash highlight incorrect letters when word is checked.

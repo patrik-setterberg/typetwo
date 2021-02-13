@@ -102,7 +102,7 @@ const Caret = (props) => {
   );
 }
 
-const Word = ({isCurrent, children, wordsRef, ...rest}) => {
+const Word = ({wordsRef, children, ...rest}) => {
   return (
     <StyledWord
       ref={wordsRef}
@@ -117,7 +117,6 @@ const Letter = (props) => {
   return (
     <StyledLetter
       {...props}
-      className="letter"
     >
       {props.children}
     </StyledLetter>
@@ -127,7 +126,7 @@ const Letter = (props) => {
 /**
 * Text component displays test's words on screen. Text is blurred when document loses focus.
 * Uses styled component Textwrapper. Uses components Word, Letter, Caret.
-* Iterates through prop "rows" and prints its contents.
+* Iterates through an array of words and prints its contents.
 */
 const Text = (props) => {
 
@@ -151,7 +150,7 @@ const Text = (props) => {
     }
   }, []);
 
-  // Keep track of current word's position for caret positioning.
+  // Keep track of current word's position for caret positioning and rows handling.
   const [currentWordLeft, setCurrentWordLeft] = useState(0);
   const [currentWordTop, setCurrentWordTop] = useState(0);
 

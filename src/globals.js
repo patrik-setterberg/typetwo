@@ -20,10 +20,7 @@ const g = {
   
   bgcolor: '#333',
 
-  // TYPE TEST CONFIGURATION VARS
-  WORDS_PER_ROW: 9,
-  ROW_COUNT: 3,
-
+  // Number of test words displayed on screen
   TEST_WORD_COUNT: 32,
 
   // TEST DURATION OPTIONS (in seconds)
@@ -31,7 +28,7 @@ const g = {
   TEST_LENGTH_MEDIUM: 30,
   TEST_LENGTH_LONG: 60,
 
-  TEST_LENGTH_DEFAULT: 60,
+  TEST_LENGTH_DEFAULT: 30,
 
   // Set how often component checks if document is focused
   FOCUS_CHECK_INTERVAL: 66,
@@ -39,7 +36,8 @@ const g = {
   RESIZE_CHECK_INTERVAL: 50,
 
   // COOKIE SETTINGS
-  COOKIE_NAME: 'highest_score',
+  SCORE_COOKIE_NAME: 'highest_score',
+  TIMESTAMP_COOKIE_NAME: 'time',
   COOKIE_MAX_AGE: 2592000, // 60'60*24*30 = 30 days
 }
 
