@@ -11,7 +11,7 @@ import TypeTest from './type-test.js';
 import ScoreScreen from './score-screen.js';
 
 const TypeTestWrapper = styled.div`
-  margin: 200px auto 0;
+  margin: 100px auto 0;
   padding: 1.5rem;
 
   @media ${g.medium} {

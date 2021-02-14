@@ -35,7 +35,7 @@ const Input = (props) => {
   }, []);
 
   /* Filter text-input. 
-  Remove everything except chars inside square brackets.
+  Remove everythi// SHIFTSng except chars inside square brackets.
   Also remove whitespaces, incl. tabs, newlines.
   Finally, trim chars which exceed length of 2nd parameter (currentWord). */
   const filterInput = (input, maxLen) => {
@@ -59,9 +59,25 @@ const Input = (props) => {
       props.endTest();
     }
 
+    /*
+    if (e.code === 'ShiftLeft') {
+      console.log('shiiiift Leefft');
+    }
+
+    if (e.code === 'ShiftRight') {
+      console.log('shiiiift Right');
+    }
+    */
+
     if (e.key === ' ') {
       props.handleSpace();
       props.updateTypedRecently();
+    }
+    props.updateKeyPressedRecently(e.key);
+    
+    if (e.code === 'ShiftLeft' || e.code === 'ShiftRight') {
+      console.log('hurra');
+      props.setShiftPressed(!props.shiftPressed);
     }
   }
 
@@ -69,6 +85,10 @@ const Input = (props) => {
     if (['ArrowLeft', 'ArrowRight', 'Control', 'Home', 'End'].includes(e.key)) {
      props.setCaretPosition(e.target.selectionStart);
      props.updateTypedRecently();
+    }
+
+    if (e.code === 'ShiftLeft' || e.code === 'ShiftRight') {
+      props.setShiftPressed(!props.shiftPressed);
     }
   }
 
@@ -82,7 +102,7 @@ const Input = (props) => {
   return(
     <StyledInput
       type="text"
-      autoComplete="off"
+      autoComplete="off"// SHIFTS
       value={props.inputValue}
       onKeyDown={(e) => {handleKeyDown(e)}}
       onKeyUp={(e) => {handleKeyUp(e)}}

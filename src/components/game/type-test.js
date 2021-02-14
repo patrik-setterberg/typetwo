@@ -9,6 +9,7 @@ import TestTimer from './test-countdown.js';
 import Text from './text.js';
 import TimeControls from './test-time-controls.js';
 import TestInstructions from './test-instructions.js';
+import Keyboard from './onscreen-keyboard.js';
 
 const StyledTypeTest = styled.div`
   display: flex;
@@ -61,6 +62,17 @@ const TypeTest = (props) => {
       setTypedRecently(false);
     }, 1);
   }
+
+  const [keyPressedRecently, setKeyPressedRecently] = useState('');
+
+  const updateKeyPressedRecently = (key) => {
+    setKeyPressedRecently(key);
+    setTimeout(() => {
+      setKeyPressedRecently('');
+    }, 300);
+  }
+
+  const [shiftPressed, setShiftPressed] = useState(false);
 
   // Compare array word with str from text-input
   const checkFullWord = () => {
@@ -179,16 +191,26 @@ const TypeTest = (props) => {
         inputValue={inputValue}
         setInputValue={setInputValue}
         handleSpace={handleSpace}
-        checkWord={checkFullWord}
         endTest={endTest}
         caretPosition={caretPosition}
         setCaretPosition={setCaretPosition}
         updateTypedRecently={updateTypedRecently}
+        updateKeyPressedRecently={updateKeyPressedRecently}
+        shiftPressed={shiftPressed}
+        setShiftPressed={setShiftPressed}
       />
       {/*<div>{props.playing ? 'playing' : 'not playing'}</div>*/}
       <TimeControls
         setTestLength={props.setTestLength}
         playing={props.playing}
+      />
+      <Keyboard
+        playing={props.playing}
+        keyPressedRecently={keyPressedRecently}
+        correctKey={props.testWords[currentWordInd][inputValue.length - 1]}
+        nextKey={props.testWords[currentWordInd][inputValue.length]}
+        wordIncorrect={wordIncorrect}
+        shiftPressed={shiftPressed}
       />
     </StyledTypeTest>
   );
