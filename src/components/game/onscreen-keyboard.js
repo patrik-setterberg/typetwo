@@ -10,7 +10,7 @@ const Key = styled.span`
   align-items: center;
   position: relative;
   pointer-events: none;
-  transition: background-color 0.15s var(--default-timing) border 0.15s var(--default-timing);
+  transition: background-color 0.07s linear, border 0.09s var(--default-timing);
 
   & + & {
     margin-left: 0.5ch;
@@ -94,8 +94,49 @@ const StyledKeyboard = styled.div`
 `
 
 const Keyboard = (props) => {
-
   const [currentLayout, setCurrentLayout] = useState(g.KEYBOARD_DEFAULT_LAYOUT);
+
+  const [highlightedAccuratePressed, setHighlightedAccuratePressed] = useState([]);
+  const [highlightedInaccuratePressed, setHighlightedInaccuratePressed] = useState([]);
+  const [highlightedAccurate, setHighlightedAccurate] = useState([]);
+
+  const HIGHLIGHT_DURATION = 150;
+
+  // Add keys to highlight arrays.
+  function highlightKey (stateArr, func, key) {
+    func((stateArr) => stateArr.concat(key));
+    setTimeout(() => {
+      console.log(stateArr)
+      func((stateArr) => stateArr.splice(stateArr.indexOf(key), 1));
+    }, HIGHLIGHT_DURATION);
+  }
+
+  useEffect(() => {
+    if (props.lastKey.length > 0) {
+
+      // Highlight correctly input keys
+      if (props.lastKey === props.correctKey) {
+        highlightKey(highlightedAccuratePressed, setHighlightedAccuratePressed, props.lastKey);
+      }
+
+      // Highlight inaccurate key.
+      if (props.lastKey !== props.correctKey) {
+        highlightKey(highlightedInaccuratePressed, setHighlightedInaccuratePressed, props.lastKey);
+      }
+
+      // Highlight current correct key.
+      highlightKey(highlightedAccurate, setHighlightedAccurate, props.correctKey ? props.correctKey : ' ');
+    }
+
+    /*
+    setTimeout(() => {
+      setHighlightedAccuratePressed([]);
+      setHighlightedInaccuratePressed([]);
+      setHighlightedAccurate([]);
+    }, HIGHLIGHT_DURATION);
+    */
+
+  }, [props.typedRecently]);
 
   return (
     <StyledKeyboard>
@@ -110,20 +151,24 @@ const Keyboard = (props) => {
               return (
                 <Key
                   key={keyInd}
-                  highlightPressed={
-                    keySymbol === props.keyPressedRecently &&
-                    keySymbol === props.correctKey
-                  }
-                  highlightPressedInaccurate={
-                    keySymbol === props.keyPressedRecently &&
-                    keySymbol !== props.correctKey
-                  }
-                  highlightAccurate={
+                  highlightPressed={highlightedAccuratePressed.indexOf(keySymbol) !== -1}
+                  
+
+                    // keySymbol === props.keyPressedRecently &&
+                    //keySymbol === props.correctKey
+                  
+                  highlightPressedInaccurate={highlightedInaccuratePressed.indexOf(keySymbol) !== -1}
+                    //keySymbol === props.keyPressedRecently &&
+                    //keySymbol !== props.correctKey
+                  
+                  highlightAccurate={highlightedAccurate.indexOf(keySymbol) !== -1}
+                    /*
                     (props.keyPressedRecently.length === 1 || props.keyPressedRecently === ' ') &&
-                    keySymbol === (props.keyPressedRecently === ' ' && props.wordIncorrect === true ? props.nextKey : props.correctKey) && // DOESN'T WORK SO GOOD. I THINK wordIncorrect isn't updated quickly enough.
+                    keySymbol === (props.keyPressedRecently === ' ' && props.wordIncorrect === true ? props.nextKey : props.correctKey) &&
                     keySymbol !== props.keyPressedRecently &&
                     props.playing === true
-                  }
+                    */
+                  
                   shiftPressed={props.shiftPressed}
                   isShift={rowInd === 2 && (keyInd === 0 || keyInd + 1 === row.length)}
                 >

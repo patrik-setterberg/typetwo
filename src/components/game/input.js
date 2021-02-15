@@ -74,6 +74,7 @@ const Input = (props) => {
       props.updateTypedRecently();
     }
     props.updateKeyPressedRecently(e.key);
+    props.setLastKey(e.key);
     
     if (e.code === 'ShiftLeft' || e.code === 'ShiftRight') {
       console.log('hurra');

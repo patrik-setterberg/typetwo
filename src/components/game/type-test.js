@@ -69,8 +69,10 @@ const TypeTest = (props) => {
     setKeyPressedRecently(key);
     setTimeout(() => {
       setKeyPressedRecently('');
-    }, 300);
+    }, 200);
   }
+
+  const [lastKey, setLastKey] = useState('');
 
   const [shiftPressed, setShiftPressed] = useState(false);
 
@@ -198,6 +200,7 @@ const TypeTest = (props) => {
         updateKeyPressedRecently={updateKeyPressedRecently}
         shiftPressed={shiftPressed}
         setShiftPressed={setShiftPressed}
+        setLastKey={setLastKey}
       />
       {/*<div>{props.playing ? 'playing' : 'not playing'}</div>*/}
       <TimeControls
@@ -211,6 +214,8 @@ const TypeTest = (props) => {
         nextKey={props.testWords[currentWordInd][inputValue.length]}
         wordIncorrect={wordIncorrect}
         shiftPressed={shiftPressed}
+        lastKey={lastKey}
+        typedRecently={typedRecently}
       />
     </StyledTypeTest>
   );
