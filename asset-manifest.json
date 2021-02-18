@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/typetwo/static/css/main.62ace4b5.chunk.css",
-    "main.js": "/typetwo/static/js/main.01b9730f.chunk.js",
-    "main.js.map": "/typetwo/static/js/main.01b9730f.chunk.js.map",
+    "main.js": "/typetwo/static/js/main.e6ca5aa0.chunk.js",
+    "main.js.map": "/typetwo/static/js/main.e6ca5aa0.chunk.js.map",
     "runtime-main.js": "/typetwo/static/js/runtime-main.3b150005.js",
     "runtime-main.js.map": "/typetwo/static/js/runtime-main.3b150005.js.map",
     "static/js/2.70b12a8e.chunk.js": "/typetwo/static/js/2.70b12a8e.chunk.js",
@@ -17,6 +17,6 @@
     "static/js/runtime-main.3b150005.js",
     "static/js/2.70b12a8e.chunk.js",
     "static/css/main.62ace4b5.chunk.css",
-    "static/js/main.01b9730f.chunk.js"
+    "static/js/main.e6ca5aa0.chunk.js"
   ]
 }
