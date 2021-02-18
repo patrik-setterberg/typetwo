@@ -72,6 +72,7 @@ const g = {
   COOKIE_MAX_AGE: 2592000, // 60'60*24*30 = 30 days
 
   KEYBOARD_DEFAULT_LAYOUT: 'QWERTY_SE',
+  KEYBOARD_HIGHLIGHT_DURATION: 160,
 }
 
 export default g;

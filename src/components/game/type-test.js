@@ -4,6 +4,7 @@
 
 import React, {useEffect, useState, useCallback} from 'react';
 import styled from 'styled-components';
+import g from '../../globals.js';
 import Input from './input.js';
 import TestTimer from './test-countdown.js';
 import Text from './text.js';
@@ -53,26 +54,29 @@ const TypeTest = (props) => {
   // Keep track of correctly input words for calculating score.
   const [correctWordsCount, setCorrectWordsCount] = useState(0);
 
-  // Quickly flash a prop to Text component, used to reset caret animation.
+  /**
+   * Quickly flash a prop.
+   * Used for onscreen keyboard highlighting and to reset caret animation.
+   * */
   const [typedRecently, setTypedRecently] = useState(false);
 
   const updateTypedRecently = () => {
     setTypedRecently(true);
     setTimeout(() => {
       setTypedRecently(false);
-    }, 1);
-  }
-
-  const [keyPressedRecently, setKeyPressedRecently] = useState('');
-
-  const updateKeyPressedRecently = (key) => {
-    setKeyPressedRecently(key);
-    setTimeout(() => {
-      setKeyPressedRecently('');
-    }, 200);
+    }, 0);
   }
 
   const [lastKey, setLastKey] = useState('');
+
+  const [spacePressedRecently, setSpacePressedRecently] = useState(false);
+
+  const flashSpacePressedRecently = () => {
+    setSpacePressedRecently(true);
+    setTimeout(() => {
+      setSpacePressedRecently(false);
+    }, g.KEYBOARD_HIGHLIGHT_DURATION);
+  }
 
   const [shiftPressed, setShiftPressed] = useState(false);
 
@@ -106,7 +110,7 @@ const TypeTest = (props) => {
       // PROBLEM: WILL THROW ERROR IF TEST ENDS DURING TIMEOUT. I THINK.
       setTimeout(() => {
         setWordIncorrect(false);
-      }, 200);
+      }, g.KEYBOARD_HIGHLIGHT_DURATION);
     }
   }
 
@@ -197,7 +201,7 @@ const TypeTest = (props) => {
         caretPosition={caretPosition}
         setCaretPosition={setCaretPosition}
         updateTypedRecently={updateTypedRecently}
-        updateKeyPressedRecently={updateKeyPressedRecently}
+        flashSpacePressedRecently={flashSpacePressedRecently}
         shiftPressed={shiftPressed}
         setShiftPressed={setShiftPressed}
         setLastKey={setLastKey}
@@ -209,13 +213,16 @@ const TypeTest = (props) => {
       />
       <Keyboard
         playing={props.playing}
-        keyPressedRecently={keyPressedRecently}
         correctKey={props.testWords[currentWordInd][inputValue.length - 1]}
-        nextKey={props.testWords[currentWordInd][inputValue.length]}
+        nextKey={props.testWords[currentWordInd][inputValue.length] ? props.testWords[currentWordInd][inputValue.length] : ' '}
+        spacePressedRecently={spacePressedRecently}
         wordIncorrect={wordIncorrect}
         shiftPressed={shiftPressed}
         lastKey={lastKey}
         typedRecently={typedRecently}
+        endOfWord={inputValue.length === props.testWords[currentWordInd].length}
+        inputLength={inputValue.length}
+        currentWordLength={props.testWords[currentWordInd].length}
       />
     </StyledTypeTest>
   );

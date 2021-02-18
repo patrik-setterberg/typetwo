@@ -79,7 +79,7 @@ const TypeTestHandler = (props) => {
 
   function calcTestScore (correctWordCount) {
     // Calculate words per minute.
-    let wpm = correctWordCount * (60 / testLength);
+    let wpm = correctWordCount * (60 / testLength); // https://www.speedtypingonline.com/typing-equations DO SOMETHING LIKE THIS INSTEAD
     setTestScore(wpm);
   }
 
