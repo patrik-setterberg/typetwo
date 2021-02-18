@@ -78,8 +78,7 @@ const Input = (props) => {
     }
     
     if (e.code === 'ShiftLeft' || e.code === 'ShiftRight') {
-      console.log('hurra');
-      props.setShiftPressed(!props.shiftPressed);
+      props.setShiftPressed(e.code);
     }
   }
 
@@ -90,7 +89,7 @@ const Input = (props) => {
     }
 
     if (e.code === 'ShiftLeft' || e.code === 'ShiftRight') {
-      props.setShiftPressed(!props.shiftPressed);
+      props.setShiftPressed('');
     }
   }
 

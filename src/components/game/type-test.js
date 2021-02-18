@@ -78,7 +78,7 @@ const TypeTest = (props) => {
     }, g.KEYBOARD_HIGHLIGHT_DURATION);
   }
 
-  const [shiftPressed, setShiftPressed] = useState(false);
+  const [shiftPressed, setShiftPressed] = useState('');
 
   // Compare array word with str from text-input
   const checkFullWord = () => {

@@ -29,10 +29,6 @@ const Key = styled.span`
     `
   }
 
-  ${props => props.shiftPressed && props.isShift && css`
-    border: 1px solid #fff;`
-  }
-
   ${props => props.highlightSpacePressed && css`
     background-color: rgba(255, 255, 255, 0.4);`
   }
@@ -67,11 +63,17 @@ const Row = styled.div`
     // LEFT SHIFT
     & > *:first-child {
       padding-right: ${props => props.iso ? '2.5ch' : '7.25ch'};
+      ${props => props.shiftPressed === 'ShiftLeft' && css`
+        background-color: rgba(255, 255, 255, 0.4);`
+      }
     }
 
     // RIGHT SHIFT
     & > *:last-child {
       padding-left: 9.5ch;
+      ${props => props.shiftPressed === 'ShiftRight' && css`
+        background-color: rgba(255, 255, 255, 0.4);`
+      }
     }
   }
 
@@ -118,7 +120,6 @@ const Keyboard = (props) => {
 
   useEffect(() => {
     if (props.lastKey.length > 0 && props.typedRecently === true) {
-      console.log(props.lastKey);
       // Highlight correctly input keys
       if (props.lastKey === props.correctKey && !props.spacePressedRecently) {
         setHighlightedAccuratePressed((highlightedAccuratePressed) => highlightedAccuratePressed.concat(props.lastKey));
@@ -168,6 +169,7 @@ const Keyboard = (props) => {
           <Row
             key={rowInd}
             iso={rowInd === 2 && row.length > 12} // ANSI has 12 bottom keys
+            shiftPressed={props.shiftPressed}
           >
             {row.map((keySymbol, keyInd) => {
               return (
@@ -176,8 +178,6 @@ const Keyboard = (props) => {
                   highlightPressedAccurate={highlightedAccuratePressed.indexOf(keySymbol) !== -1}
                   highlightPressedInaccurate={highlightedInaccuratePressed.indexOf(keySymbol) !== -1}
                   highlightAccurate={highlightedAccurate.indexOf(keySymbol) !== -1 && props.lastKey.length === 1}
-                  shiftPressed={props.shiftPressed}
-                  isShift={rowInd === 2 && (keyInd === 0 || keyInd + 1 === row.length)}
                 >
                   {keySymbol.toUpperCase()}
                 </Key>
