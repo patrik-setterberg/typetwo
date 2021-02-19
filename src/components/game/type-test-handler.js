@@ -64,10 +64,10 @@ const TypeTestHandler = (props) => {
 
   const [highestScore, setHighestScore] = useState(() => {
     // Check if there is a cookie with a key which matches COOKIE_NAME.
-    if (document.cookie.split(';').some((item) => item.trim().startsWith(g.COOKIE_NAME))) {
+    if (document.cookie.split(';').some((item) => item.trim().startsWith(g.SCORE_COOKIE_NAME))) {
       return (
         // Return its value.
-        document.cookie.split(';').find(row => row.startsWith(g.COOKIE_NAME)).split('=')[1]
+        document.cookie.split(';').find(row => row.startsWith(g.SCORE_COOKIE_NAME)).split('=')[1]
       );
     } else {
       // If there is no matching cookie, set highestScore to 0.
