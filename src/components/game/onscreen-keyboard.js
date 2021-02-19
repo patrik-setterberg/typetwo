@@ -63,7 +63,7 @@ const Row = styled.div`
     // LEFT SHIFT
     & > *:first-child {
       padding-right: ${props => props.iso ? '2.5ch' : '7.25ch'};
-      ${props => props.shiftPressed === 'ShiftLeft' && css`
+      ${props => props.leftShiftPressed && css`
         background-color: rgba(255, 255, 255, 0.4);`
       }
     }
@@ -71,7 +71,7 @@ const Row = styled.div`
     // RIGHT SHIFT
     & > *:last-child {
       padding-left: 9.5ch;
-      ${props => props.shiftPressed === 'ShiftRight' && css`
+      ${props => props.rightShiftPressed && css`
         background-color: rgba(255, 255, 255, 0.4);`
       }
     }
@@ -122,18 +122,20 @@ const Keyboard = (props) => {
     if (props.lastKey.length > 0 && props.typedRecently === true) {
       // Highlight correctly input keys
       if (props.lastKey === props.correctKey && !props.spacePressedRecently) {
-        setHighlightedAccuratePressed((highlightedAccuratePressed) => highlightedAccuratePressed.concat(props.lastKey));
+        setHighlightedAccuratePressed((highlightedAccuratePressed) => highlightedAccuratePressed.concat(props.lastKey.toLowerCase()));
       }
       // Highlight inaccurate key.
       if (props.lastKey !== props.correctKey  && !props.spacePressedRecently) {
-        setHighlightedInaccuratePressed((highlightedInaccuratePressed) => highlightedInaccuratePressed.concat(props.lastKey));
+        setHighlightedInaccuratePressed((highlightedInaccuratePressed) => highlightedInaccuratePressed.concat(props.lastKey.toLowerCase()));
       }
       // Highlight current correct key.
-      setHighlightedAccurate((highlightedAccurate) => (
-        (props.spacePressedRecently || (wasEndOfWord === true && props.inputLength > 0)) &&
-        (props.endOfWord === true || props.wordIncorrect == true) ?
-          highlightedAccurate.concat(props.nextKey) : highlightedAccurate.concat(props.correctKey)
-      ));
+      if (props.correctKey !== undefined && props.nextKey !== undefined) {
+        setHighlightedAccurate((highlightedAccurate) => (
+          (props.spacePressedRecently || (wasEndOfWord === true && props.inputLength > 0)) &&
+          (props.endOfWord === true || props.wordIncorrect == true) ?
+            highlightedAccurate.concat(props.nextKey.toLowerCase()) : highlightedAccurate.concat(props.correctKey.toLowerCase())
+        ));
+      }
     }
   }, [props.typedRecently]);
 
@@ -169,7 +171,8 @@ const Keyboard = (props) => {
           <Row
             key={rowInd}
             iso={rowInd === 2 && row.length > 12} // ANSI has 12 bottom keys
-            shiftPressed={props.shiftPressed}
+            leftShiftPressed={props.leftShiftPressed}
+            rightShiftPressed={props.rightShiftPressed}
           >
             {row.map((keySymbol, keyInd) => {
               return (
@@ -177,7 +180,10 @@ const Keyboard = (props) => {
                   key={keyInd}
                   highlightPressedAccurate={highlightedAccuratePressed.indexOf(keySymbol) !== -1}
                   highlightPressedInaccurate={highlightedInaccuratePressed.indexOf(keySymbol) !== -1}
-                  highlightAccurate={highlightedAccurate.indexOf(keySymbol) !== -1 && props.lastKey.length === 1}
+                  highlightAccurate={
+                    (highlightedAccurate.indexOf(keySymbol) !== -1 && props.lastKey.length === 1) ||
+                    (props.spacePressedRecently === true && props.wordIncorrect === true && props.nextKey.toLowerCase() === keySymbol)
+                  }
                 >
                   {keySymbol.toUpperCase()}
                 </Key>
@@ -197,8 +203,7 @@ const Keyboard = (props) => {
           highlightAccurate={highlightedAccurate.indexOf(' ') !== -1}
           highlightPressedInaccurate={
             props.spacePressedRecently === true &&
-            props.wordIncorrect === true && 
-            props.playing === true
+            props.wordIncorrect === true
           }
         >
         {`\u2007`}{/* A good looking whitespace character. */}

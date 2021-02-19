@@ -78,7 +78,8 @@ const TypeTest = (props) => {
     }, g.KEYBOARD_HIGHLIGHT_DURATION);
   }
 
-  const [shiftPressed, setShiftPressed] = useState('');
+  const [leftShiftPressed, setLeftShiftPressed] = useState(false);
+  const [rightShiftPressed, setRightShiftPressed] = useState(false);
 
   // Compare array word with str from text-input
   const checkFullWord = () => {
@@ -202,9 +203,9 @@ const TypeTest = (props) => {
         setCaretPosition={setCaretPosition}
         updateTypedRecently={updateTypedRecently}
         flashSpacePressedRecently={flashSpacePressedRecently}
-        shiftPressed={shiftPressed}
-        setShiftPressed={setShiftPressed}
         setLastKey={setLastKey}
+        setLeftShiftPressed={setLeftShiftPressed}
+        setRightShiftPressed={setRightShiftPressed}
       />
       {/*<div>{props.playing ? 'playing' : 'not playing'}</div>*/}
       <TimeControls
@@ -217,7 +218,8 @@ const TypeTest = (props) => {
         nextKey={props.testWords[currentWordInd][inputValue.length] ? props.testWords[currentWordInd][inputValue.length] : ' '}
         spacePressedRecently={spacePressedRecently}
         wordIncorrect={wordIncorrect}
-        shiftPressed={shiftPressed}
+        leftShiftPressed={leftShiftPressed}
+        rightShiftPressed={rightShiftPressed}
         lastKey={lastKey}
         typedRecently={typedRecently}
         endOfWord={inputValue.length === props.testWords[currentWordInd].length}

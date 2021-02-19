@@ -59,26 +59,16 @@ const Input = (props) => {
       props.endTest();
     }
 
-    /*
     if (e.code === 'ShiftLeft') {
-      console.log('shiiiift Leefft');
-    }
-
-    if (e.code === 'ShiftRight') {
-      console.log('shiiiift Right');
-    }
-    */
-
-    if (e.key === ' ') {
+      props.setLeftShiftPressed(true);
+    } else if (e.code === 'ShiftRight') {
+      props.setRightShiftPressed(true);
+    } else if (e.key === ' ') {
       props.handleSpace();
       props.updateTypedRecently();
       props.flashSpacePressedRecently();
     } else {
       props.setLastKey(e.key);
-    }
-    
-    if (e.code === 'ShiftLeft' || e.code === 'ShiftRight') {
-      props.setShiftPressed(e.code);
     }
   }
 
@@ -88,8 +78,10 @@ const Input = (props) => {
      props.updateTypedRecently();
     }
 
-    if (e.code === 'ShiftLeft' || e.code === 'ShiftRight') {
-      props.setShiftPressed('');
+    if (e.code === 'ShiftLeft') {
+      props.setLeftShiftPressed(false);
+    } else if (e.code === 'ShiftRight') {
+      props.setRightShiftPressed(false);
     }
   }
 
