@@ -97,7 +97,7 @@ const TypeTest = (props) => {
     setCurrentWordInd(0);
     props.setTestWords(props.loadWords());
     setTimeLeft(props.testLength);
-  }, []);
+  }, [props.testLength]);
 
   const handleSpace = () => {
     // Check if input matches currentWord.

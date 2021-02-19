@@ -61,13 +61,16 @@ const Input = (props) => {
 
     if (e.code === 'ShiftLeft') {
       props.setLeftShiftPressed(true);
-    } else if (e.code === 'ShiftRight') {
+    }
+    else if (e.code === 'ShiftRight') {
       props.setRightShiftPressed(true);
-    } else if (e.key === ' ') {
+    }
+    else if (e.key === ' ') {
       props.handleSpace();
       props.updateTypedRecently();
       props.flashSpacePressedRecently();
-    } else {
+    }
+    else {
       props.setLastKey(e.key);
     }
   }
@@ -80,7 +83,8 @@ const Input = (props) => {
 
     if (e.code === 'ShiftLeft') {
       props.setLeftShiftPressed(false);
-    } else if (e.code === 'ShiftRight') {
+    }
+    else if (e.code === 'ShiftRight') {
       props.setRightShiftPressed(false);
     }
   }
@@ -95,7 +99,7 @@ const Input = (props) => {
   return(
     <StyledInput
       type="text"
-      autoComplete="off"// SHIFTS
+      autoComplete="off"// SHIFTS // what?
       value={props.inputValue}
       onKeyDown={(e) => {handleKeyDown(e)}}
       onKeyUp={(e) => {handleKeyUp(e)}}
