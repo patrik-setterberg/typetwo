@@ -25,8 +25,7 @@ const Key = styled.span`
   }
   
   ${props => props.highlightPressedInaccurate && css`
-    background-color: rgba(255, 0, 0, 0.3);
-    `
+    background-color: rgba(255, 0, 0, 0.3);`
   }
 
   ${props => props.highlightSpacePressed && css`
@@ -66,6 +65,9 @@ const Row = styled.div`
       ${props => props.leftShiftPressed && css`
         background-color: rgba(255, 255, 255, 0.4);`
       }
+      ${props => props.leftShiftPressedInaccurate && css`
+        background-color: rgba(255, 0, 0, 0.3);`
+      }
     }
 
     // RIGHT SHIFT
@@ -73,6 +75,16 @@ const Row = styled.div`
       padding-left: 9.5ch;
       ${props => props.rightShiftPressed && css`
         background-color: rgba(255, 255, 255, 0.4);`
+      }
+      ${props => props.rightShiftPressedInaccurate && css`
+        background-color: rgba(255, 0, 0, 0.3);`
+      }
+    }
+
+    & > *:first-child,
+    & > *:last-child {
+      ${props => props.shiftAccurate && css`
+        border: 1px solid #fff;`
       }
     }
   }
@@ -172,7 +184,10 @@ const Keyboard = (props) => {
             key={rowInd}
             iso={rowInd === 2 && row.length > 12} // ANSI has 12 bottom keys
             leftShiftPressed={props.leftShiftPressed}
+            leftShiftPressedInaccurate={props.correctKey !== undefined && props.leftShiftPressed && highlightedInaccuratePressed.length > 0 && props.correctKey !== props.correctKey.toUpperCase()}
             rightShiftPressed={props.rightShiftPressed}
+            rightShiftPressedInaccurate={props.correctKey !== undefined && props.rightShiftPressed && highlightedInaccuratePressed.length > 0 && props.correctKey !== props.correctKey.toUpperCase()}
+            shiftAccurate={rowInd === 2 && (props.correctKey !== undefined && props.correctKey === props.correctKey.toUpperCase()) && highlightedInaccuratePressed.length > 0}
           >
             {row.map((keySymbol, keyInd) => {
               return (
