@@ -68,6 +68,9 @@ const Row = styled.div`
       ${props => props.leftShiftPressedInaccurate && css`
         background-color: rgba(255, 0, 0, 0.3);`
       }
+      ${props => props.shiftAccurate && (!props.rightShiftPressed || (!props.leftShiftPressed && !props.rightShiftPressed)) && props.lastKey !== 'Backspace' && css`
+        border: 1px solid #fff;`
+      }
     }
 
     // RIGHT SHIFT
@@ -79,11 +82,7 @@ const Row = styled.div`
       ${props => props.rightShiftPressedInaccurate && css`
         background-color: rgba(255, 0, 0, 0.3);`
       }
-    }
-
-    & > *:first-child,
-    & > *:last-child {
-      ${props => props.shiftAccurate && css`
+      ${props => props.shiftAccurate && (!props.leftShiftPressed || (!props.leftShiftPressed && !props.rightShiftPressed)) && props.lastKey !== 'Backspace' && css`
         border: 1px solid #fff;`
       }
     }
@@ -183,11 +182,29 @@ const Keyboard = (props) => {
           <Row
             key={rowInd}
             iso={rowInd === 2 && row.length > 12} // ANSI has 12 bottom keys
+            lastKey={props.lastKey}
             leftShiftPressed={props.leftShiftPressed}
-            leftShiftPressedInaccurate={props.correctKey !== undefined && props.leftShiftPressed && highlightedInaccuratePressed.length > 0 && props.correctKey !== props.correctKey.toUpperCase()}
+            leftShiftPressedInaccurate={
+              rowInd === 2 &&
+              props.correctKey !== undefined &&
+              props.leftShiftPressed && highlightedInaccuratePressed.length > 0 &&
+              props.correctKey !== props.correctKey.toUpperCase()
+            }
             rightShiftPressed={props.rightShiftPressed}
-            rightShiftPressedInaccurate={props.correctKey !== undefined && props.rightShiftPressed && highlightedInaccuratePressed.length > 0 && props.correctKey !== props.correctKey.toUpperCase()}
-            shiftAccurate={rowInd === 2 && (props.correctKey !== undefined && props.correctKey === props.correctKey.toUpperCase()) && highlightedInaccuratePressed.length > 0}
+            rightShiftPressedInaccurate={
+              rowInd === 2 &&
+              props.correctKey !== undefined &&
+              props.rightShiftPressed && highlightedInaccuratePressed.length > 0 &&
+              props.correctKey !== props.correctKey.toUpperCase()
+            }
+            highlightedAccuratePressed={highlightedAccuratePressed}
+            highlightedInaccuratePressed={highlightedInaccuratePressed}
+            shiftAccurate={
+              rowInd === 2 &&
+              (((props.correctKey !== undefined && props.correctKey === props.correctKey.toUpperCase()) ||
+              (props.spacePressedRecently && props.nextKey === props.nextKey.toUpperCase())) &&
+              (highlightedAccuratePressed.length > 0 || highlightedInaccuratePressed.length > 0))
+            }
           >
             {row.map((keySymbol, keyInd) => {
               return (
