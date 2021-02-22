@@ -68,7 +68,7 @@ const Row = styled.div`
       ${props => props.leftShiftPressedInaccurate && css`
         background-color: rgba(255, 0, 0, 0.3);`
       }
-      ${props => props.shiftAccurate && (!props.rightShiftPressed || (!props.leftShiftPressed && !props.rightShiftPressed)) && props.lastKey !== 'Backspace' && css`
+      ${props => props.shiftAccurate && (!props.rightShiftPressed || (!props.leftShiftPressed && !props.rightShiftPressed)) && css`
         border: 1px solid #fff;`
       }
     }
@@ -82,7 +82,7 @@ const Row = styled.div`
       ${props => props.rightShiftPressedInaccurate && css`
         background-color: rgba(255, 0, 0, 0.3);`
       }
-      ${props => props.shiftAccurate && (!props.leftShiftPressed || (!props.leftShiftPressed && !props.rightShiftPressed)) && props.lastKey !== 'Backspace' && css`
+      ${props => props.shiftAccurate && (!props.leftShiftPressed || (!props.leftShiftPressed && !props.rightShiftPressed)) && css`
         border: 1px solid #fff;`
       }
     }
@@ -140,7 +140,7 @@ const Keyboard = (props) => {
         setHighlightedInaccuratePressed((highlightedInaccuratePressed) => highlightedInaccuratePressed.concat(props.lastKey.toLowerCase()));
       }
       // Highlight current correct key.
-      if (props.correctKey !== undefined && props.nextKey !== undefined) {
+      if (props.correctKey !== undefined && props.nextKey !== undefined && props.lastKey !== 'Backspace') {
         setHighlightedAccurate((highlightedAccurate) => (
           (props.spacePressedRecently || (wasEndOfWord === true && props.inputLength > 0)) &&
           (props.endOfWord === true || props.wordIncorrect == true) ?
@@ -160,7 +160,7 @@ const Keyboard = (props) => {
   }, [highlightedAccuratePressed]);
 
   useEffect(() => {
-    if (highlightedInaccuratePressed.length > 0  && props.typedRecently === true) {
+    if (highlightedInaccuratePressed.length > 0 && props.typedRecently === true) {
       setTimeout(() => {
         setHighlightedInaccuratePressed((highlightedInaccuratePressed) => (highlightedInaccuratePressed.slice(1)));
       }, g.KEYBOARD_HIGHLIGHT_DURATION);
@@ -168,7 +168,7 @@ const Keyboard = (props) => {
   }, [highlightedInaccuratePressed]);
 
   useEffect(() => {
-    if (highlightedAccurate.length > 0  && props.typedRecently === true) {
+    if (highlightedAccurate.length > 0 && props.typedRecently === true) {
       setTimeout(() => {
         setHighlightedAccurate((highlightedAccurate) => (highlightedAccurate.slice(1)));
       }, g.KEYBOARD_HIGHLIGHT_DURATION);
@@ -197,13 +197,11 @@ const Keyboard = (props) => {
               props.rightShiftPressed && highlightedInaccuratePressed.length > 0 &&
               props.correctKey !== props.correctKey.toUpperCase()
             }
-            highlightedAccuratePressed={highlightedAccuratePressed}
-            highlightedInaccuratePressed={highlightedInaccuratePressed}
             shiftAccurate={
               rowInd === 2 &&
-              (((props.correctKey !== undefined && props.correctKey === props.correctKey.toUpperCase()) ||
-              (props.spacePressedRecently && props.nextKey === props.nextKey.toUpperCase())) &&
-              (highlightedAccuratePressed.length > 0 || highlightedInaccuratePressed.length > 0))
+              props.lastKey !== 'Backspace' &&
+              ((props.correctKey !== undefined && props.correctKey === props.correctKey.toUpperCase()) && (highlightedAccurate.length > 0 && !props.spacePressedRecently)) ||
+              (props.spacePressedRecently === true && (props.nextKey === props.nextKey.toUpperCase()))
             }
           >
             {row.map((keySymbol, keyInd) => {
