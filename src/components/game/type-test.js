@@ -81,6 +81,26 @@ const TypeTest = (props) => {
   const [leftShiftPressed, setLeftShiftPressed] = useState(false);
   const [rightShiftPressed, setRightShiftPressed] = useState(false);
 
+  const [shiftPressedRecently, setShiftPressedRecently] = useState(false);
+
+  useEffect(() => {
+    if (leftShiftPressed === false) {
+      setShiftPressedRecently(true);
+      setTimeout(() => {
+        setShiftPressedRecently(false);
+      }, g.KEYBOARD_HIGHLIGHT_DURATION);
+    }
+  }, [leftShiftPressed]);
+
+  useEffect(() => {
+    if (rightShiftPressed === false) {
+      setShiftPressedRecently(true);
+      setTimeout(() => {
+        setShiftPressedRecently(false);
+      }, g.KEYBOARD_HIGHLIGHT_DURATION);
+    }
+  }, [rightShiftPressed]);
+
   // Compare array word with str from text-input
   const checkFullWord = () => {
     return props.testWords[currentWordInd].join('') === inputValue;
@@ -218,6 +238,7 @@ const TypeTest = (props) => {
         nextKey={props.testWords[currentWordInd][inputValue.length] ? props.testWords[currentWordInd][inputValue.length] : ' '}
         spacePressedRecently={spacePressedRecently}
         wordIncorrect={wordIncorrect}
+        shiftPressedRecently={shiftPressedRecently}
         leftShiftPressed={leftShiftPressed}
         rightShiftPressed={rightShiftPressed}
         lastKey={lastKey}
