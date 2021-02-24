@@ -60,9 +60,11 @@ const Input = (props) => {
     }
 
     if (e.code === 'ShiftLeft') {
+      props.setShiftPressedRecently(true);
       props.setLeftShiftPressed(true);
     }
     else if (e.code === 'ShiftRight') {
+      props.setShiftPressedRecently(true);
       props.setRightShiftPressed(true);
     }
     else if (e.key === ' ') {
@@ -82,9 +84,11 @@ const Input = (props) => {
     }
 
     if (e.code === 'ShiftLeft') {
+      props.setShiftPressedRecently(false);
       props.setLeftShiftPressed(false);
     }
     else if (e.code === 'ShiftRight') {
+      props.setShiftPressedRecently(false);
       props.setRightShiftPressed(false);
     }
   }

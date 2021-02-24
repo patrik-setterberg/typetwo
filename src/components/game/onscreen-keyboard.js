@@ -68,7 +68,16 @@ const Row = styled.div`
       ${props => props.leftShiftPressedInaccurate && css`
         background-color: rgba(255, 0, 0, 0.3);`
       }
-      ${props => props.shiftAccurate && (!props.rightShiftPressed || (!props.leftShiftPressed && !props.rightShiftPressed && !props.shiftPressedRecently)) && css`
+      /**
+       * Highlight accurate if either only one shift is pressed, if both are pressed,
+       * or neither (when they should have been)...
+       * Basically just don't highlight *the other* shift as accurate while, or shortly after
+       * a shift key has been pressed.
+       */
+      ${props => props.shiftAccurate &&
+        ((props.leftShiftPressed && !props.rightShiftPressed) ||
+        (props.leftShiftPressed && props.rightShiftPressed) ||
+        (!props.leftShiftPressed && !props.rightShiftPressed && !props.shiftPressedRecently)) && css`
         border: 1px solid #fff;`
       }
     }
@@ -82,7 +91,9 @@ const Row = styled.div`
       ${props => props.rightShiftPressedInaccurate && css`
         background-color: rgba(255, 0, 0, 0.3);`
       }
-      ${props => props.shiftAccurate && (!props.leftShiftPressed || (!props.leftShiftPressed && !props.rightShiftPressed && !props.shiftPressedRecently)) && css`
+      ${props => props.shiftAccurate && ((props.rightShiftPressed && !props.leftShiftPressed) ||
+      (props.leftShiftPressed && props.rightShiftPressed) ||
+      (!props.leftShiftPressed && !props.rightShiftPressed && !props.shiftPressedRecently)) && css`
         border: 1px solid #fff;`
       }
     }

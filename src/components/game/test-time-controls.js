@@ -19,7 +19,6 @@ const StyledButton = styled.button`
     background-color: #fff;
     color: #888;
   }
-  
 `
 
 const StyledTimeControls = styled.div`

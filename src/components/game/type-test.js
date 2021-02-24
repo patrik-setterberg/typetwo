@@ -78,28 +78,24 @@ const TypeTest = (props) => {
     }, g.KEYBOARD_HIGHLIGHT_DURATION);
   }
 
+  /**
+   * Handle shift keys:
+   * Keep track of whether shift keys are currently or have recently been pressed.
+   * Used for onscreen keyboard highlighting.
+   */
   const [leftShiftPressed, setLeftShiftPressed] = useState(false);
   const [rightShiftPressed, setRightShiftPressed] = useState(false);
 
   const [shiftPressedRecently, setShiftPressedRecently] = useState(false);
 
   useEffect(() => {
-    if (leftShiftPressed === false) {
+    if (!leftShiftPressed && !rightShiftPressed) {
       setShiftPressedRecently(true);
       setTimeout(() => {
         setShiftPressedRecently(false);
       }, g.KEYBOARD_HIGHLIGHT_DURATION);
     }
-  }, [leftShiftPressed]);
-
-  useEffect(() => {
-    if (rightShiftPressed === false) {
-      setShiftPressedRecently(true);
-      setTimeout(() => {
-        setShiftPressedRecently(false);
-      }, g.KEYBOARD_HIGHLIGHT_DURATION);
-    }
-  }, [rightShiftPressed]);
+  }, [leftShiftPressed, rightShiftPressed]);
 
   // Compare array word with str from text-input
   const checkFullWord = () => {
@@ -224,10 +220,10 @@ const TypeTest = (props) => {
         updateTypedRecently={updateTypedRecently}
         flashSpacePressedRecently={flashSpacePressedRecently}
         setLastKey={setLastKey}
+        setShiftPressedRecently={setShiftPressedRecently}
         setLeftShiftPressed={setLeftShiftPressed}
         setRightShiftPressed={setRightShiftPressed}
       />
-      {/*<div>{props.playing ? 'playing' : 'not playing'}</div>*/}
       <TimeControls
         setTestLength={props.setTestLength}
         playing={props.playing}
