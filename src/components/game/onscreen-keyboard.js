@@ -115,6 +115,15 @@ const StyledKeyboard = styled.div`
   margin: 3rem auto 1rem;
   width: fit-content;
   font-size: 1.25rem;
+  opacity: 0;
+  max-height: 0px;
+  transition: opacity 0.1s var(--default-timing), max-height 0.2s var(--default-timing) 0.2s;
+
+  @media ${g.large} {
+    opacity: 1;
+    max-height: 300px;
+    transition: opacity 0.1s var(--default-timing), max-height 0.05s var(--default-timing);
+  }
 `
 
 const Keyboard = (props) => {
@@ -210,6 +219,7 @@ const Keyboard = (props) => {
               props.correctKey !== props.correctKey.toUpperCase()
             }
             shiftAccurate={
+              // Highlight shift as accurate if it was correctly input, but also if it should have been and wasn't.
               rowInd === 2 &&
               (((props.correctKey !== undefined && props.correctKey === props.correctKey.toUpperCase()) && (highlightedAccurate.length > 0 && !props.spacePressedRecently)) ||
 -              (props.spacePressedRecently === true && props.wordIncorrect === true && !props.endOfWord && props.nextKey === props.nextKey.toUpperCase()))

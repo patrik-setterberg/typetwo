@@ -35,7 +35,7 @@ export {LAYOUTS};
  * MEDIA BREAKPOINT VARS TWEAK HERE
  */
 const largestSmall = 767; // px
-const largestMedium = 1299; // px
+const largestMedium = 1099; // px
 
 /**
  * GLOBAL VARS
@@ -71,7 +71,7 @@ const g = {
   TIMESTAMP_COOKIE_NAME: 'time',
   COOKIE_MAX_AGE: 2592000, // 60'60*24*30 = 30 days
 
-  KEYBOARD_DEFAULT_LAYOUT: 'QWERTY_US',
+  KEYBOARD_DEFAULT_LAYOUT: 'QWERTY_SE',
   KEYBOARD_HIGHLIGHT_DURATION: 160,
 }
 

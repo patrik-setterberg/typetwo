@@ -11,6 +11,7 @@ import Text from './text.js';
 import TimeControls from './test-time-controls.js';
 import TestInstructions from './test-instructions.js';
 import Keyboard from './onscreen-keyboard.js';
+import ToggleSwitch from '../ui/toggle-switch.js';
 
 const StyledTypeTest = styled.div`
   display: flex;
@@ -243,6 +244,7 @@ const TypeTest = (props) => {
         inputLength={inputValue.length}
         currentWordLength={props.testWords[currentWordInd].length}
       />
+      <ToggleSwitch Id={'test-toggler'} text={'keyboard'}/>
     </StyledTypeTest>
   );
 }

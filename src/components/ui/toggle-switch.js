@@ -10,10 +10,12 @@ import g from '../../globals.js';
 const Input = styled.input`
   opacity: 0;
 
+  /*
   &:focus ~ label {
-    /*outline: var(--default-outline);*/
+    outline: var(--default-outline); UNDEFINED
     outline-offset: 5px;
   }
+  */
 
   &:checked + label::after {
     left: calc(100% - 2px);
@@ -21,48 +23,53 @@ const Input = styled.input`
   }
 `
 
+const LABEL_LETTER_SPACING = 1.2; // px
+
 const Label = styled.label`
   display: block;
-  height: 28px;
-  width: 56px;
-  border-radius: 28px;
+  height: 1.75rem;
+  width: 3.5rem;
+  border-radius: 1.75rem;
+  margin: 1rem; // temp
   cursor: pointer;
-  background: #fff;
-  text-indent: -80px;
-  font-size: 1rem;
+  background-color: #fff;
+  text-indent: calc(${props => props.text.length * -1}ch + (${props => props.text.length} * ${LABEL_LETTER_SPACING}px * -1) - 2ch);
+  font-size: 0.875rem;
   line-height: 1.875;
+  letter-spacing: ${LABEL_LETTER_SPACING}px;
   font-weight: 600;
   text-transform: uppercase;
   color: #fff;
   position: absolute;
   right: 0.5rem;
   top: 0;
-  transition: box-shadow 1s ease-in-out;
+  box-shadow: none;
+  transition: box-shadow 0.2s var(--default-timing);
 
   &::after {
     content: '';
     position: absolute;
-    top: 2px;
-    left: 2px;
-    height: 24px;
-    width: 24px;
+    top: 0.125rem;
+    left: 0.125rem;
+    height: 1.5rem;
+    width: 1.5rem;
     border-radius: 50%;
-    background: white;
-    transition: left 0.2s var(--default-timing), transform 0.2s var(--default-timing);
+    background-color: #333;
+    transition: all 0.12s var(--default-timing);
   }
 
   &:hover {
-    box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.3);
+    box-shadow: 0 0 7px 2px rgba(255, 255, 255, 0.25);
   }
 
   @media ${g.atleastMedium} {
-    height: 32px;
-    width: 64px;
+    height: 2rem;
+    width: 4rem;
     line-height: 2.1;
 
     &::after {
-      height: 28px;
-      width: 28px;
+      height: 1.75rem;
+      width: 1.75rem;
     }
   }
 `
@@ -71,7 +78,7 @@ const ToggleSwitch = ({Id, text}) => {
   return (
     <div>
       <Input type="checkbox" id={Id || 'toggle_switch'} />
-      <Label htmlFor={Id || 'toggle_switch'}>
+      <Label htmlFor={Id || 'toggle_switch'} text={text || 'Toggle'}>
         {text || 'Toggle'}
       </Label>
   </div>
