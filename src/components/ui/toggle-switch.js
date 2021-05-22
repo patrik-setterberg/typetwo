@@ -3,8 +3,8 @@ import styled from 'styled-components';
 import g from '../../globals.js';
 
 /* 
-   ToggleSwitch
-   Set id using prop "Id"
+   ToggleSwitch component.
+   Set id using prop "Id".
 */
 
 const Input = styled.input`

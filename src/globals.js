@@ -142,3 +142,9 @@ const GlobalStyle = createGlobalStyle`
 `
 
 export {GlobalStyle};
+
+const themeSettings = {
+  DEFAULT_THEME: 'dark',
+}
+
+export {themeSettings};

@@ -1,6 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import styled from 'styled-components';
-import g from '../../globals.js';
+import g, {themeSettings} from '../../globals.js';
+import themes from '../../themes.js';
+import {ThemeProvider} from 'styled-components';
+import Header from '../ui/header.js';
 import TypeTestHandler from '../game/type-test-handler.js';
 
 
@@ -14,6 +17,15 @@ const Main = styled.main`
 `
 
 const App = () => {
+
+  // Keep track of currently active theme.
+  const [currentTheme, setCurrentTheme] = useState(themes[themeSettings.DEFAULT_THEME]);
+
+  // Set active theme
+  const setTheme = (theme) => {
+    setCurrentTheme(themes[theme]);
+    //console.log(Object.keys(themes));
+  }
 
   // Keep track of whether document is focused.
   const [documentIsFocused, setDocumentIsFocused] = useState(document.hasFocus());
@@ -55,9 +67,12 @@ const App = () => {
 
 	return(
 		<>
-			<Main>
-				<TypeTestHandler documentIsFocused={documentIsFocused}/>
-			</Main>
+      <ThemeProvider theme={currentTheme}>
+        <Header setTheme={setTheme}/>
+        <Main>
+          <TypeTestHandler documentIsFocused={documentIsFocused} />
+        </Main>
+      </ThemeProvider>
 		</>
 	);
 } 

@@ -17,7 +17,7 @@ const StyledTypeTest = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  color: #fff;
+  color: ${props => props.theme.bg};
   font-size: 1.5rem;
 `
 
