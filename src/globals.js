@@ -48,8 +48,6 @@ const g = {
   atMostMedium: `only screen and (max-width: ${largestMedium}px)`,
   atleastMedium: `only screen and (min-width: ${largestSmall+1}px)`,
   large: `only screen and (min-width: ${largestMedium+1}px)`,
-  
-  bgcolor: '#333',
 
   // Number of test words displayed on screen
   TEST_WORD_COUNT: 32,
@@ -72,6 +70,7 @@ const g = {
   COOKIE_MAX_AGE: 2592000, // 60'60*24*30 = 30 days
 
   KEYBOARD_DEFAULT_LAYOUT: 'QWERTY_SE',
+  KEYBOARD_DEFAULT_VISIBILITY: true,
   KEYBOARD_HIGHLIGHT_DURATION: 160,
 }
 

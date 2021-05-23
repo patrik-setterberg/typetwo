@@ -1,12 +1,11 @@
 const themes = {
 	dark: {
-		bg: 'orange',
-		colorPrimary: 'orange',
-		highlightPrimary: 'red',
+		colorPrimary: '#f4cb4c',
+		highlightPrimary: 'orange',
 	},
 
 	light: {
-		bg: 'orange',
+		
 	}
 }
 

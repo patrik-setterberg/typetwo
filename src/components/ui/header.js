@@ -26,7 +26,7 @@ import GearToggler from './control-panel-toggler';
 import ControlPanel from './control-panel';
 
 const StyledHeader = styled.header`
-	background-color: #333;
+	background-color: #1b1b1d;
 	font-family: 'Roboto Mono', monospace;
 	color: ${props => props.theme.colorPrimary};
 	
@@ -36,19 +36,34 @@ const StyledHeader = styled.header`
 		align-items: center;
 		padding: 1rem;
 	}
+
+	/* TEMP */
+	& > div > span {
+		letter-spacing: 1px;
+	}
+	& > div > span > span {
+		font-weight: 700;
+	}
 `
 
-const Header = () => {
+const Header = (props) => {
 
 	const [controlPanelOpen, setControlPanelOpen] = useState(false);
 
 	return (
 		<StyledHeader>
 			<div>
-				<span>TYPE|TWO</span>
-				<GearToggler controlPanelOpen={controlPanelOpen} setControlPanelOpen={setControlPanelOpen} />
+				<span><span>TYPE</span>|TWO</span>
+				<GearToggler
+					controlPanelOpen={controlPanelOpen}
+					setControlPanelOpen={setControlPanelOpen}
+				/>
 			</div>
-			<ControlPanel isOpen={controlPanelOpen} />
+			<ControlPanel
+				isOpen={controlPanelOpen}
+				setTestLength={props.setTestLength}
+				playing={props.playing}
+			/>
 			
 			
 		</StyledHeader>

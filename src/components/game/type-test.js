@@ -8,23 +8,21 @@ import g from '../../globals.js';
 import Input from './input.js';
 import TestTimer from './test-countdown.js';
 import Text from './text.js';
-import TimeControls from './test-time-controls.js';
 import TestInstructions from './test-instructions.js';
 import Keyboard from './onscreen-keyboard.js';
-import ToggleSwitch from '../ui/toggle-switch.js';
 
 const StyledTypeTest = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  color: ${props => props.theme.bg};
+  color: ${props => props.theme.colorPrimary};
   font-size: 1.5rem;
 `
 
 const TypeTest = (props) => {  
 
   // Time left printed on screen
-  const [timeLeft, setTimeLeft] = useState((props.testLength));
+  const [timeLeft, setTimeLeft] = useState(props.testLength);
 
   /**
    * Keep track of currentWord.
@@ -225,12 +223,9 @@ const TypeTest = (props) => {
         setLeftShiftPressed={setLeftShiftPressed}
         setRightShiftPressed={setRightShiftPressed}
       />
-      <TimeControls
-        setTestLength={props.setTestLength}
-        playing={props.playing}
-      />
       <Keyboard
         playing={props.playing}
+        keyboardVisible={props.keyboardVisible}
         correctKey={props.testWords[currentWordInd][inputValue.length - 1]}
         nextKey={props.testWords[currentWordInd][inputValue.length] ? props.testWords[currentWordInd][inputValue.length] : ' '}
         spacePressedRecently={spacePressedRecently}
@@ -244,7 +239,6 @@ const TypeTest = (props) => {
         inputLength={inputValue.length}
         currentWordLength={props.testWords[currentWordInd].length}
       />
-      <ToggleSwitch Id={'test-toggler'} text={'keyboard'}/>
     </StyledTypeTest>
   );
 }

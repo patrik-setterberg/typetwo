@@ -112,6 +112,7 @@ const Row = styled.div`
 `
 
 const StyledKeyboard = styled.div`
+  display: ${props => props.keyboardVisible ? 'block' : 'none'};
   margin: 3rem auto 1rem;
   width: fit-content;
   font-size: 1.25rem;
@@ -196,7 +197,7 @@ const Keyboard = (props) => {
   }, [highlightedAccurate]);
 
   return (
-    <StyledKeyboard>
+    <StyledKeyboard keyboardVisible={props.keyboardVisible}>
       {LAYOUTS[currentLayout].map((row, rowInd) => {
         return (
           <Row

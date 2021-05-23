@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import g, {themeSettings} from '../../globals.js';
 import themes from '../../themes.js';
 import {ThemeProvider} from 'styled-components';
-import Header from '../ui/header.js';
 import TypeTestHandler from '../game/type-test-handler.js';
 
 
@@ -11,8 +10,7 @@ const Main = styled.main`
 	height: 100%;
 	width: 100%;
 	position: fixed;
-	/* padding: var(--default-padding); */
-	background-color: ${g.bgcolor}; /* ??? */
+	background-color: #29292B;
 	font-family: 'Roboto Mono', monospace;
 `
 
@@ -68,9 +66,11 @@ const App = () => {
 	return(
 		<>
       <ThemeProvider theme={currentTheme}>
-        <Header setTheme={setTheme}/>
         <Main>
-          <TypeTestHandler documentIsFocused={documentIsFocused} />
+          <TypeTestHandler
+            documentIsFocused={documentIsFocused}
+            setTheme={setTheme}
+          />
         </Main>
       </ThemeProvider>
 		</>

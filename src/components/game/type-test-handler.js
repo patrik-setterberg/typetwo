@@ -7,19 +7,27 @@ import React, {useState, useCallback, useEffect} from 'react';
 import styled from 'styled-components';
 import g from '../../globals.js';
 import words from '../../assets/game/words.js';
+import Header from '../ui/header.js';
 import TypeTest from './type-test.js';
 import ScoreScreen from './score-screen.js';
 
 const TypeTestWrapper = styled.div`
-  margin: 100px auto 0;
-  padding: 1.5rem;
+
+  & > div {
+    margin: 0 auto;
+    padding: 1.5rem;
+  }
 
   @media ${g.medium} {
-    width: min(80vw, 900px);
+    & > div {
+      width: min(80vw, 900px);
+    }
   }
 
   @media ${g.large} {
-    width: 900px;
+    & > div {
+      width: 900px;
+    }
   }
 `
 
@@ -27,11 +35,13 @@ const TypeTestHandler = (props) => {
 
   const [playing, setPlaying] = useState(false);
 
+  // Stores selected test length (in seconds).
+  const [testLength, setTestLength] = useState(g.TEST_LENGTH_DEFAULT);
+
   // Determines whether type test or score screen is displayed.
   const [testConcluded, setTestConcluded] = useState(false);
 
-  // Stores selected test length (in seconds).
-  const [testLength, setTestLength] = useState(g.TEST_LENGTH_DEFAULT);
+  const [keyboardVisible, setKeyboardVisible] = useState(g.KEYBOARD_DEFAULT_VISIBILITY);
 
   // Retrieve a random word from array of words, return array of letters
   const getWord = useCallback((words) => {
@@ -98,6 +108,11 @@ const TypeTestHandler = (props) => {
 
   return (
     <TypeTestWrapper>
+      <Header
+          setTheme={props.setTheme}
+          setTestLength={setTestLength}
+          playing={playing}
+        />
       {testConcluded ?
         /* Render score screen if test has concluded. */
         <ScoreScreen
@@ -112,7 +127,6 @@ const TypeTestHandler = (props) => {
           setPlaying={setPlaying}
           calcTestScore={calcTestScore}
           testLength={testLength}
-          setTestLength={setTestLength}
           testConcluded={testConcluded}
           setTestConcluded={setTestConcluded}
           documentIsFocused={props.documentIsFocused}
@@ -121,6 +135,7 @@ const TypeTestHandler = (props) => {
           loadWords={loadWords}
           shiftWords={shiftWords}
           addWords={addWords}
+          keyboardVisible={keyboardVisible}
         />
       }
     </TypeTestWrapper>

@@ -7,6 +7,10 @@ import g from '../../globals.js';
    Set id using prop "Id".
 */
 
+const Wrapper = styled.div`
+  position: relative;
+`
+
 const Input = styled.input`
   opacity: 0;
 
@@ -26,7 +30,7 @@ const Input = styled.input`
 const LABEL_LETTER_SPACING = 1.2; // px
 
 const Label = styled.label`
-  display: block;
+  display: inline-block;
   height: 1.75rem;
   width: 3.5rem;
   border-radius: 1.75rem;
@@ -76,12 +80,12 @@ const Label = styled.label`
 
 const ToggleSwitch = ({Id, text}) => {
   return (
-    <div>
+    <Wrapper>
       <Input type="checkbox" id={Id || 'toggle_switch'} />
       <Label htmlFor={Id || 'toggle_switch'} text={text || 'Toggle'}>
         {text || 'Toggle'}
       </Label>
-  </div>
+    </Wrapper>
   );
 }
 
