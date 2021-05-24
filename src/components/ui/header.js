@@ -61,8 +61,11 @@ const Header = (props) => {
 			</div>
 			<ControlPanel
 				isOpen={controlPanelOpen}
+				currentLayout={props.currentLayout}
+				setCurrentLayout={props.setCurrentLayout}
+				keyboardVisible={props.keyboardVisible}
+				setKeyboardVisible={props.setKeyboardVisible}
 				setTestLength={props.setTestLength}
-				playing={props.playing}
 			/>
 			
 			

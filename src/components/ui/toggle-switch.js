@@ -78,10 +78,21 @@ const Label = styled.label`
   }
 `
 
-const ToggleSwitch = ({Id, text}) => {
+const ToggleSwitch = ({Id, text, defaultChecked, onChangeFunc}) => {
+
+  const handleChange = (e) => {
+    let isChecked = e.target.checked;
+    onChangeFunc(isChecked);
+  }
+
   return (
     <Wrapper>
-      <Input type="checkbox" id={Id || 'toggle_switch'} />
+      <Input
+        type="checkbox"
+        id={Id || 'toggle_switch'}
+        defaultChecked={defaultChecked}
+        onChange={handleChange}
+      />
       <Label htmlFor={Id || 'toggle_switch'} text={text || 'Toggle'}>
         {text || 'Toggle'}
       </Label>

@@ -43,6 +43,8 @@ const TypeTestHandler = (props) => {
 
   const [keyboardVisible, setKeyboardVisible] = useState(g.KEYBOARD_DEFAULT_VISIBILITY);
 
+  const [currentLayout, setCurrentLayout] = useState(g.KEYBOARD_DEFAULT_LAYOUT);
+
   // Retrieve a random word from array of words, return array of letters
   const getWord = useCallback((words) => {
     return words[Math.floor(Math.random() * words.length)].split('');
@@ -111,6 +113,10 @@ const TypeTestHandler = (props) => {
       <Header
           setTheme={props.setTheme}
           setTestLength={setTestLength}
+          currentLayout={currentLayout}
+          setCurrentLayout={setCurrentLayout}
+          keyboardVisible={keyboardVisible}
+          setKeyboardVisible={setKeyboardVisible}
           playing={playing}
         />
       {testConcluded ?
@@ -136,6 +142,7 @@ const TypeTestHandler = (props) => {
           shiftWords={shiftWords}
           addWords={addWords}
           keyboardVisible={keyboardVisible}
+          currentLayout={currentLayout}
         />
       }
     </TypeTestWrapper>

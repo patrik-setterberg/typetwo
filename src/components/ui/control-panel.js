@@ -14,12 +14,16 @@ const StyledControlPanel = styled.div`
 const ControlPanel = (props) => {
   return (
 		<StyledControlPanel isOpen={props.isOpen}>
-				<TimeControls
-        setTestLength={props.setTestLength}
-        playing={props.playing}
+			<TimeControls
+				setTestLength={props.setTestLength}
       />
 			<ThemeControls />
-			<KeyboardControls />
+			<KeyboardControls
+				currentLayout={props.currentLayout}
+				setCurrentLayout={props.setCurrentLayout}
+				keyboardVisible={props.keyboardVisible}
+				setKeyboardVisible={props.setKeyboardVisible}
+			/>
 		</StyledControlPanel>
 	);
 }

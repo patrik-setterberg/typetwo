@@ -128,7 +128,6 @@ const StyledKeyboard = styled.div`
 `
 
 const Keyboard = (props) => {
-  const [currentLayout, setCurrentLayout] = useState(g.KEYBOARD_DEFAULT_LAYOUT);
 
   // Arrays for storing currently highlighted keys.
   const [highlightedAccuratePressed, setHighlightedAccuratePressed] = useState([]);
@@ -198,7 +197,7 @@ const Keyboard = (props) => {
 
   return (
     <StyledKeyboard keyboardVisible={props.keyboardVisible}>
-      {LAYOUTS[currentLayout].map((row, rowInd) => {
+      {LAYOUTS[props.currentLayout].map((row, rowInd) => {
         return (
           <Row
             key={rowInd}

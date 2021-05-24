@@ -226,6 +226,7 @@ const TypeTest = (props) => {
       <Keyboard
         playing={props.playing}
         keyboardVisible={props.keyboardVisible}
+        currentLayout={props.currentLayout}
         correctKey={props.testWords[currentWordInd][inputValue.length - 1]}
         nextKey={props.testWords[currentWordInd][inputValue.length] ? props.testWords[currentWordInd][inputValue.length] : ' '}
         spacePressedRecently={spacePressedRecently}

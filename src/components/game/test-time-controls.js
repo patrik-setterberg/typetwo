@@ -26,7 +26,6 @@ const StyledTimeControls = styled.div`
   flex-direction: column;
   align-items: center;
   margin-top: 0.5rem;
-  opacity: ${props => props.playing ? '0' : '1'};
   transition: opacity 0.2s ease;
   
   & button + button {

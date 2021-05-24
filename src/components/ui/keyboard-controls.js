@@ -17,6 +17,8 @@ const KeyboardControls = (props) => {
 			<KeyboardToggler
 				Id={'keyboard-toggler'}
 				text={'show keyboard'}
+				defaultChecked={props.keyboardVisible}
+				onChangeFunc={props.setKeyboardVisible}
 			/>
 		</KeyboardControlsContainer>
 	);
