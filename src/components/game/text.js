@@ -13,7 +13,7 @@ const TextWrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
   max-width: 100%;
-  color: ${props => props.focused ? '#fff' : 'transparent'};
+  color: ${(props => props.focused) ? '#fff' : 'transparent'};
   transition: color 0.2s ease;
   position: relative;
 
@@ -84,7 +84,6 @@ const StyledCaret = styled.div`
   opacity: var(--caret-opacity);
   position: absolute;
   z-index: 1;
-  animation: ${props => props.typedRecently ? '' : '1.3s cubic-bezier(0.78, 0.2, 0.05, 1.0) 0s infinite forwards caret-blink'};
   visibility: ${props => props.focused ? 'visible' : 'hidden'};
   left: ${props => props.currentWordLeft}px;
   top: ${props => props.currentWordTop}px;
@@ -92,7 +91,22 @@ const StyledCaret = styled.div`
   ${props => props.playing === true && props.focused === false && css`
     opacity: 0;`
   }
+
+  ${props => props.focused && !props.typedRecently && css`
+    animation: 1.3s cubic-bezier(0.78, 0.2, 0.05, 1.0) 0s infinite forwards caret-blink;
+  `}
 `;
+
+const Wrapper = (props) => {
+  return (
+    <TextWrapper
+      focused={props.focused}
+      controlPanelOpen={props.controlPanelOpen}
+    >
+      {props.children}
+    </TextWrapper>
+  );
+}
 
 const Caret = (props) => {
   return (
@@ -185,7 +199,7 @@ const Text = (props) => {
   },[props.focused]);
 
   return (
-    <TextWrapper focused={props.focused}>
+    <Wrapper focused={props.focused && !props.controlPanelOpen}>
 
       {props.testWords.map((word, wordInd) => {
         return (
@@ -212,7 +226,7 @@ const Text = (props) => {
                     props.inputValue.length > letterInd // Don't check letters not yet input
                   }
                   wordIncorrect={props.wordIncorrect && props.currentWordInd === wordInd}
-                  focused={props.focused}
+                  focused={props.focused && !props.controlPanelOpen}
                   wordIsCorrect={props.currentWordInd > wordInd}
                 >
                   {letter}
@@ -224,7 +238,7 @@ const Text = (props) => {
       })}
       <Caret
         playing={props.playing}
-        focused={props.focused}
+        focused={props.focused && !props.controlPanelOpen}
         currentWordLeft={currentWordLeft}
         currentWordTop={currentWordTop}
         inputValue={props.inputValue}
@@ -234,7 +248,7 @@ const Text = (props) => {
           transform: `translateX(min(${props.caretPosition}ch, ${props.inputValue.length}ch))`,
         }}
       />
-    </TextWrapper>        
+    </Wrapper>
   );
 }
 

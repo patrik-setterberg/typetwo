@@ -48,19 +48,17 @@ const StyledHeader = styled.header`
 
 const Header = (props) => {
 
-	const [controlPanelOpen, setControlPanelOpen] = useState(false);
-
 	return (
 		<StyledHeader>
 			<div>
 				<span><span>TYPE</span>|TWO</span>
 				<GearToggler
-					controlPanelOpen={controlPanelOpen}
-					setControlPanelOpen={setControlPanelOpen}
+					controlPanelOpen={props.controlPanelOpen}
+					setControlPanelOpen={props.setControlPanelOpen}
 				/>
 			</div>
 			<ControlPanel
-				isOpen={controlPanelOpen}
+				isOpen={props.controlPanelOpen}
 				currentLayout={props.currentLayout}
 				setCurrentLayout={props.setCurrentLayout}
 				keyboardVisible={props.keyboardVisible}

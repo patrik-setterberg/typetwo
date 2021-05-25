@@ -1,6 +1,6 @@
 /**
  * TYPE TEST SCREEN HANDLER
- * Wrapper component for TYPE TEST. Handles rendering of the test and the score screen.
+ * Wrapper component for TYPE TEST. Handles rendering of the test, score screen as well as the header.
  */
 
 import React, {useState, useCallback, useEffect} from 'react';
@@ -10,6 +10,7 @@ import words from '../../assets/game/words.js';
 import Header from '../ui/header.js';
 import TypeTest from './type-test.js';
 import ScoreScreen from './score-screen.js';
+import ControlPanel from '../ui/control-panel.js';
 
 const TypeTestWrapper = styled.div`
 
@@ -34,6 +35,8 @@ const TypeTestWrapper = styled.div`
 const TypeTestHandler = (props) => {
 
   const [playing, setPlaying] = useState(false);
+
+  const [controlPanelOpen, setControlPanelOpen] = useState(false);
 
   // Stores selected test length (in seconds).
   const [testLength, setTestLength] = useState(g.TEST_LENGTH_DEFAULT);
@@ -111,14 +114,16 @@ const TypeTestHandler = (props) => {
   return (
     <TypeTestWrapper>
       <Header
-          setTheme={props.setTheme}
-          setTestLength={setTestLength}
-          currentLayout={currentLayout}
-          setCurrentLayout={setCurrentLayout}
-          keyboardVisible={keyboardVisible}
-          setKeyboardVisible={setKeyboardVisible}
-          playing={playing}
-        />
+        controlPanelOpen={controlPanelOpen}
+        setControlPanelOpen={setControlPanelOpen}
+        setTheme={props.setTheme}
+        setTestLength={setTestLength}
+        currentLayout={currentLayout}
+        setCurrentLayout={setCurrentLayout}
+        keyboardVisible={keyboardVisible}
+        setKeyboardVisible={setKeyboardVisible}
+        playing={playing}
+      />
       {testConcluded ?
         /* Render score screen if test has concluded. */
         <ScoreScreen
@@ -141,6 +146,8 @@ const TypeTestHandler = (props) => {
           loadWords={loadWords}
           shiftWords={shiftWords}
           addWords={addWords}
+          controlPanelOpen={controlPanelOpen}
+          setControlPanelOpen={setControlPanelOpen}
           keyboardVisible={keyboardVisible}
           currentLayout={currentLayout}
         />

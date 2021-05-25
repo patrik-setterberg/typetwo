@@ -50,54 +50,64 @@ const Input = (props) => {
      * START TEST.
      * Start test if key is a letter, i.e. if user started typing
      */
-    if (/[a-z|A-Z]/g.test(e.key) && props.playing === false && e.key.length === 1) {
+    if (/[a-z|A-Z]/g.test(e.key) && props.playing === false && e.key.length === 1 && props.controlPanelOpen === false) {
       props.setPlaying(!props.playing);
     }
 
     // Abort test if Escape is pressed
     if (e.key === 'Escape') {
-      props.endTest();
+      if (props.controlPanelOpen === true) {
+        props.setControlPanelOpen(!props.controlPanelOpen);
+      } else {
+        props.endTest();
+      }
     }
 
-    if (e.code === 'ShiftLeft') {
-      props.setShiftPressedRecently(true);
-      props.setLeftShiftPressed(true);
-    }
-    else if (e.code === 'ShiftRight') {
-      props.setShiftPressedRecently(true);
-      props.setRightShiftPressed(true);
-    }
-    else if (e.key === ' ') {
-      props.handleSpace();
-      props.updateTypedRecently();
-      props.flashSpacePressedRecently();
-    }
-    else {
-      props.setLastKey(e.key);
+    if (!props.controlPanelOpen) {
+      if (e.code === 'ShiftLeft') {
+        props.setShiftPressedRecently(true);
+        props.setLeftShiftPressed(true);
+      }
+      else if (e.code === 'ShiftRight') {
+        props.setShiftPressedRecently(true);
+        props.setRightShiftPressed(true);
+      }
+      else if (e.key === ' ') {
+        props.handleSpace();
+        props.updateTypedRecently();
+        props.flashSpacePressedRecently();
+      }
+      else {
+        props.setLastKey(e.key);
+      }
     }
   }
 
   const handleKeyUp = (e) => {
-    if (['ArrowLeft', 'ArrowRight', 'Control', 'Home', 'End'].includes(e.key)) {
-     props.setCaretPosition(e.target.selectionStart);
-     props.updateTypedRecently();
-    }
+    if (!props.controlPanelOpen) {
+      if (['ArrowLeft', 'ArrowRight', 'Control', 'Home', 'End'].includes(e.key)) {
+        props.setCaretPosition(e.target.selectionStart);
+        props.updateTypedRecently();
+      }
 
-    if (e.code === 'ShiftLeft') {
-      props.setShiftPressedRecently(false);
-      props.setLeftShiftPressed(false);
-    }
-    else if (e.code === 'ShiftRight') {
-      props.setShiftPressedRecently(false);
-      props.setRightShiftPressed(false);
+      if (e.code === 'ShiftLeft') {
+        props.setShiftPressedRecently(false);
+        props.setLeftShiftPressed(false);
+      }
+      else if (e.code === 'ShiftRight') {
+        props.setShiftPressedRecently(false);
+        props.setRightShiftPressed(false);
+      }
     }
   }
 
   const handleInput = (e) => {
-    let text = filterInput(e.target.value, props.currentWord.length);
-    props.setInputValue(text);
-    props.updateTypedRecently();
-    props.setCaretPosition(e.target.selectionStart);
+    if (!props.controlPanelOpen) {
+      let text = filterInput(e.target.value, props.currentWord.length);
+      props.setInputValue(text);
+      props.updateTypedRecently();
+      props.setCaretPosition(e.target.selectionStart);
+    }
   }
 
   return(

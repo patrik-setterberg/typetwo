@@ -149,7 +149,7 @@ const TypeTest = (props) => {
   useEffect(() => {
     let timerInterval;
 
-    if (props.playing === true && props.documentIsFocused === true) {
+    if (props.playing === true && props.documentIsFocused === true && props.controlPanelOpen === false) {
       /**
        * Runs a clock which decreases timeLeft by 1 every second.
        * Timer clears if document loses focus. Restarts when focus is regained.
@@ -166,7 +166,7 @@ const TypeTest = (props) => {
     return () => {
       clearInterval(timerInterval);
     }
-  }, [props.playing, props.documentIsFocused, timeLeft]);
+  }, [props.playing, props.documentIsFocused, timeLeft, props.controlPanelOpen]);
 
   // End test when timer reaches zero.
   useEffect(() => {
@@ -204,6 +204,7 @@ const TypeTest = (props) => {
         typedRecently={typedRecently}
         updateTypedRecently={updateTypedRecently}
         wordIncorrect={wordIncorrect}
+        controlPanelOpen={props.controlPanelOpen}
         />
       <Input
         currentWord={props.testWords[currentWordInd]}
@@ -222,6 +223,8 @@ const TypeTest = (props) => {
         setShiftPressedRecently={setShiftPressedRecently}
         setLeftShiftPressed={setLeftShiftPressed}
         setRightShiftPressed={setRightShiftPressed}
+        controlPanelOpen={props.controlPanelOpen}
+        setControlPanelOpen={props.setControlPanelOpen}
       />
       <Keyboard
         playing={props.playing}
