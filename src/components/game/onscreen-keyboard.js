@@ -50,7 +50,7 @@ const Row = styled.div`
       display: block;
       position: absolute;
       width: 1ch;
-      border-bottom: 2px solid darkorange;
+      border-bottom: 2px solid ${props => props.theme.colorPrimary};
       bottom: 0.5ch;
       opacity: 0.6;
     }
@@ -147,7 +147,7 @@ const Keyboard = (props) => {
     } else {
       setWasEndOfWord(false);
     }
-  }, [props.typedRecently]);
+  }, [props.typedRecently, props.endOfWord]);
 
   useEffect(() => {
     if (props.lastKey.length > 0 && props.typedRecently === true && props.lastKey !== 'Backspace') {
@@ -177,7 +177,7 @@ const Keyboard = (props) => {
         setHighlightedAccuratePressed((highlightedAccuratePressed) => (highlightedAccuratePressed.slice(1)));
       }, g.KEYBOARD_HIGHLIGHT_DURATION);
     }
-  }, [highlightedAccuratePressed]);
+  }, [highlightedAccuratePressed, props.typedRecently]);
 
   useEffect(() => {
     if (highlightedInaccuratePressed.length > 0 && props.typedRecently === true) {
@@ -185,7 +185,7 @@ const Keyboard = (props) => {
         setHighlightedInaccuratePressed((highlightedInaccuratePressed) => (highlightedInaccuratePressed.slice(1)));
       }, g.KEYBOARD_HIGHLIGHT_DURATION);
     }
-  }, [highlightedInaccuratePressed]);
+  }, [highlightedInaccuratePressed, props.typedRecently]);
 
   useEffect(() => {
     if (highlightedAccurate.length > 0 && props.typedRecently === true) {
@@ -193,7 +193,7 @@ const Keyboard = (props) => {
         setHighlightedAccurate((highlightedAccurate) => (highlightedAccurate.slice(1)));
       }, g.KEYBOARD_HIGHLIGHT_DURATION);
     }
-  }, [highlightedAccurate]);
+  }, [highlightedAccurate, props.typedRecently]);
 
   return (
     <StyledKeyboard keyboardVisible={props.keyboardVisible}>

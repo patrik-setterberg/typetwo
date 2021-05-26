@@ -187,6 +187,7 @@ const TypeTest = (props) => {
       <TestInstructions
         playing={props.playing}
         focused={props.documentIsFocused}
+        controlPanelOpen={props.controlPanelOpen}
       />
       <TestTimer
         playing={props.playing}

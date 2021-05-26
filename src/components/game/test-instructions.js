@@ -10,7 +10,7 @@ const InstructionsContainer = styled.div`
 const StyledInstructions = styled.span`
   opacity: 1;
   transition: color 0.2s var(--default-timing);
-  ${props => props.playing === true && props.focused === true && css`
+  ${props => props.playing && props.focused && !props.controlPanelOpen && css`
     transition: opacity 1s var(--default-timing) 1s, color 1.5s linear;
     font-size: 1.3rem;
     opacity: 0;
@@ -21,10 +21,16 @@ const StyledInstructions = styled.span`
 const TestInstructions = (props) => {
   return (
     <InstructionsContainer>
-      <StyledInstructions playing={props.playing} focused={props.focused}>
+      <StyledInstructions playing={props.playing} focused={props.focused} controlPanelOpen={props.controlPanelOpen}>
         {props.focused ?
-          (props.playing ? 'Type like the wind' : 'Begin typing to start test') :
-          (props.playing ? 'Test paused, focus to resume' : 'Click document to focus')
+          (props.playing ?
+            (props.controlPanelOpen ? 'Test paused. Close control panel to resume' : 'Type like the wind') :
+            (props.controlPanelOpen ? 'Close control panel to return to test' : 'Begin typing to start test')
+          )
+          : (props.playing ?
+            (props.controlPanelOpen ? 'Test paused. Close control panel to resume' : 'Focus lost. Click page to resume') :
+            (props.controlPanelOpen ? 'Close control panel to return to test' : 'Click page to focus')
+          )
         }
       </StyledInstructions>
     </InstructionsContainer>

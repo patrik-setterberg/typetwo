@@ -1,9 +1,17 @@
 import React, {useEffect, useState} from 'react';
 import styled from 'styled-components';
-import g, {themeSettings} from '../../globals.js';
+import {themeSettings} from '../../globals.js';
 import themes from '../../themes.js';
 import {ThemeProvider} from 'styled-components';
 import TypeTestHandler from '../game/type-test-handler.js';
+
+
+/**
+ * TEMP / TODO:
+ * 
+ * Store control panel's settings somewhere. Probably in a cookie.
+ * Close control panel with Escape even if game is not running (move logic from input.js because it is not mounted when score screen is displayed).
+ */
 
 
 const Main = styled.main`

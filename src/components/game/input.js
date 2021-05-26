@@ -35,7 +35,7 @@ const Input = (props) => {
   }, []);
 
   /* Filter text-input. 
-  Remove everythi// SHIFTSng except chars inside square brackets.
+  Remove everything except chars inside square brackets.
   Also remove whitespaces, incl. tabs, newlines.
   Finally, trim chars which exceed length of 2nd parameter (currentWord). */
   const filterInput = (input, maxLen) => {

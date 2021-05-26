@@ -13,7 +13,7 @@ const TextWrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
   max-width: 100%;
-  color: ${(props => props.focused) ? '#fff' : 'transparent'};
+  color: ${(props => props.focused) ? '#F2F4F3' : 'transparent'};
   transition: color 0.2s ease;
   position: relative;
 
@@ -80,7 +80,7 @@ const StyledCaret = styled.div`
   height: calc(1.6 * 1.5rem); /* 1.6 is line height of text */
   font-size: 1.5rem;
   width: 3px;
-  background-color: orange;
+  background-color: ${props => props.theme.colorPrimary};
   opacity: var(--caret-opacity);
   position: absolute;
   z-index: 1;
@@ -100,8 +100,7 @@ const StyledCaret = styled.div`
 const Wrapper = (props) => {
   return (
     <TextWrapper
-      focused={props.focused}
-      controlPanelOpen={props.controlPanelOpen}
+      {...props}
     >
       {props.children}
     </TextWrapper>
@@ -192,11 +191,6 @@ const Text = (props) => {
       }
     }
   }, [props.currentWordInd]);
-
-  // Restart caret animation when focus is regained.  
-  useEffect(() => {
-    if (props.focused === true) props.updateTypedRecently();
-  },[props.focused]);
 
   return (
     <Wrapper focused={props.focused && !props.controlPanelOpen}>

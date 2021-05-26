@@ -10,7 +10,6 @@ import words from '../../assets/game/words.js';
 import Header from '../ui/header.js';
 import TypeTest from './type-test.js';
 import ScoreScreen from './score-screen.js';
-import ControlPanel from '../ui/control-panel.js';
 
 const TypeTestWrapper = styled.div`
 

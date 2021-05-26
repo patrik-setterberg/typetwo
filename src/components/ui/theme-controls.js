@@ -7,7 +7,9 @@ const ThemeControlsContainer = styled.div`
 
 const ThemeControls = (props) => {
   return (
-    <div>THEME CONTROLS</div>
+    <ThemeControlsContainer>
+      THEME CONTROLS
+    </ThemeControlsContainer>
   );
 }
 

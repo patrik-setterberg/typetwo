@@ -3,24 +3,7 @@
  * Holds logo and control panel.
  */
 
-
-/**
- * HERE WE WANT:
- * LOGO
- * CONTROL PANEL TOGGLER
- */
-
-/**
- * CONTROL PANEL:
- * Set test duration buttons
- * Onscreen keyboard toggler
- * Keyboard layout selector (dropdown?)
- * Theme picker
- */
-
-/* SHOULD WE PERHAPS STORE SETTINGS IN A COOKIE OR SOMETHING? */
-
-import React, {useState} from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import GearToggler from './control-panel-toggler';
 import ControlPanel from './control-panel';
