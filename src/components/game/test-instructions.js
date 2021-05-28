@@ -9,12 +9,12 @@ const InstructionsContainer = styled.div`
 
 const StyledInstructions = styled.span`
   opacity: 1;
+  color: ${props => props.theme.highlight};
   transition: color 0.2s var(--default-timing);
   ${props => props.playing && props.focused && !props.controlPanelOpen && css`
     transition: opacity 1s var(--default-timing) 1s, color 1.5s linear;
     font-size: 1.3rem;
-    opacity: 0;
-    color: #888;`
+    opacity: 0;`
   }
 `
 

@@ -11,7 +11,7 @@ import ControlPanel from './control-panel';
 const StyledHeader = styled.header`
 	background-color: #1b1b1d;
 	font-family: 'Roboto Mono', monospace;
-	color: ${props => props.theme.colorPrimary};
+	color: ${props => props.theme.highlight};
 	
 	& > div:first-of-type {
 		display: flex;
@@ -46,6 +46,7 @@ const Header = (props) => {
 				setCurrentLayout={props.setCurrentLayout}
 				keyboardVisible={props.keyboardVisible}
 				setKeyboardVisible={props.setKeyboardVisible}
+				testLength={props.testLength}
 				setTestLength={props.setTestLength}
 			/>
 			

@@ -1,7 +1,7 @@
 const themes = {
 	dark: {
-		colorPrimary: '#f4cb4c',
-		highlightPrimary: 'orange',
+		primary: '#F2F4F3',
+		highlight: '#F4CB4C',
 	},
 
 	light: {

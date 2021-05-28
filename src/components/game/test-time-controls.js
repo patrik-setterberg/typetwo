@@ -4,49 +4,60 @@
  */
 
 import React from 'react';
-import styled from 'styled-components';
+import styled, {css} from 'styled-components';
 import g from '../../globals.js';
 
 const StyledButton = styled.button`
-  padding: 0.5rem 1rem;
-  background-color: transparent;
-  border: 2px solid #fff;
-  border-radius: 0.25rem;
-  color: #fff;
-  font-size: 1.1rem;
+  padding: 0.4rem 0.8rem;
+  background-color: ${props => props.theme.highlight};
+  border-radius: 0.8rem;
+  color: #333;
+  font-family: var(--font-main);
+  font-size: 1.2rem;
+  font-weight: 700;
 
   &:active {
-    background-color: #fff;
-    color: #888;
+    background-color: ${props => props.theme.primary};
+  }
+
+  ${props => props.selectedOption && css`
+    background-color: ${props => props.theme.primary}; /* not exactly beautiful. */`
   }
 `
 
 const StyledTimeControls = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
   margin-top: 0.5rem;
   transition: opacity 0.2s ease;
   
   & button + button {
-    margin-left: 1rem;
+    margin-left: 0.5rem;
   }
 
   & span {
-    font-size: 1.3rem;
+    font-size: 1.2rem;
     display: inline-block;
   }
 
   & div {
     display: flex;
-    justify-content: center;
-    margin-top: 1.5rem;
+    font-size: 1.2rem;
+    align-items: center;
+    margin-top: 1rem;
+
+    & button:last-of-type {
+      margin-right: 1rem;
+    }
   }
 `
 
 const Button = (props) => {
   return (
-    <StyledButton onClick={() => props.setTestLength(props.testLengthOption)}>
+    <StyledButton
+      selectedOption={props.selectedOption}
+      onClick={() => props.setTestLength(props.testLengthOption)}
+    >
       {props.children}
     </StyledButton>
   );
@@ -61,19 +72,21 @@ const TimeControls = (props) => {
 
   return (
     <StyledTimeControls playing={props.playing}>
-      <span>Set test duration</span>
+      <span>Test duration</span>
       <div>
         {testLengthOptions.map((option, key) => {
           return (
             <Button
               setTestLength={props.setTestLength}
               testLengthOption={option}
+              selectedOption={option === props.testLength}
               key={key}
             >
-              {option}s
+              {option}
             </Button>
           );
         })}
+        seconds
       </div>  
     </StyledTimeControls>
   );

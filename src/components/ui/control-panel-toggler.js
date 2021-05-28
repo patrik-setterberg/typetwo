@@ -15,7 +15,7 @@ const Gears = styled.button`
 			fill: none;
 		}
 		& path {
-			fill: ${props => props.isOpen ? '#fff' : props.theme.colorPrimary};
+			fill: ${props => props.isOpen ? props.theme.primary : props.theme.highlight};
 		}
 		& .gear-1 {
 			transform-origin: 226.5px 89px;

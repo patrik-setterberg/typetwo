@@ -16,6 +16,7 @@ const ControlPanel = (props) => {
 		<StyledControlPanel isOpen={props.isOpen}>
 			<TimeControls
 				setTestLength={props.setTestLength}
+				testLength={props.testLength}
       />
 			<ThemeControls />
 			<KeyboardControls

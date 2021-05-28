@@ -15,7 +15,7 @@ const StyledTypeTest = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  color: ${props => props.theme.colorPrimary};
+  color: ${props => props.theme.primary};
   font-size: 1.5rem;
 `
 
@@ -179,7 +179,7 @@ const TypeTest = (props) => {
 
   // Re-render when test-time-controls button is clicked
   useEffect(() => {
-    setTimeLeft(props.testLength);
+    if (!props.playing) setTimeLeft(props.testLength);
   }, [props.testLength]);
 
   return(

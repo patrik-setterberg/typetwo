@@ -116,6 +116,7 @@ const TypeTestHandler = (props) => {
         controlPanelOpen={controlPanelOpen}
         setControlPanelOpen={setControlPanelOpen}
         setTheme={props.setTheme}
+        testLength={testLength}
         setTestLength={setTestLength}
         currentLayout={currentLayout}
         setCurrentLayout={setCurrentLayout}

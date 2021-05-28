@@ -9,16 +9,18 @@ import styled, {css} from 'styled-components';
 import g from '../../globals.js';
 import {debounce} from '../../utilities.js';
 
+const TEXT_LINE_HEIGHT = 1.6;
+
 const TextWrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
   max-width: 100%;
-  color: ${(props => props.focused) ? '#F2F4F3' : 'transparent'};
+  color: ${(props => props.focused) ? (props => props.theme.primary) : 'transparent'};
   transition: color 0.2s ease;
   position: relative;
 
   & > span {
-    line-height: 1.6;
+    line-height: ${TEXT_LINE_HEIGHT};
   }
 `;
 
@@ -30,6 +32,8 @@ const StyledWord = styled.span`
     color: #888; /* Use a variable */`
   }
 `;
+
+/* TODO: Clean up some conditions below (e.g. probably don't need "=== true"), assign color vars */
 
 const StyledLetter = styled.span`
   transition: color 0.03s var(--default-timing), text-shadow 0.2s ease;
@@ -76,11 +80,13 @@ const StyledLetter = styled.span`
   }
 `;
 
+const CARET_FONT_SIZE = 1.5;
+
 const StyledCaret = styled.div`
-  height: calc(1.6 * 1.5rem); /* 1.6 is line height of text */
-  font-size: 1.5rem;
+  height: calc(${TEXT_LINE_HEIGHT} * ${CARET_FONT_SIZE}rem);
+  font-size: ${CARET_FONT_SIZE}rem;
   width: 3px;
-  background-color: ${props => props.theme.colorPrimary};
+  background-color: ${props => props.theme.highlight};
   opacity: var(--caret-opacity);
   position: absolute;
   z-index: 1;
@@ -88,7 +94,7 @@ const StyledCaret = styled.div`
   left: ${props => props.currentWordLeft}px;
   top: ${props => props.currentWordTop}px;
 
-  ${props => props.playing === true && props.focused === false && css`
+  ${props => props.playing && !props.focused && css`
     opacity: 0;`
   }
 
