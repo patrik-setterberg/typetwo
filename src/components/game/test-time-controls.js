@@ -28,7 +28,7 @@ const StyledButton = styled.button`
 const StyledTimeControls = styled.div`
   display: flex;
   flex-direction: column;
-  margin-top: 0.5rem;
+  flex: 1;
   transition: opacity 0.2s ease;
   
   & button + button {
@@ -36,15 +36,20 @@ const StyledTimeControls = styled.div`
   }
 
   & span {
-    font-size: 1.2rem;
     display: inline-block;
+    width: fit-content;
+
+    &:first-child {
+      text-transform: uppercase;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
   }
 
   & div {
     display: flex;
-    font-size: 1.2rem;
     align-items: center;
-    margin-top: 1rem;
+    margin-top: 1.5rem;
 
     & button:last-of-type {
       margin-right: 1rem;
@@ -72,7 +77,7 @@ const TimeControls = (props) => {
 
   return (
     <StyledTimeControls playing={props.playing}>
-      <span>Test duration</span>
+      <span>Set test duration</span>
       <div>
         {testLengthOptions.map((option, key) => {
           return (
@@ -86,7 +91,7 @@ const TimeControls = (props) => {
             </Button>
           );
         })}
-        seconds
+        <span>seconds</span>
       </div>  
     </StyledTimeControls>
   );

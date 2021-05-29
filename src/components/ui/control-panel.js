@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import g from '../../globals.js';
 import TimeControls from '../game/test-time-controls.js';
 import KeyboardControls from './keyboard-controls.js';
 import ThemeControls from './theme-controls.js';
@@ -8,7 +9,11 @@ const StyledControlPanel = styled.div`
 	justify-content: space-evenly;
 	display: ${props => props.isOpen ? 'flex' : 'none'};
 	overflow: hidden;
-	padding-bottom: var(--default-padding);
+	padding: 1rem;
+
+	@media ${g.large} {
+		padding: 1.5rem;
+	}
 `
 
 const ControlPanel = (props) => {
@@ -18,7 +23,10 @@ const ControlPanel = (props) => {
 				setTestLength={props.setTestLength}
 				testLength={props.testLength}
       />
-			<ThemeControls />
+			<ThemeControls
+				currentTheme={props.currentTheme}
+				setTheme={props.setTheme}
+			/>
 			<KeyboardControls
 				currentLayout={props.currentLayout}
 				setCurrentLayout={props.setCurrentLayout}

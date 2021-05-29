@@ -31,7 +31,7 @@ const Input = styled.input`
   }
 `
 
-const LABEL_LETTER_SPACING = 1.2; // px
+const LABEL_LETTER_SPACING = 1; // px
 
 const Label = styled.label`
   display: inline-block;
@@ -41,14 +41,12 @@ const Label = styled.label`
   cursor: pointer;
   background-color: ${props => props.theme.highlight};
   text-indent: calc(${props => props.text.length * -1}ch + (${props => props.text.length} * ${LABEL_LETTER_SPACING}px * -1) - 2ch);
-  font-size: 0.875rem;
+  font-size: 1rem;
   line-height: 1.875;
   letter-spacing: ${LABEL_LETTER_SPACING}px;
-  font-weight: 600;
-  text-transform: uppercase;
   color: ${props => props.theme.highlight};
   position: absolute;
-  right: 0.5rem;
+  right: 0;
   top: 0;
   box-shadow: none;
   transition: box-shadow 0.2s var(--default-timing), background-color 0.2s var(--default-timing);

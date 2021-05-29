@@ -5,6 +5,7 @@
 
 import React from 'react';
 import styled from 'styled-components';
+import g from '../../globals.js';
 import GearToggler from './control-panel-toggler';
 import ControlPanel from './control-panel';
 
@@ -25,7 +26,13 @@ const StyledHeader = styled.header`
 		letter-spacing: 1px;
 	}
 	& > div > span > span {
-		font-weight: 700;
+		font-weight: 600;
+	}
+
+	@media ${g.large} {
+		& > div:first-of-type {
+			padding: 1.5rem;
+		}
 	}
 `
 
@@ -42,12 +49,14 @@ const Header = (props) => {
 			</div>
 			<ControlPanel
 				isOpen={props.controlPanelOpen}
+				testLength={props.testLength}
+				setTestLength={props.setTestLength}
+				currentTheme={props.currentTheme}
+				setTheme={props.setTheme}
 				currentLayout={props.currentLayout}
 				setCurrentLayout={props.setCurrentLayout}
 				keyboardVisible={props.keyboardVisible}
 				setKeyboardVisible={props.setKeyboardVisible}
-				testLength={props.testLength}
-				setTestLength={props.setTestLength}
 			/>
 			
 			

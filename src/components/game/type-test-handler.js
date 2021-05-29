@@ -27,6 +27,7 @@ const TypeTestWrapper = styled.div`
   @media ${g.large} {
     & > div {
       width: 900px;
+      padding-top: 2.5rem;
     }
   }
 `
@@ -119,6 +120,7 @@ const TypeTestHandler = (props) => {
       <Header
         controlPanelOpen={controlPanelOpen}
         setControlPanelOpen={setControlPanelOpen}
+        currentTheme={props.currentTheme}
         setTheme={props.setTheme}
         testLength={testLength}
         setTestLength={setTestLength}

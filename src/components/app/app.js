@@ -86,6 +86,7 @@ const App = () => {
         <Main>
           <TypeTestHandler
             documentIsFocused={documentIsFocused}
+            currentTheme={currentTheme}
             setTheme={setTheme}
             escapePressed={escapePressed}
           />

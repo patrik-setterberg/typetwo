@@ -9,10 +9,13 @@ const themes = {
 	dark: {
 		primary: '#F2F4F3',
 		highlight: '#F4CB4C',
+		backgroundPrimary: '#333',
 	},
 
 	light: {
-		
+		primary: '#333',
+		highlight: 'red',
+		backgroundPrimary: '#F2F4F3',
 	}
 }
 
