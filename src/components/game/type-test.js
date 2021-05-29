@@ -149,7 +149,7 @@ const TypeTest = (props) => {
   useEffect(() => {
     let timerInterval;
 
-    if (props.playing === true && props.documentIsFocused === true && props.controlPanelOpen === false) {
+    if (props.playing && props.documentIsFocused && !props.controlPanelOpen) {
       /**
        * Runs a clock which decreases timeLeft by 1 every second.
        * Timer clears if document loses focus. Restarts when focus is regained.
@@ -225,7 +225,6 @@ const TypeTest = (props) => {
         setLeftShiftPressed={setLeftShiftPressed}
         setRightShiftPressed={setRightShiftPressed}
         controlPanelOpen={props.controlPanelOpen}
-        setControlPanelOpen={props.setControlPanelOpen}
       />
       <Keyboard
         playing={props.playing}

@@ -37,6 +37,10 @@ const TypeTestHandler = (props) => {
 
   const [controlPanelOpen, setControlPanelOpen] = useState(false);
 
+  useEffect(() => {
+    if (props.escapePressed) setControlPanelOpen(false);
+  }, [props.escapePressed]);
+
   // Stores selected test length (in seconds).
   const [testLength, setTestLength] = useState(g.TEST_LENGTH_DEFAULT);
 
@@ -147,7 +151,6 @@ const TypeTestHandler = (props) => {
           shiftWords={shiftWords}
           addWords={addWords}
           controlPanelOpen={controlPanelOpen}
-          setControlPanelOpen={setControlPanelOpen}
           keyboardVisible={keyboardVisible}
           currentLayout={currentLayout}
         />

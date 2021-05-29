@@ -48,9 +48,18 @@ const App = () => {
     document.body.classList.add('no-outline');
   }
 
+  const [escapePressed, setEscapePressed] = useState(false);
+
   const handleKeyDown = (event) => {
     if (event.key === 'Tab') {
       document.body.classList.remove('no-outline');
+    }
+
+    if (event.key === 'Escape') {
+      setEscapePressed(true);
+      setTimeout(() => {
+        setEscapePressed(false);
+      }, 0);
     }
   }
 
@@ -66,8 +75,8 @@ const App = () => {
     return () => {
       window.removeEventListener('blur', handleBlur);
       window.removeEventListener('focus', handleFocus);
-      document.removeEventListener('mousedown', handleMouseDown);
-      document.removeEventListener('keydown', handleKeyDown);
+      document.body.removeEventListener('mousedown', handleMouseDown);
+      document.body.removeEventListener('keydown', handleKeyDown);
     }
   }, []);
 
@@ -78,6 +87,7 @@ const App = () => {
           <TypeTestHandler
             documentIsFocused={documentIsFocused}
             setTheme={setTheme}
+            escapePressed={escapePressed}
           />
         </Main>
       </ThemeProvider>

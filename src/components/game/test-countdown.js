@@ -13,8 +13,10 @@ const TimerWrapper = styled.div`
 `
 
 const Numbers = styled.span`
-  color: #fff;
+  font-family: var(--font-main);
+  font-weight: 600;
   font-size: 3.5rem;
+  color: ${props => props.theme.primary};
   transition: color 0.2s var(--default-timing);
 
   ${props => props.playing && css`

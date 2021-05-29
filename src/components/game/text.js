@@ -38,8 +38,8 @@ const StyledWord = styled.span`
 const StyledLetter = styled.span`
   transition: color 0.03s var(--default-timing), text-shadow 0.2s ease;
 
-  ${props => props.entered === false && props.wordIsCorrect === false && props.focused === false && css`
-    text-shadow: 0 0 0.4rem #fff;`
+  ${props => !props.entered && !props.wordIsCorrect && !props.focused && css`
+    text-shadow: 0 0 0.4rem ${props => props.theme.primary};`
   }
 
   ${props => props.entered && css`
@@ -50,7 +50,7 @@ const StyledLetter = styled.span`
     color: darkred;`
   }
 
-  ${props => props.wordIncorrect && props.entered === false && props.playing && css`
+  ${props => props.wordIncorrect && !props.entered && props.playing && css`
     text-decoration: underline;`
   }
 
@@ -63,11 +63,11 @@ const StyledLetter = styled.span`
     text-shadow: 0 0 0.4rem #666;`
   }
 
-  ${props => props.focused === false && props.wordIsCorrect && css`
+  ${props => !props.focused && props.wordIsCorrect && css`
     text-shadow: 0 0 0.4rem #666;`
   }
 
-  ${props => props.isIncorrect && props.focused === false && css`
+  ${props => props.isIncorrect && !props.focused && css`
     text-shadow: 0 0 0.4rem darkred;`
   }
 

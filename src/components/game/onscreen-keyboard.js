@@ -4,8 +4,8 @@ import g, {LAYOUTS} from '../../globals.js';
 
 const Key = styled.span`
   display: inline-flex;
-  border: 1px solid #888;
-  border-radius: 0.5rem;
+  border: 1px solid #555;
+  border-radius: 0.65rem;
   padding: 0.75ch 1.5ch;
   align-items: center;
   position: relative;
@@ -50,7 +50,7 @@ const Row = styled.div`
       display: block;
       position: absolute;
       width: 1ch;
-      border-bottom: 2px solid ${props => props.theme.colorPrimary};
+      border-bottom: 2px solid ${props => props.theme.highlight};
       bottom: 0.5ch;
       opacity: 0.6;
     }

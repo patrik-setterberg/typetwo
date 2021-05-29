@@ -14,7 +14,7 @@ const StyledButton = styled.button`
   color: #333;
   font-family: var(--font-main);
   font-size: 1.2rem;
-  font-weight: 700;
+  font-weight: 600;
 
   &:active {
     background-color: ${props => props.theme.primary};

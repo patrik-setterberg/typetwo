@@ -50,15 +50,13 @@ const Input = (props) => {
      * START TEST.
      * Start test if key is a letter, i.e. if user started typing
      */
-    if (/[a-z|A-Z]/g.test(e.key) && props.playing === false && e.key.length === 1 && props.controlPanelOpen === false) {
+    if (/[a-z|A-Z]/g.test(e.key) && !props.playing && e.key.length === 1 && !props.controlPanelOpen) {
       props.setPlaying(!props.playing);
     }
 
     // Abort test if Escape is pressed
     if (e.key === 'Escape') {
-      if (props.controlPanelOpen === true) {
-        props.setControlPanelOpen(!props.controlPanelOpen);
-      } else {
+      if (!props.controlPanelOpen) {
         props.endTest();
       }
     }
