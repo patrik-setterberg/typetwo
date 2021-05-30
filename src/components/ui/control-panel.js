@@ -10,6 +10,8 @@ const StyledControlPanel = styled.div`
 	display: ${props => props.isOpen ? 'flex' : 'none'};
 	overflow: hidden;
 	padding: 1rem;
+	background-color: #242424;
+	/*background: linear-gradient(to bottom, #1b1b1d, #29292B 90%);*/
 
 	@media ${g.large} {
 		padding: 1.5rem;

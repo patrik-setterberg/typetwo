@@ -32,14 +32,17 @@ const ScoreScreen = (props) => {
 
   useEffect(() => {
     const handleKeypress = (e) => {
-      if (e.key === 'Enter' && props.testConcluded === true) {
-        props.setTestConcluded(!props.testConcluded);
+      if (props.testConcluded && !props.controlPanelOpen) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          props.setTestConcluded(!props.testConcluded);
+        }
       }
     }
-    window.addEventListener('keyup', handleKeypress);
+    window.addEventListener('keydown', handleKeypress);
 
     return () => {
-      window.removeEventListener('keyup', handleKeypress);
+      window.removeEventListener('keydown', handleKeypress);
     };
   }, [props, props.setTestConcluded, props.testConcluded]);
 
@@ -55,7 +58,6 @@ const ScoreScreen = (props) => {
         :
         <></>
       }
-      <span>Press ENTER to run test again</span>
     </StyledScoreScreen>
   )
 }

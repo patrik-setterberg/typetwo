@@ -8,7 +8,6 @@ import g from '../../globals.js';
 import Input from './input.js';
 import TestTimer from './test-countdown.js';
 import Text from './text.js';
-import TestInstructions from './test-instructions.js';
 import Keyboard from './onscreen-keyboard.js';
 
 const StyledTypeTest = styled.div`
@@ -184,11 +183,6 @@ const TypeTest = (props) => {
 
   return(
     <StyledTypeTest focused={props.documentIsFocused}>
-      <TestInstructions
-        playing={props.playing}
-        focused={props.documentIsFocused}
-        controlPanelOpen={props.controlPanelOpen}
-      />
       <TestTimer
         playing={props.playing}
         timeLeft={timeLeft}

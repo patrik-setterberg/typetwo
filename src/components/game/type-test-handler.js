@@ -39,8 +39,15 @@ const TypeTestHandler = (props) => {
   const [controlPanelOpen, setControlPanelOpen] = useState(false);
 
   useEffect(() => {
-    if (props.escapePressed) setControlPanelOpen(false);
-  }, [props.escapePressed]);
+    switch(props.hotkeyPressed) {
+      case 'Escape':
+        setControlPanelOpen(false);
+        break;
+      case '+':
+        setControlPanelOpen(!controlPanelOpen);
+        break;
+    }
+  }, [props.hotkeyPressed]);
 
   // Stores selected test length (in seconds).
   const [testLength, setTestLength] = useState(g.TEST_LENGTH_DEFAULT);
@@ -129,6 +136,8 @@ const TypeTestHandler = (props) => {
         keyboardVisible={keyboardVisible}
         setKeyboardVisible={setKeyboardVisible}
         playing={playing}
+        documentIsFocused={props.documentIsFocused}
+        testConcluded={testConcluded}
       />
       {testConcluded ?
         /* Render score screen if test has concluded. */
@@ -137,6 +146,7 @@ const TypeTestHandler = (props) => {
         setTestConcluded={setTestConcluded}
         testConcluded={testConcluded}
         highestScore={highestScore}
+        controlPanelOpen={controlPanelOpen}
         />
         : /* Otherwise render type test. */
         <TypeTest

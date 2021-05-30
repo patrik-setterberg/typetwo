@@ -6,12 +6,15 @@
 import React from 'react';
 import styled from 'styled-components';
 import g from '../../globals.js';
+import TestInstructions from '../game/test-instructions.js';
 import GearToggler from './control-panel-toggler';
 import ControlPanel from './control-panel';
 
 const StyledHeader = styled.header`
-	background-color: #1b1b1d;
-	font-family: 'Roboto Mono', monospace;
+	display: flex;
+	flex-direction: column;
+	background-color: #1F1F21;
+	font-family: var(--font-main);
 	color: ${props => props.theme.highlight};
 	
 	& > div:first-of-type {
@@ -19,6 +22,10 @@ const StyledHeader = styled.header`
 		justify-content: space-between;
 		align-items: center;
 		padding: 1rem;
+
+		& > * {
+			flex: 1 1 1px;
+		}
 	}
 
 	/* TEMP */
@@ -42,6 +49,12 @@ const Header = (props) => {
 		<StyledHeader>
 			<div>
 				<span><span>TYPE</span>|TWO</span>
+				<TestInstructions
+					playing={props.playing}
+					focused={props.documentIsFocused}
+					controlPanelOpen={props.controlPanelOpen}
+					testConcluded={props.testConcluded}
+      	/>
 				<GearToggler
 					controlPanelOpen={props.controlPanelOpen}
 					setControlPanelOpen={props.setControlPanelOpen}
@@ -58,8 +71,6 @@ const Header = (props) => {
 				keyboardVisible={props.keyboardVisible}
 				setKeyboardVisible={props.setKeyboardVisible}
 			/>
-			
-			
 		</StyledHeader>
 	)
 }

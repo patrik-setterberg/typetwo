@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import styled, {css} from 'styled-components';
 import themes from '../../themes.js';
 
@@ -50,11 +50,6 @@ const ThemeButton = (props) => {
 const ThemeControls = (props) => {
 
   const themeNames = Object.keys(themes);
-
-  useEffect(() => {
-    console.log(themes);
-    console.log(props.currentTheme);
-  }, []);
 
   return (
     <ThemeControlsContainer>

@@ -5,12 +5,10 @@ import themes from '../../themes.js';
 import {ThemeProvider} from 'styled-components';
 import TypeTestHandler from '../game/type-test-handler.js';
 
-
 /**
  * TEMP / TODO:
  * 
  * Store control panel's settings somewhere. Probably in a cookie.
- * Close control panel with Escape even if game is not running (move logic from input.js because it is not mounted when score screen is displayed).
  */
 
 
@@ -18,8 +16,8 @@ const Main = styled.main`
 	height: 100%;
 	width: 100%;
 	position: fixed;
-	background-color: #29292B;
-	font-family: 'Roboto Mono', monospace;
+	background-color: #262628;
+	font-family: var(--font-main);
 `
 
 const App = () => {
@@ -48,17 +46,17 @@ const App = () => {
     document.body.classList.add('no-outline');
   }
 
-  const [escapePressed, setEscapePressed] = useState(false);
+  const [hotkeyPressed, setHotkeyPressed] = useState('');
 
   const handleKeyDown = (event) => {
     if (event.key === 'Tab') {
       document.body.classList.remove('no-outline');
     }
 
-    if (event.key === 'Escape') {
-      setEscapePressed(true);
+    if (event.key === 'Escape' || event.key === '+') {
+      setHotkeyPressed(event.key);
       setTimeout(() => {
-        setEscapePressed(false);
+        setHotkeyPressed('');
       }, 0);
     }
   }
@@ -88,7 +86,7 @@ const App = () => {
             documentIsFocused={documentIsFocused}
             currentTheme={currentTheme}
             setTheme={setTheme}
-            escapePressed={escapePressed}
+            hotkeyPressed={hotkeyPressed}
           />
         </Main>
       </ThemeProvider>

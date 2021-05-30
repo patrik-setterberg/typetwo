@@ -15,6 +15,7 @@ const StyledButton = styled.button`
   font-family: var(--font-main);
   font-size: 1.2rem;
   font-weight: 600;
+  cursor: pointer;
 
   &:active {
     background-color: ${props => props.theme.primary};
