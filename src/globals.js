@@ -2,31 +2,46 @@ import {createGlobalStyle} from 'styled-components';
 
 // Supported keyboard layouts.
 const LAYOUTS = {
-  DVORAK_US: [
-    ["'", ',', '.', 'p', 'y', 'f', 'g', 'c', 'r', 'l', '/', '='],
-    ['a', 'o', 'e', 'u', 'i', 'd', 'h', 't', 'n', 's', '-'],
-    ['\u21e7', ';', 'q', 'j', 'k', 'x', 'b', 'm', 'w', 'v', 'z', '\u21e7'],
-  ],
-  QWERTY_US: [
-    ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']'],
-    ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', "'"],
-    ['\u21e7', 'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '/', '\u21e7'],
-  ],
-  QWERTY_SE: [
-    ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', 'å', '"'],
-    ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'ö', 'ä', "'"],
-    ['\u21e7', '<', 'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '-', '\u21e7'],
-  ],
-  QWERTZ_DE: [
-    ['q', 'w', 'e', 'r', 't', 'z', 'u', 'i', 'o', 'p', 'ü', '+'],
-    ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'ö', 'ä', '#'],
-    ['\u21e7', '<', 'y', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '-', '\u21e7'],
-  ],
-  AZERTY_FR: [
-    ['a', 'z', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '^', '$'],
-    ['q', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'ù', '*'],
-    ['\u21e7', '<', 'w', 'x', 'c', 'v', 'b', 'n', ',', ';', ':', '!', '\u21e7'],
-  ],
+  DVORAK_US: {
+    LAYOUT: [
+      ["'", ',', '.', 'p', 'y', 'f', 'g', 'c', 'r', 'l', '/', '='],
+      ['a', 'o', 'e', 'u', 'i', 'd', 'h', 't', 'n', 's', '-'],
+      ['\u21e7', ';', 'q', 'j', 'k', 'x', 'b', 'm', 'w', 'v', 'z', '\u21e7'],
+    ],
+    CONTROL_PANEL_HOTKEY: 'UNKNOWN',
+  },
+  QWERTY_US: {
+    LAYOUT: [
+      ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']'],
+      ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', "'"],
+      ['\u21e7', 'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '/', '\u21e7'],
+    ],
+    CONTROL_PANEL_HOTKEY: '`',
+  },
+  QWERTY_SE: {
+    LAYOUT: [
+      ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', 'å', '"'],
+      ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'ö', 'ä', "'"],
+      ['\u21e7', '<', 'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '-', '\u21e7'],
+    ],
+    CONTROL_PANEL_HOTKEY: '§',
+  },
+  QWERTZ_DE: {
+    LAYOUT: [
+      ['q', 'w', 'e', 'r', 't', 'z', 'u', 'i', 'o', 'p', 'ü', '+'],
+      ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'ö', 'ä', '#'],
+      ['\u21e7', '<', 'y', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '-', '\u21e7'],
+    ],
+    CONTROL_PANEL_HOTKEY: 'UNKNOWN',
+  },
+  AZERTY_FR: {
+    LAYOUT: [
+      ['a', 'z', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '^', '$'],
+      ['q', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'ù', '*'],
+      ['\u21e7', '<', 'w', 'x', 'c', 'v', 'b', 'n', ',', ';', ':', '!', '\u21e7'],
+    ],
+    CONTROL_PANEL_HOTKEY: 'UNKNOWN',
+  },
 };
 
 export {LAYOUTS};
@@ -35,7 +50,9 @@ export {LAYOUTS};
  * MEDIA BREAKPOINT VARS TWEAK HERE
  */
 const largestSmall = 767; // px
-const largestMedium = 1099; // px
+const largestMedium = 1299; // px
+
+export {largestMedium};
 
 /**
  * GLOBAL VARS
@@ -69,7 +86,7 @@ const g = {
   TIMESTAMP_COOKIE_NAME: 'time',
   COOKIE_MAX_AGE: 2592000, // 60*60*24*30 = 30 days
 
-  KEYBOARD_DEFAULT_LAYOUT: 'QWERTY_US',
+  KEYBOARD_DEFAULT_LAYOUT: 'QWERTY_SE',
   KEYBOARD_DEFAULT_VISIBILITY: true,
   KEYBOARD_HIGHLIGHT_DURATION: 160,
 }

@@ -56,7 +56,7 @@ const Input = (props) => {
 
     // Abort test if Escape is pressed
     if (e.key === 'Escape') {
-      if (!props.controlPanelOpen) {
+      if (!props.controlPanelOpen && props.playing) {
         props.endTest();
       }
     }

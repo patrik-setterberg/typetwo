@@ -3,9 +3,9 @@
  * Wrapper component for TYPE TEST. Handles rendering of the test, score screen as well as the header.
  */
 
-import React, {useState, useCallback, useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import styled from 'styled-components';
-import g from '../../globals.js';
+import g, {LAYOUTS} from '../../globals.js';
 import words from '../../assets/game/words.js';
 import Header from '../ui/header.js';
 import TypeTest from './type-test.js';
@@ -43,8 +43,10 @@ const TypeTestHandler = (props) => {
       case 'Escape':
         setControlPanelOpen(false);
         break;
-      case '+':
+      case LAYOUTS[props.currentLayout].CONTROL_PANEL_HOTKEY:
         setControlPanelOpen(!controlPanelOpen);
+        break;
+      default:
         break;
     }
   }, [props.hotkeyPressed]);
@@ -57,20 +59,31 @@ const TypeTestHandler = (props) => {
 
   const [keyboardVisible, setKeyboardVisible] = useState(g.KEYBOARD_DEFAULT_VISIBILITY);
 
-  const [currentLayout, setCurrentLayout] = useState(g.KEYBOARD_DEFAULT_LAYOUT);
+  // Retrieve a random word from array of words.
+  const getWord = (words) => {
+    let word = words[Math.floor(Math.random() * words.length)];
+    return word.split('');
+  }
 
-  // Retrieve a random word from array of words, return array of letters
-  const getWord = useCallback((words) => {
-    return words[Math.floor(Math.random() * words.length)].split('');
-  },[]);
+  const getWordString = (words) => {
+    return words[Math.floor(Math.random() * words.length)];
+  }
 
-  // Load an array of words. Removes duplicates before returning.
-  const loadWords = useCallback(() => {
-    let wordArr = Array.from(Array(g.TEST_WORD_COUNT)).map((_) => {
-      return getWord(words);
-    });
-    return ([...new Set(wordArr)]);
-  },[getWord]);
+  // Load an array of unique words.
+  const loadWords = () => {
+    let usedWords = [];
+    let wordArr = [];
+
+    while (wordArr.length < g.TEST_WORD_COUNT) {
+      let word = getWordString(words);
+      if (!usedWords.includes(word)) {
+        usedWords.push(word);
+        wordArr.push(word.split(''));
+      }
+    }
+    return wordArr;
+    // THIS RUNS WHEN TypeTestHandler re-renders (e.g. when focus is lost, hotkey pressed).
+  }
 
   const [testWords, setTestWords] = useState(loadWords());
 
@@ -131,8 +144,8 @@ const TypeTestHandler = (props) => {
         setTheme={props.setTheme}
         testLength={testLength}
         setTestLength={setTestLength}
-        currentLayout={currentLayout}
-        setCurrentLayout={setCurrentLayout}
+        currentLayout={props.currentLayout}
+        setCurrentLayout={props.setCurrentLayout}
         keyboardVisible={keyboardVisible}
         setKeyboardVisible={setKeyboardVisible}
         playing={playing}
@@ -164,7 +177,7 @@ const TypeTestHandler = (props) => {
           addWords={addWords}
           controlPanelOpen={controlPanelOpen}
           keyboardVisible={keyboardVisible}
-          currentLayout={currentLayout}
+          currentLayout={props.currentLayout}
         />
       }
     </TypeTestWrapper>

@@ -2,7 +2,7 @@
  * TYPE TEST MAIN COMPONENT
  */
 
-import React, {useEffect, useState, useCallback} from 'react';
+import React, {useEffect, useState} from 'react';
 import styled from 'styled-components';
 import g from '../../globals.js';
 import Input from './input.js';
@@ -30,7 +30,7 @@ const TypeTest = (props) => {
   const [currentWordInd, setCurrentWordInd] = useState(0);
 
   const increaseCurrentWordInd = () => {
-    setCurrentWordInd((currentWordInd) => (currentWordInd + 1));
+    setCurrentWordInd(currentWordInd => currentWordInd + 1);
   }
 
   /**
@@ -105,13 +105,13 @@ const TypeTest = (props) => {
    * Stops test, clears input, resets currentWord and currentRow,
    * loads a new set of rows of words and rewinds caret.
    */  
-  const endTest = useCallback(() => {
+  const endTest = () => {
     props.setPlaying(false);
     setInputValue('');
     setCurrentWordInd(0);
     props.setTestWords(props.loadWords());
     setTimeLeft(props.testLength);
-  }, [props.testLength]);
+  }
 
   const handleSpace = () => {
     // Check if input matches currentWord.

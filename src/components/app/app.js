@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useCallback} from 'react';
 import styled from 'styled-components';
-import {themeSettings} from '../../globals.js';
+import g, {themeSettings, LAYOUTS} from '../../globals.js';
 import themes from '../../themes.js';
 import {ThemeProvider} from 'styled-components';
 import TypeTestHandler from '../game/type-test-handler.js';
@@ -31,6 +31,8 @@ const App = () => {
     //console.log(Object.keys(themes));
   }
 
+  const [currentLayout, setCurrentLayout] = useState(g.KEYBOARD_DEFAULT_LAYOUT);
+
   // Keep track of whether document is focused.
   const [documentIsFocused, setDocumentIsFocused] = useState(document.hasFocus());
 
@@ -48,18 +50,18 @@ const App = () => {
 
   const [hotkeyPressed, setHotkeyPressed] = useState('');
 
-  const handleKeyDown = (event) => {
+  const handleKeyDown = useCallback((event) => {
     if (event.key === 'Tab') {
       document.body.classList.remove('no-outline');
     }
 
-    if (event.key === 'Escape' || event.key === '+') {
+    if (event.key === 'Escape' || event.key === LAYOUTS[currentLayout].CONTROL_PANEL_HOTKEY) {
       setHotkeyPressed(event.key);
       setTimeout(() => {
         setHotkeyPressed('');
       }, 0);
     }
-  }
+  },[currentLayout]);
 
   useEffect(() => {
     // Handle document focus.
@@ -76,7 +78,7 @@ const App = () => {
       document.body.removeEventListener('mousedown', handleMouseDown);
       document.body.removeEventListener('keydown', handleKeyDown);
     }
-  }, []);
+  }, [handleKeyDown]);
 
 	return(
 		<>
@@ -87,6 +89,8 @@ const App = () => {
             currentTheme={currentTheme}
             setTheme={setTheme}
             hotkeyPressed={hotkeyPressed}
+            currentLayout={currentLayout}
+            setCurrentLayout={setCurrentLayout}
           />
         </Main>
       </ThemeProvider>

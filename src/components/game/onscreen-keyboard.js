@@ -78,7 +78,7 @@ const Row = styled.div`
         ((props.leftShiftPressed && !props.rightShiftPressed) ||
         (props.leftShiftPressed && props.rightShiftPressed) ||
         (!props.leftShiftPressed && !props.rightShiftPressed && !props.shiftPressedRecently)) && css`
-        border: 1px solid #fff;`
+        border: 1px solid ${props => props.theme.primary};`
       }
     }
 
@@ -94,7 +94,7 @@ const Row = styled.div`
       ${props => props.shiftAccurate && ((props.rightShiftPressed && !props.leftShiftPressed) ||
       (props.leftShiftPressed && props.rightShiftPressed) ||
       (!props.leftShiftPressed && !props.rightShiftPressed && !props.shiftPressedRecently)) && css`
-        border: 1px solid #fff;`
+        border: ${props => props.theme.primary};`
       }
     }
   }
@@ -120,7 +120,7 @@ const StyledKeyboard = styled.div`
   max-height: 0px;
   transition: opacity 0.1s var(--default-timing), max-height 0.2s var(--default-timing) 0.2s;
 
-  @media ${g.large} {
+  @media only screen and (min-width: 1100px) {
     opacity: 1;
     max-height: 300px;
     transition: opacity 0.1s var(--default-timing), max-height 0.05s var(--default-timing);
@@ -197,7 +197,7 @@ const Keyboard = (props) => {
 
   return (
     <StyledKeyboard keyboardVisible={props.keyboardVisible}>
-      {LAYOUTS[props.currentLayout].map((row, rowInd) => {
+      {LAYOUTS[props.currentLayout].LAYOUT.map((row, rowInd) => {
         return (
           <Row
             key={rowInd}

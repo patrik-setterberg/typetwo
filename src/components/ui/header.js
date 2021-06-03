@@ -5,14 +5,12 @@
 
 import React from 'react';
 import styled from 'styled-components';
-import g from '../../globals.js';
+import g, {largestMedium} from '../../globals.js';
 import TestInstructions from '../game/test-instructions.js';
 import GearToggler from './control-panel-toggler';
 import ControlPanel from './control-panel';
 
 const StyledHeader = styled.header`
-	display: flex;
-	flex-direction: column;
 	background-color: #1F1F21;
 	font-family: var(--font-main);
 	color: ${props => props.theme.highlight};
@@ -20,25 +18,28 @@ const StyledHeader = styled.header`
 	& > div:first-of-type {
 		display: flex;
 		justify-content: space-between;
-		align-items: center;
 		padding: 1rem;
+		margin: 0 auto;
 
 		& > * {
-			flex: 1 1 1px;
+			flex: 1;
 		}
 	}
 
-	/* TEMP */
+	/* TEMP LOGO */
 	& > div > span {
 		letter-spacing: 1px;
-	}
-	& > div > span > span {
-		font-weight: 600;
+		align-self: center;
+
+		& > span {
+			font-weight: 600;
+		}
 	}
 
 	@media ${g.large} {
 		& > div:first-of-type {
 			padding: 1.5rem;
+			max-width: ${largestMedium+1}px;
 		}
 	}
 `

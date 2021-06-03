@@ -5,14 +5,17 @@ import themes from '../../themes.js';
 const ThemeControlsContainer = styled.div`
 
   & span {
-    display: inline-block;
+    display: block;
     text-transform: uppercase;
+    text-align: center;
     font-weight: 600;
     letter-spacing: 1px;
   }
 
   & div {
     margin-top: 1.5rem;
+    display: flex;
+    justify-content: center;
   }
 `
 
