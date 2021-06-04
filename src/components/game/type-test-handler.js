@@ -3,7 +3,7 @@
  * Wrapper component for TYPE TEST. Handles rendering of the test, score screen as well as the header.
  */
 
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import styled from 'styled-components';
 import g, {LAYOUTS} from '../../globals.js';
 import words from '../../assets/game/words.js';
@@ -38,18 +38,50 @@ const TypeTestHandler = (props) => {
 
   const [controlPanelOpen, setControlPanelOpen] = useState(false);
 
-  useEffect(() => {
-    switch(props.hotkeyPressed) {
+  /**
+   * Keep track of whether document is focused.
+   * Used to blur text and pause test, if focus is lost.
+   */
+  const [documentIsFocused, setDocumentIsFocused] = useState(document.hasFocus());
+
+  const handleBlur = useCallback(() => {
+    setDocumentIsFocused(false);
+  },[]);
+
+  const handleFocus = useCallback(() => {
+    setDocumentIsFocused(true);
+  },[]);
+
+  const [currentLayout, setCurrentLayout] = useState(g.KEYBOARD_DEFAULT_LAYOUT);
+
+  const handleKeyDown = useCallback((event) => {
+    switch(event.key) {
       case 'Escape':
         setControlPanelOpen(false);
         break;
-      case LAYOUTS[props.currentLayout].CONTROL_PANEL_HOTKEY:
+      case LAYOUTS[currentLayout].CONTROL_PANEL_HOTKEY:
         setControlPanelOpen(!controlPanelOpen);
+        break;
+      case 'Tab':
+        // Enable focus highlighting.
+        document.body.classList.remove('no-outline');
         break;
       default:
         break;
+    };
+  },[currentLayout, controlPanelOpen]);
+
+  useEffect(() => {
+    window.addEventListener('blur', handleBlur);
+    window.addEventListener('focus', handleFocus);
+    document.body.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('blur', handleBlur);
+      window.removeEventListener('focus', handleFocus);
+      document.body.removeEventListener('keydown', handleKeyDown);
     }
-  }, [props.hotkeyPressed]);
+  }, [handleKeyDown, handleBlur, handleFocus]);
 
   // Stores selected test length (in seconds).
   const [testLength, setTestLength] = useState(g.TEST_LENGTH_DEFAULT);
@@ -59,46 +91,30 @@ const TypeTestHandler = (props) => {
 
   const [keyboardVisible, setKeyboardVisible] = useState(g.KEYBOARD_DEFAULT_VISIBILITY);
 
-  // Retrieve a random word from array of words.
   const getWord = (words) => {
-    let word = words[Math.floor(Math.random() * words.length)];
+    let word = '';
+    do {
+      // Retrieve a random word from static asset array of words.
+      word = words[Math.floor(Math.random() * words.length)];
+    } while ( // Make sure it is not already in current testWords.
+      Array.from(props.testWords.map((testWord) => testWord.join(''))).includes(word)
+    );
+    // Return array of letters.
     return word.split('');
   }
 
-  const getWordString = (words) => {
-    return words[Math.floor(Math.random() * words.length)];
-  }
-
-  // Load an array of unique words.
-  const loadWords = () => {
-    let usedWords = [];
-    let wordArr = [];
-
-    while (wordArr.length < g.TEST_WORD_COUNT) {
-      let word = getWordString(words);
-      if (!usedWords.includes(word)) {
-        usedWords.push(word);
-        wordArr.push(word.split(''));
-      }
-    }
-    return wordArr;
-    // THIS RUNS WHEN TypeTestHandler re-renders (e.g. when focus is lost, hotkey pressed).
-  }
-
-  const [testWords, setTestWords] = useState(loadWords());
-
-  // Remove words from the from of testWords array.
+  // Remove words from the front of testWords array.
   const shiftWords = (count) => {
-    setTestWords(testWords => testWords.slice(count));
+    props.setTestWords(testWords => testWords.slice(count));
   }
 
-  // Add some new words to the testWords array.
+  // Add some new words to the end of testWords array.
   const addWords = (count) => {
     let newWords = [];
     for (let i = 0; i < count; i++) {
       newWords.push(getWord(words));
     }
-    setTestWords(testWords => testWords.concat(newWords));
+    props.setTestWords(testWords => testWords.concat(newWords));
   }
 
   const [highestScore, setHighestScore] = useState(() => {
@@ -144,12 +160,12 @@ const TypeTestHandler = (props) => {
         setTheme={props.setTheme}
         testLength={testLength}
         setTestLength={setTestLength}
-        currentLayout={props.currentLayout}
-        setCurrentLayout={props.setCurrentLayout}
+        currentLayout={currentLayout}
+        setCurrentLayout={setCurrentLayout}
         keyboardVisible={keyboardVisible}
         setKeyboardVisible={setKeyboardVisible}
         playing={playing}
-        documentIsFocused={props.documentIsFocused}
+        documentIsFocused={documentIsFocused}
         testConcluded={testConcluded}
       />
       {testConcluded ?
@@ -169,15 +185,15 @@ const TypeTestHandler = (props) => {
           testLength={testLength}
           testConcluded={testConcluded}
           setTestConcluded={setTestConcluded}
-          documentIsFocused={props.documentIsFocused}
-          testWords={testWords}
-          setTestWords={setTestWords}
-          loadWords={loadWords}
+          documentIsFocused={documentIsFocused}
+          testWords={props.testWords}
+          setTestWords={props.setTestWords}
+          loadWords={props.loadWords}
           shiftWords={shiftWords}
           addWords={addWords}
           controlPanelOpen={controlPanelOpen}
           keyboardVisible={keyboardVisible}
-          currentLayout={props.currentLayout}
+          currentLayout={currentLayout}
         />
       }
     </TypeTestWrapper>
