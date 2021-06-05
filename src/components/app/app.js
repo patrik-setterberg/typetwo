@@ -9,13 +9,21 @@ import TypeTestHandler from '../game/type-test-handler.js';
 /**
  * TEMP / TODO:
  * Store control panel's settings somewhere. Probably in a cookie.
+ * Make header responsive.
+ * More theming.
+ * Keyboard layout selector.
+ * Re-think auto-focusing (would be nice to be able to navigate control panel with keyboard).
+ * Allow next word even if current incomplete, allow input longer than current word.
+ * Overhaul test score calculation.
+ * Find new approach for test time countdown.
+ * Name & logo.
  */
 
 const Main = styled.main`
 	height: 100%;
 	width: 100%;
 	position: fixed;
-	background-color: #262628;
+	background-color: #262526;
 	font-family: var(--font-main);
 `
 

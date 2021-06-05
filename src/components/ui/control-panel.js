@@ -6,23 +6,26 @@ import KeyboardControls from './keyboard-controls.js';
 import ThemeControls from './theme-controls.js';
 
 const StyledControlPanel = styled.div`
-	display: ${props => props.isOpen ? 'block' : 'none'};
+	max-height: ${props => props.isOpen ? '10rem' : '0px'};
 	overflow: hidden;
-	padding: 1rem;
-	background-color: #242424;
+	padding: 0 1rem;
+	background-color: #222;
+	transition: max-height 0.2s ease-in-out;
 	/*background: linear-gradient(to bottom, #1b1b1d, #29292B 90%);*/
 
 	& > div {
 		display: flex;
 		justify-content: space-between;
+		padding: 1rem 0;
 	}
 
 	@media ${g.large} {
-		padding: 1.5rem;
+		padding: 0 1.5rem;
 
 		& > div {
 			max-width: ${largestMedium+1}px;
 			margin: 0 auto;
+			padding: 1.5rem 0;
 		}
 	}
 `

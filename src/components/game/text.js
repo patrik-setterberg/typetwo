@@ -16,7 +16,7 @@ const TextWrapper = styled.div`
   flex-wrap: wrap;
   max-width: 100%;
   color: ${(props => props.focused) ? (props => props.theme.primary) : 'transparent'};
-  transition: color 0.2s ease;
+  transition: color 0.2s ease-in-out;
   position: relative;
 
   & > span {
@@ -36,7 +36,7 @@ const StyledWord = styled.span`
 /* TODO: Clean up some conditions below (e.g. probably don't need "=== true"), assign color vars */
 
 const StyledLetter = styled.span`
-  transition: color 0.03s var(--default-timing), text-shadow 0.2s ease;
+  transition: color 0.03s var(--default-timing), text-shadow 0.2s ease-in-out;
 
   ${props => !props.entered && !props.wordIsCorrect && !props.focused && css`
     text-shadow: 0 0 0.4rem ${props => props.theme.primary};`

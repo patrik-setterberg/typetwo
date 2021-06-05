@@ -20,6 +20,7 @@ const Gears = styled.button`
 			fill: none;
 		}
 		& path {
+			transition: fill 0.2s ease-in-out;
 			fill: ${props => props.isOpen ? props.theme.primary : props.theme.highlight};
 		}
 		& .gear-1 {

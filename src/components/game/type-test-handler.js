@@ -144,6 +144,7 @@ const TypeTestHandler = (props) => {
     }
   }, [testConcluded, testScore, highestScore, setHighestScore]);
 
+  // Highest score cookies.
   useEffect(() => {
     if (highestScore > 0) {
       document.cookie = `${g.SCORE_COOKIE_NAME}=${highestScore};max-age=${g.COOKIE_MAX_AGE}`;
