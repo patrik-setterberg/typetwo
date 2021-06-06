@@ -7,7 +7,7 @@ import {ThemeProvider} from 'styled-components';
 import TypeTestHandler from '../game/type-test-handler.js';
 
 /**
- * TEMP / TODO:
+ * TODO:
  * Store control panel's settings somewhere. Probably in a cookie.
  * Make header responsive.
  * More theming.
@@ -17,18 +17,22 @@ import TypeTestHandler from '../game/type-test-handler.js';
  * Overhaul test score calculation.
  * Find new approach for test time countdown.
  * Name & logo.
+ * Control panel-like "help panel", teaching hotkeys (and maybe test-instructions?)
+ * Footer?
+ * testWords in different languages?
+ * Context to get rid of some prop drilling?
  */
 
 const Main = styled.main`
 	height: 100%;
 	width: 100%;
 	position: fixed;
-	background-color: #262526;
+	background-color: ${props => props.theme.backgroundPrimary};
 	font-family: var(--font-main);
 `
 
 const App = () => {
-  // Theme passed to ThemeProvider, wrapping entire app content.
+  // Theme passed to ThemeProvider, wrapping entire app.
   const [currentTheme, setCurrentTheme] = useState(themes[themeSettings.DEFAULT_THEME]);
   const setTheme = (theme) => {
     setCurrentTheme(themes[theme]);

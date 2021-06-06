@@ -11,7 +11,7 @@ import GearToggler from './control-panel-toggler';
 import ControlPanel from './control-panel';
 
 const StyledHeader = styled.header`
-	background-color: #1F1F21;
+	background-color: ${props => props.theme.backgroundSecondary};
 	font-family: var(--font-main);
 	color: ${props => props.theme.highlight};
 	

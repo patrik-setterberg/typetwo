@@ -9,12 +9,14 @@ const themes = {
 	dark: {
 		primary: '#F2F4F3',
 		highlight: '#F4CB4C',
-		backgroundPrimary: '#333',
+		backgroundPrimary: '#262526',
+		backgroundSecondary: '#1F1F21',
+		backgroundTertiary: '#222',
 	},
 
 	light: {
 		primary: '#333',
-		highlight: 'red',
+		highlight: 'darkorange',
 		backgroundPrimary: '#F2F4F3',
 	}
 }

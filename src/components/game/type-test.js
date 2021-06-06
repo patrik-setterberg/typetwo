@@ -186,6 +186,8 @@ const TypeTest = (props) => {
       <TestTimer
         playing={props.playing}
         timeLeft={timeLeft}
+        documentIsFocused={props.documentIsFocused}
+        controlPanelOpen={props.controlPanelOpen}
       />
       <Text
         testWords={props.testWords}

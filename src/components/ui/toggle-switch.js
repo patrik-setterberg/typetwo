@@ -59,7 +59,7 @@ const Label = styled.label`
     height: 1.5rem;
     width: 1.5rem;
     border-radius: 50%;
-    background-color: #333;
+    background-color: ${props => props.theme.backgroundTertiary};
     transition: all 0.12s var(--default-timing);
   }
 

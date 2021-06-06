@@ -11,7 +11,7 @@ const StyledButton = styled.button`
   padding: 0.4rem 0.8rem;
   background-color: ${props => props.theme.highlight};
   border-radius: 0.8rem;
-  color: #333;
+  color: ${props => props.theme.backgroundTertiary};
   font-family: var(--font-main);
   font-size: 1.2rem;
   font-weight: 600;

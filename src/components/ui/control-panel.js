@@ -6,12 +6,12 @@ import KeyboardControls from './keyboard-controls.js';
 import ThemeControls from './theme-controls.js';
 
 const StyledControlPanel = styled.div`
-	max-height: ${props => props.isOpen ? '10rem' : '0px'};
+	max-height: ${props => props.isOpen ? '8.75rem' : '0px'};
+	opacity: ${props => props.isOpen ? '1' : '0'};
 	overflow: hidden;
 	padding: 0 1rem;
-	background-color: #222;
-	transition: max-height 0.2s ease-in-out;
-	/*background: linear-gradient(to bottom, #1b1b1d, #29292B 90%);*/
+	background-color: ${props => props.theme.backgroundTertiary};
+	transition: max-height 0.2s var(--default-timing), opacity 0.2s var(--default-timing);
 
 	& > div {
 		display: flex;

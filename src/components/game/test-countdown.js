@@ -23,13 +23,20 @@ const Numbers = styled.span`
     color: #888;
     transition: color 1.5s linear;`
   }
+
+  & svg {
+    fill: ${props => props.theme.primary};
+  }
 `
 
 const TestTimer = (props) => {
   return(
     <TimerWrapper>
       <Numbers playing={props.playing}>
-        {props.timeLeft}
+        {/* Display pause icon or time left countdown. */}
+        {(props.playing && (props.controlPanelOpen || !props.documentIsFocused)) ?
+          <svg width="1ch" height="auto" viewBox="0 0 156 203" xmlns="http://www.w3.org/2000/svg"><rect width="52" height="203"/><rect x="104" width="52" height="203"/></svg> :
+          props.timeLeft}
       </Numbers>      
     </TimerWrapper>
   );
