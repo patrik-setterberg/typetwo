@@ -8,7 +8,7 @@ const LAYOUTS = {
       ['a', 'o', 'e', 'u', 'i', 'd', 'h', 't', 'n', 's', '-'],
       ['\u21e7', ';', 'q', 'j', 'k', 'x', 'b', 'm', 'w', 'v', 'z', '\u21e7'],
     ],
-    CONTROL_PANEL_HOTKEY: 'UNKNOWN',
+    CONTROL_PANEL_HOTKEY: '`',
   },
   QWERTY_US: {
     LAYOUT: [
@@ -24,7 +24,7 @@ const LAYOUTS = {
       ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'ö', 'ä', "'"],
       ['\u21e7', '<', 'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '-', '\u21e7'],
     ],
-    CONTROL_PANEL_HOTKEY: '§',
+    CONTROL_PANEL_HOTKEY: '§', // Works in firefox. In chrome, it's '\\' (backslash)? wtf
   },
   QWERTZ_DE: {
     LAYOUT: [
@@ -32,7 +32,7 @@ const LAYOUTS = {
       ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'ö', 'ä', '#'],
       ['\u21e7', '<', 'y', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '-', '\u21e7'],
     ],
-    CONTROL_PANEL_HOTKEY: 'UNKNOWN',
+    CONTROL_PANEL_HOTKEY: 'Dead',
   },
   AZERTY_FR: {
     LAYOUT: [
@@ -40,7 +40,7 @@ const LAYOUTS = {
       ['q', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'ù', '*'],
       ['\u21e7', '<', 'w', 'x', 'c', 'v', 'b', 'n', ',', ';', ':', '!', '\u21e7'],
     ],
-    CONTROL_PANEL_HOTKEY: 'UNKNOWN',
+    CONTROL_PANEL_HOTKEY: '²',
   },
 };
 

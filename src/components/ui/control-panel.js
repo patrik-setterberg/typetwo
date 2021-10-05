@@ -10,8 +10,9 @@ const StyledControlPanel = styled.div`
 	opacity: ${props => props.isOpen ? '1' : '0'};
 	overflow: hidden;
 	padding: 0 1rem;
+	/*background: linear-gradient(to bottom, ${props => props.theme.backgroundSecondary} 10%, ${props => props.theme.backgroundPrimary} 80%);*/
 	background-color: ${props => props.theme.backgroundTertiary};
-	transition: max-height 0.2s var(--default-timing), opacity 0.2s var(--default-timing);
+	transition: max-height 0.2s var(--default-timing), opacity 0.175s var(--default-timing);
 
 	& > div {
 		display: flex;
