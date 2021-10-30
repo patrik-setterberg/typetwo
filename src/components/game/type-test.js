@@ -46,9 +46,8 @@ const TypeTest = (props) => {
   // Value of test's hidden text-input.
   const [inputValue, setInputValue] = useState('');
 
-  // Used to flash highlight correct and incorrect letters when word is checked.
+  // Used to flash highlight incorrect letters when word is checked.
   const [wordIncorrect, setWordIncorrect] = useState(false);
-  const [wordIsCorrect, setWordIsCorrect] = useState(false);
 
   // Keep track of total attempted, as well as correctly input words for calculating score.
   const [totalAttemptedWords, setTotalAttemptedWords] = useState(0);
@@ -91,17 +90,11 @@ const TypeTest = (props) => {
     }, g.KEYBOARD_HIGHLIGHT_DURATION);
   }
 
-  const flashWordIsCorrect = () => {
-    setWordIsCorrect(true);
-    setTimeout(() => {
-      setWordIsCorrect(false);
-    }, g.KEYBOARD_HIGHLIGHT_DURATION);
-  }
-
   /**
    * Handle shift keys:
    * Keep track of whether shift keys are currently or have recently been pressed.
    * Used for onscreen keyboard highlighting.
+   * UNFORTUNATELY RIGHT SHIFT DETECTION SEEMS TO HAVE STOPPED WORKING?
    */
   const [leftShiftPressed, setLeftShiftPressed] = useState(false);
   const [rightShiftPressed, setRightShiftPressed] = useState(false);
@@ -122,7 +115,6 @@ const TypeTest = (props) => {
     setTotalAttemptedWords((totalAttemptedWords) => (totalAttemptedWords + 1));
     if (props.testWords[currentWordInd].join('') === inputValue) {
       setCorrectlyInputWords((correctlyInputWords) => (correctlyInputWords + 1));
-      flashWordIsCorrect();
     } else {
       flashWordIncorrect();
     }
@@ -163,11 +155,11 @@ const TypeTest = (props) => {
     // if so, we can increaseCurrendWordInd, set inputValue to '' and... maybe
     // add any remaining chars in the (now previous) word to uncorrectedErrors?
 
-    // Should we check total & correct input entries after each keypress, 
+    // Should we check total & correct input entries after each keypress,
     // or here in handleSpace? If in here, we would have to handle remainder when test ends,
     // but that might be easy. In here might be less taxing than on each keypress...
     // But would make live accuracy not really possible. Do we want live accuracy?
-    // Other pros/cons? 
+    // Other pros/cons?
 
     // We could have semi-live accuracy & stats... Have stats which update on space press.
     // We could track correct words also, not just "new" wpm. myes...
@@ -183,12 +175,6 @@ const TypeTest = (props) => {
 
     setInputValue('');
     setCaretPosition(inputValue.length); // Always necessary?
-
-    // Check if input matches currentWord.
-
-
-
-    
   }
 
   /* temp */
@@ -273,7 +259,6 @@ const TypeTest = (props) => {
         caretPosition={caretPosition}
         typedRecently={typedRecently}
         updateTypedRecently={updateTypedRecently}
-        wordIsCorrect={wordIsCorrect}
         wordIncorrect={wordIncorrect}
         controlPanelOpen={props.controlPanelOpen}
         spacePressedRecently={spacePressedRecently}

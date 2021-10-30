@@ -1,7 +1,13 @@
 /**
  * TYPE TEST TEXT COMPONENT
  * Displays type test's words on screen.
- * Incorrectly input characters are highlighted in **PROBABLY RED**.
+ * Earlier words (already entered) get a darker color.
+ * Incorrectly input characters are highlighted in red.
+ * Incorrect words get a red strike-through briefly when pressing space.
+ * When document loses focus, text is blurred (gets shadow, text made transparent),
+ * 
+ * ADD SOME STUFF HERE MAYBE ABOUT RESIZING IS HANDLED?
+ * LINE-BREAKING, REPLACING WORDS?
  */
 
 import React, {useEffect, useState, useRef} from 'react';
@@ -16,19 +22,19 @@ const TextWrapper = styled.div`
   flex-wrap: wrap;
   max-width: 100%;
   color: ${(props => props.focused) ? (props => props.theme.primary) : 'transparent'};
-  transition: color 0.2s ease-in-out;
+  transition: color 0.2s ease;
   position: relative;
 
   & > span {
     line-height: ${TEXT_LINE_HEIGHT};
   }
-`;
+`
 
 const StyledWord = styled.span`
   display: inline-flex;
   margin-right: 1ch;
 
-  ${props => props.isCorrect && css`
+  ${props => props.earlierWord && css`
     transition: color 1.1s ease-in;
     color: #515e72; /* Use a variable */`
   }
@@ -55,14 +61,8 @@ const StyledLetter = styled.span`
     color: darkred;`
   }
 
-  ${props => props.wordIsCorrect && !props.entered && props.playing && css`
-    /* color: darkgreen;
-    opacity: 0.8; */`
-  }
-
   ${props => props.wordIncorrect && !props.entered && props.playing && css`
-    /* color: darkred; */
-    text-decoration: line-through darkred 3px;
+    text-decoration: line-through darkred 0.25rem;
     opacity: 0.8;`
   }
 
@@ -215,8 +215,7 @@ const Text = (props) => {
           <Word
             key={wordInd}
             wordsRef={elem => wordsRef.current[wordInd] = elem}
-            isCurrent={wordInd === props.currentWordInd}
-            isCorrect={props.currentWordInd > wordInd + 1} // rename me to... earlierWord?
+            earlierWord={props.currentWordInd > wordInd + 1}
             previousWord={props.currentWordInd - 1 === wordInd}
           >
             {word.map((letter, letterInd) => {
@@ -235,7 +234,6 @@ const Text = (props) => {
                     wordInd === props.currentWordInd && // Check only currentWord
                     props.inputValue.length > letterInd // Don't check letters not yet input
                   }
-                  wordIsCorrect={props.wordIsCorrect && props.currentWordInd-1 === wordInd}
                   wordIncorrect={props.wordIncorrect && props.currentWordInd-1 === wordInd}
                   focused={props.focused && !props.controlPanelOpen}
                   isEarlierWord={props.currentWordInd > wordInd}
