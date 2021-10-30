@@ -132,10 +132,17 @@ const TypeTestHandler = (props) => {
 
   const [testScore, setTestScore] = useState(0);
 
-  function calcTestScore (correctWordCount) {
+  function calcTestScore (correctWordCount /* totalTypedCharsCount, correctTypedCharsCount */) {
     // Calculate words per minute.
-    let wpm = correctWordCount * (60 / testLength); // https://www.speedtypingonline.com/typing-equations DO SOMETHING LIKE THIS INSTEAD
+    let wpm = correctWordCount * (60 / testLength);
     setTestScore(wpm);
+
+    /** https://www.speedtypingonline.com/typing-equations DO SOMETHING LIKE THIS INSTEAD
+     * We want to calculate net WPM = gross WPM - (uncorrected errors / time)
+     * where
+     * gross WPM = (all typed entries / 5) / time.
+     * We also want accuracy which is correct entries / all typed entries.
+     */
   }
 
   useEffect(() => {

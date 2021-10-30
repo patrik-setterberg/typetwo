@@ -12,7 +12,7 @@ const Gears = styled.button`
 	cursor: pointer;
 	
 	svg {
-		width: 2.5rem;
+		width: 2.25rem;
 		padding: 0.25rem;
 		height: auto;
 

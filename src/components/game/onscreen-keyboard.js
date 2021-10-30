@@ -16,9 +16,9 @@ const Key = styled.span`
     margin-left: 0.5ch;
   }
 
-  ${props => props.highlightPressedAccurate && css`
-    background-color: rgba(255, 255, 255, 0.4);`
-  }
+  /* ${props => props.highlightPressedAccurate && css`
+    background-color: rgba(255, 255, 255, 0.25);`
+  } */
 
   ${props => props.highlightAccurate && css`
     border: 1px solid #fff;`
@@ -115,7 +115,7 @@ const StyledKeyboard = styled.div`
   display: ${props => props.keyboardVisible ? 'block' : 'none'};
   margin: 3rem auto 1rem;
   width: fit-content;
-  font-size: 1.25rem;
+  font-size: 1.125rem;
   opacity: 0;
   max-height: 0px;
   transition: opacity 0.1s var(--default-timing), max-height 0.2s var(--default-timing) 0.2s;

@@ -8,12 +8,13 @@ import styled, {css} from 'styled-components';
 import g from '../../globals.js';
 
 const StyledButton = styled.button`
-  padding: 0.4rem 0.8rem;
+  padding: 0.375rem 0.75rem;
   background-color: ${props => props.theme.highlight};
-  border-radius: 0.8rem;
+  border-radius: 0.75rem;
+  border: 0;
   color: ${props => props.theme.backgroundTertiary};
   font-family: var(--font-main);
-  font-size: 1.2rem;
+  font-size: 0.875rem;
   font-weight: 600;
   cursor: pointer;
 
@@ -30,6 +31,7 @@ const StyledTimeControls = styled.div`
   display: flex;
   flex-direction: column;
   flex: 1;
+  font-size: 0.875rem;
   transition: opacity 0.2s ease;
   
   & button + button {
@@ -50,7 +52,7 @@ const StyledTimeControls = styled.div`
   & div {
     display: flex;
     align-items: center;
-    margin-top: 1.5rem;
+    margin-top: 1rem;
 
     & button:last-of-type {
       margin-right: 1rem;

@@ -24,7 +24,7 @@ const LAYOUTS = {
       ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'ö', 'ä', "'"],
       ['\u21e7', '<', 'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '-', '\u21e7'],
     ],
-    CONTROL_PANEL_HOTKEY: '§', // Works in firefox. In chrome, it's '\\' (backslash)? wtf
+    CONTROL_PANEL_HOTKEY: '\\', // § Works in firefox. In chrome, it's '\\' (backslash)? wtf
   },
   QWERTZ_DE: {
     LAYOUT: [
@@ -87,8 +87,8 @@ const g = {
   COOKIE_MAX_AGE: 2592000, // 60*60*24*30 = 30 days
 
   KEYBOARD_DEFAULT_LAYOUT: 'QWERTY_SE',
-  KEYBOARD_DEFAULT_VISIBILITY: true,
-  KEYBOARD_HIGHLIGHT_DURATION: 160,
+  KEYBOARD_DEFAULT_VISIBILITY: false,
+  KEYBOARD_HIGHLIGHT_DURATION: 175,
 }
 
 export default g;
@@ -97,10 +97,8 @@ const GlobalStyle = createGlobalStyle`
   :root {
     --font-main: 'Roboto mono', 'monospace';
     --default-padding: 1.5rem;
-    
     --default-timing: cubic-bezier(0.78, 0.2, 0.05, 1.0);
-
-    --caret-opacity: 0.7;
+    --caret-opacity: 0.6;
   }
 
   * {

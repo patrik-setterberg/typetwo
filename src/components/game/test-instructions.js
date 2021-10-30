@@ -12,7 +12,7 @@ const InstructionsContainer = styled.div`
 const StyledInstructions = styled.span`
   opacity: 1;
   color: ${props => props.theme.highlight};
-  font-size: 1.2rem;
+  font-size: 1.125rem;
   text-transform: uppercase;
   font-weight: 600;
   letter-spacing: 1px;

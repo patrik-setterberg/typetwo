@@ -6,6 +6,7 @@ const ThemeControlsContainer = styled.div`
 
   & span {
     display: block;
+    font-size: 0.875rem;
     text-transform: uppercase;
     text-align: center;
     font-weight: 600;
@@ -13,7 +14,7 @@ const ThemeControlsContainer = styled.div`
   }
 
   & div {
-    margin-top: 1.5rem;
+    margin-top: 1rem;
     display: flex;
     justify-content: center;
   }

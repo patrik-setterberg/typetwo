@@ -29,29 +29,41 @@ const StyledWord = styled.span`
   margin-right: 1ch;
 
   ${props => props.isCorrect && css`
-    color: #888; /* Use a variable */`
+    transition: color 1.1s ease-in;
+    color: #515e72; /* Use a variable */`
+  }
+
+  ${props => props.previousWord && css`
+    color: #7988a0;`
   }
 `;
 
 /* TODO: Clean up some conditions below (e.g. probably don't need "=== true"), assign color vars */
 
 const StyledLetter = styled.span`
-  transition: color 0.03s var(--default-timing), text-shadow 0.2s ease-in-out;
+  transition: color 0.03s ease, text-shadow 0.2s ease, opacity 0.05s ease;
 
-  ${props => !props.entered && !props.wordIsCorrect && !props.focused && css`
+  ${props => !props.entered && !props.isEarlierWord && !props.focused && css`
     text-shadow: 0 0 0.4rem ${props => props.theme.primary};`
   }
 
   ${props => props.entered && css`
-    color: #888; /* Use a variable */`
+    color: #7988a0; /* Use a variable */`
   }
 
   ${props => props.isIncorrect && css`
     color: darkred;`
   }
 
+  ${props => props.wordIsCorrect && !props.entered && props.playing && css`
+    /* color: darkgreen;
+    opacity: 0.8; */`
+  }
+
   ${props => props.wordIncorrect && !props.entered && props.playing && css`
-    text-decoration: underline;`
+    /* color: darkred; */
+    text-decoration: line-through darkred 3px;
+    opacity: 0.8;`
   }
 
   ${props => props.focused === false && css`
@@ -63,27 +75,19 @@ const StyledLetter = styled.span`
     text-shadow: 0 0 0.4rem #666;`
   }
 
-  ${props => !props.focused && props.wordIsCorrect && css`
+  ${props => !props.focused && props.isEarlierWord && css`
     text-shadow: 0 0 0.4rem #666;`
   }
 
   ${props => props.isIncorrect && !props.focused && css`
     text-shadow: 0 0 0.4rem darkred;`
   }
-
-  /**
-   * wordIncorrect is triggered quickly when an input word is checked and is incorrect.
-   * This then highlights incorrect characters.
-   */
-  ${props => props.wordIncorrect && props.isIncorrect && css`
-    color: red;`
-  }
 `;
 
-const CARET_FONT_SIZE = 1.5;
+const CARET_FONT_SIZE = 1.375;
 
 const StyledCaret = styled.div`
-  height: calc(${TEXT_LINE_HEIGHT} * ${CARET_FONT_SIZE}rem);
+  height: calc(${TEXT_LINE_HEIGHT} * ${CARET_FONT_SIZE - 0.25}rem);
   font-size: ${CARET_FONT_SIZE}rem;
   width: 3px;
   background-color: ${props => props.theme.highlight};
@@ -92,7 +96,12 @@ const StyledCaret = styled.div`
   z-index: 1;
   visibility: ${props => props.focused ? 'visible' : 'hidden'};
   left: ${props => props.currentWordLeft}px;
-  top: ${props => props.currentWordTop}px;
+  top: ${props => props.currentWordTop + 3}px;
+  transition: transform 0.05s linear;
+
+  ${props => props.spacePressedRecently && css`
+    transition: transform 0s;`
+  }
 
   ${props => props.playing && !props.focused && css`
     opacity: 0;`
@@ -207,7 +216,8 @@ const Text = (props) => {
             key={wordInd}
             wordsRef={elem => wordsRef.current[wordInd] = elem}
             isCurrent={wordInd === props.currentWordInd}
-            isCorrect={props.currentWordInd > wordInd}
+            isCorrect={props.currentWordInd > wordInd + 1} // rename me to... earlierWord?
+            previousWord={props.currentWordInd - 1 === wordInd}
           >
             {word.map((letter, letterInd) => {
               return (
@@ -225,9 +235,10 @@ const Text = (props) => {
                     wordInd === props.currentWordInd && // Check only currentWord
                     props.inputValue.length > letterInd // Don't check letters not yet input
                   }
-                  wordIncorrect={props.wordIncorrect && props.currentWordInd === wordInd}
+                  wordIsCorrect={props.wordIsCorrect && props.currentWordInd-1 === wordInd}
+                  wordIncorrect={props.wordIncorrect && props.currentWordInd-1 === wordInd}
                   focused={props.focused && !props.controlPanelOpen}
-                  wordIsCorrect={props.currentWordInd > wordInd}
+                  isEarlierWord={props.currentWordInd > wordInd}
                 >
                   {letter}
                 </Letter>
@@ -243,6 +254,7 @@ const Text = (props) => {
         currentWordTop={currentWordTop}
         inputValue={props.inputValue}
         caretPosition={props.caretPosition}
+        spacePressedRecently={props.spacePressedRecently}
         typedRecently={props.typedRecently}
         style={{
           transform: `translateX(min(${props.caretPosition}ch, ${props.inputValue.length}ch))`,

@@ -13,16 +13,21 @@ const KeyboardControlsContainer = styled.div`
 	align-items: flex-end;
 	justify-content: flex-end;
 
+	& label {
+		font-size: 0.875rem;
+	}
+
 	& > span {
 		display: inline-block;
 		text-transform: uppercase;
+		font-size: 0.875rem;
 		font-weight: 600;
 		letter-spacing: 1px;
 	}
 
 	& > div {
-		margin-top: 1.5rem;
-		padding-bottom: 1.1rem;
+		margin-top: 1rem;
+		padding-bottom: 1rem;
 	}
 `
 

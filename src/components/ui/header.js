@@ -13,6 +13,7 @@ import ControlPanel from './control-panel';
 const StyledHeader = styled.header`
 	background-color: ${props => props.theme.backgroundSecondary};
 	font-family: var(--font-main);
+	font-size: 0.9375rem;
 	color: ${props => props.theme.highlight};
 	
 	& > div:first-of-type {
@@ -30,9 +31,17 @@ const StyledHeader = styled.header`
 	& > div > span {
 		letter-spacing: 1px;
 		align-self: center;
+		color: ${props => props.theme.primary};
 
 		& > span {
 			font-weight: 600;
+			color: ${props => props.theme.primary};	
+			
+		}
+
+		& > span + span {
+			color: ${props => props.theme.highlight};
+			font-weight: 700;
 		}
 	}
 
@@ -49,7 +58,7 @@ const Header = (props) => {
 	return (
 		<StyledHeader>
 			<div>
-				<span><span>TYPE</span>|TWO</span>
+				<span><span>TYPE</span><span>|</span>TWO</span>
 				<TestInstructions
 					playing={props.playing}
 					focused={props.documentIsFocused}
