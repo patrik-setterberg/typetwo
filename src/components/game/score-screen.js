@@ -4,11 +4,9 @@ import styled from 'styled-components';
 const StyledScoreScreen = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
   color: ${props => props.theme.primary};
   font-size: 1.5rem;
   font-size: 2.5rem;
-  text-align: center;
 
   /* TODO: Clean up this span nonsense. Redesign this whole page while you're at it. */
 

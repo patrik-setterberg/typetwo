@@ -42,9 +42,7 @@ const StyledWord = styled.span`
   ${props => props.previousWord && css`
     color: #7988a0;`
   }
-`;
-
-/* TODO: Clean up some conditions below (e.g. probably don't need "=== true"), assign color vars */
+`
 
 const StyledLetter = styled.span`
   transition: color 0.03s ease, text-shadow 0.2s ease, opacity 0.05s ease;
