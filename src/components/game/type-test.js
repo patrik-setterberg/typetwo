@@ -221,8 +221,9 @@ const TypeTest = (props) => {
         // Checks total attempted words variable and adds one if user has "begun attempting" another word.
         totalAttemptedWords: totalAttemptedWords ? inputValue.length > 0 ? totalAttemptedWords + 1 : totalAttemptedWords : 1,
         /* Checks correctly input words variable and also account for word currently being input,
-        i.e. if user finished typing a word but didn't have time to press "space" before test ended. */
-        correctlyInputWords: correctlyInputWords ? checkFullWord() ? correctlyInputWords + 1 : correctlyInputWords : checkFullWord() ? 1 : 0,
+        i.e. if user began typing a word (and all chars are correct) but didn't complete it before test ended,
+        it is counted as a correct word. */
+        correctlyInputWords: correctlyInputWords ? (inputValue.length > 0 && (inputValue.length === checkCorrectLetters())) ? correctlyInputWords + 1 : correctlyInputWords : checkFullWord() ? 1 : 0,
         // Checks total input chars var and adds length of inputValue at the end of the test.
         totalInputChars: totalInputChars + inputValue.length,
         // Checks correct and incorrect letters variables, also accounts for current inputValue...
