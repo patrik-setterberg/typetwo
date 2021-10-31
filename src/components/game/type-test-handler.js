@@ -145,6 +145,7 @@ const TypeTestHandler = (props) => {
     wordAccuracy: 0,
     letterAccuracy: 0,
     raw: {},
+    testLength: 0,
   });
 
   function calcTestResults (results) {
@@ -165,6 +166,7 @@ const TypeTestHandler = (props) => {
       wordAccuracy: wordAcc,
       letterAccuracy: !Number.isNaN(letterAcc) ? letterAcc : 0, // Can be NaN if totalInputChars is 0.
       raw: results,
+      testLength: testLength,
     });
   }
 

@@ -10,6 +10,7 @@ const themes = {
 		backgroundPrimary: '#191d23',
 		backgroundSecondary: '#121519',
 		backgroundTertiary: '#20252d',
+		backgroundFourthenary: '#272d37',
 	},
 
 	light: {
