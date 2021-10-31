@@ -35,7 +35,7 @@ const TestTimer = (props) => {
       <Numbers playing={props.playing}>
         {/* Display pause icon or time left countdown. */}
         {(props.playing && (props.controlPanelOpen || !props.documentIsFocused)) ?
-          <svg width="1ch" height="auto" viewBox="0 0 156 203" xmlns="http://www.w3.org/2000/svg"><rect width="52" height="203"/><rect x="104" width="52" height="203"/></svg> :
+          <svg width="1ch" viewBox="0 0 156 203" xmlns="http://www.w3.org/2000/svg"><rect width="52" height="203"/><rect x="104" width="52" height="203"/></svg> :
           props.timeLeft}
       </Numbers>      
     </TimerWrapper>

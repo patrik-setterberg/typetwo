@@ -46,18 +46,25 @@ const TypeTest = (props) => {
   // Value of test's hidden text-input.
   const [inputValue, setInputValue] = useState('');
 
-  // Used to flash highlight incorrect letters when word is checked.
-  const [wordIncorrect, setWordIncorrect] = useState(false);
-
-  // Keep track of total attempted, as well as correctly input words for calculating score.
+  // Keep track of input words and characters for calculating score and accuracy.
   const [totalAttemptedWords, setTotalAttemptedWords] = useState(0);
   const [correctlyInputWords, setCorrectlyInputWords] = useState(0);
-
-  // Keep track of total and correctly input chars, and uncorrected errors for calculating score and accuracy.
   const [totalInputChars, setTotalInputChars] = useState(0);
   const [correctlyInputChars, setCorrectlyInputChars] = useState(0);
   const [uncorrectedErrors, setUncorrectedErrors] = useState(0);
 
+  /**
+   * Resets above scoring state variables, necessary when aborting test before it ends.
+   * Only needed then, because when game concludes naturally, entire TypeTest reloads which
+   * resets all the variables.
+   */
+  function resetStatistics() {
+    setTotalAttemptedWords(0);
+    setCorrectlyInputWords(0);
+    setTotalInputChars(0);
+    setCorrectlyInputChars(0);
+    setUncorrectedErrors(0);
+  }
 
   /**
    * Quickly flash a prop.
@@ -83,6 +90,9 @@ const TypeTest = (props) => {
     }, g.KEYBOARD_HIGHLIGHT_DURATION);
   }
 
+  // Used to flash highlight incorrect letters when word is checked.
+  const [wordIncorrect, setWordIncorrect] = useState(false);
+
   const flashWordIncorrect = () => {
     setWordIncorrect(true);
     setTimeout(() => {
@@ -98,7 +108,6 @@ const TypeTest = (props) => {
    */
   const [leftShiftPressed, setLeftShiftPressed] = useState(false);
   const [rightShiftPressed, setRightShiftPressed] = useState(false);
-
   const [shiftPressedRecently, setShiftPressedRecently] = useState(false);
 
   useEffect(() => {
@@ -112,32 +121,29 @@ const TypeTest = (props) => {
 
   // Compare array word with str from text-input
   function checkFullWord() {
-    setTotalAttemptedWords((totalAttemptedWords) => (totalAttemptedWords + 1));
     if (props.testWords[currentWordInd].join('') === inputValue) {
-      setCorrectlyInputWords((correctlyInputWords) => (correctlyInputWords + 1));
+      return true;
     } else {
       flashWordIncorrect();
+      return false;
     }
   }
 
+  // Count how many characters in inputValue are correctly input (match currentWord).
   function checkCorrectLetters() {
     let correctLetters = 0;
-    let errors = 0;
     let inputValArray = Array.from(inputValue);
     inputValArray.forEach((val, ind) => {
       if (val === props.testWords[currentWordInd][ind]) {
         correctLetters++;
-      } else {
-        errors++;
       }
     });
-    setCorrectlyInputChars((correctInputChars) => (correctInputChars + correctLetters));
-    setUncorrectedErrors((uncorrectedErrors) => (uncorrectedErrors + errors));
+    return correctLetters;
   }
 
   /**
    * End test when timer expires or escape is pressed.
-   * Stops test, clears input, resets currentWord and currentRow,
+   * Stops test, clears input, resets currentWord,
    * loads a new set of rows of words and rewinds caret.
    */
   const endTest = () => {
@@ -149,44 +155,25 @@ const TypeTest = (props) => {
   }
 
   const handleSpace = () => {
-
-    // instead of if checkFullWord we could check
-    // if (inputValue.length > 0) to see if anything is input at all,
-    // if so, we can increaseCurrendWordInd, set inputValue to '' and... maybe
-    // add any remaining chars in the (now previous) word to uncorrectedErrors?
-
-    // Should we check total & correct input entries after each keypress,
-    // or here in handleSpace? If in here, we would have to handle remainder when test ends,
-    // but that might be easy. In here might be less taxing than on each keypress...
-    // But would make live accuracy not really possible. Do we want live accuracy?
-    // Other pros/cons?
-
-    // We could have semi-live accuracy & stats... Have stats which update on space press.
-    // We could track correct words also, not just "new" wpm. myes...
-
+    // Advance to next word if at least one character has been entered.
     if (inputValue.length > 0) {
+      // Update statistics.
       setTotalInputChars((totalInputChars) => (totalInputChars + inputValue.length));
-      checkCorrectLetters();
-      checkFullWord();
+      setTotalAttemptedWords((totalAttemptedWords) => (totalAttemptedWords + 1));
+      if (checkFullWord()) setCorrectlyInputWords((correctlyInputWords) => (correctlyInputWords + 1));
+      setCorrectlyInputChars((correctInputChars) => (correctInputChars + checkCorrectLetters()));
+      setUncorrectedErrors((uncorrectedErrors) => (uncorrectedErrors + (inputValue.length - checkCorrectLetters())));
+
       increaseCurrentWordInd();
+    // Else flash space (used for onscreen keyboard highlighting).
     } else {
       flashSpacePressedRecently();
     }
 
+    // Reset inputValue and caret.
     setInputValue('');
     setCaretPosition(inputValue.length); // Always necessary?
   }
-
-  /* temp */
-  useEffect(() => {
-    console.log(`totalAttemptedWords = ${totalAttemptedWords}`);
-    console.log(`totalInputChars = ${totalInputChars}`);
-    console.log(`correctInputChars = ${correctlyInputChars}`);
-    console.log(`uncorrectedErrors = ${uncorrectedErrors}`);
-    console.log(`correctlyInputWords = ${correctlyInputWords}`);
-    console.log(`lastKey = ${lastKey}`);
-    console.log('------------------');
-  }, [inputValue.length]);
 
   /**
    * Update which word index is current.
@@ -229,11 +216,22 @@ const TypeTest = (props) => {
   // End test when timer reaches zero.
   useEffect(() => {
     if (timeLeft <= 0) {
-      props.calcTestScore(correctlyInputWords);
-      endTest();
       props.setTestConcluded(true);
+      props.setRawResults({
+        // Checks total attempted words variable and adds one if user has "begun attempting" another word.
+        totalAttemptedWords: totalAttemptedWords ? inputValue.length > 0 ? totalAttemptedWords + 1 : totalAttemptedWords : 1,
+        /* Checks correctly input words variable and also account for word currently being input,
+        i.e. if user finished typing a word but didn't have time to press "space" before test ended. */
+        correctlyInputWords: correctlyInputWords ? checkFullWord() ? correctlyInputWords + 1 : correctlyInputWords : checkFullWord() ? 1 : 0,
+        // Checks total input chars var and adds length of inputValue at the end of the test.
+        totalInputChars: totalInputChars + inputValue.length,
+        // Checks correct and incorrect letters variables, also accounts for current inputValue...
+        correctlyInputChars: correctlyInputChars + checkCorrectLetters(),
+        uncorrectedErrors: uncorrectedErrors + (inputValue.length - checkCorrectLetters()),
+      });
+      endTest();
     }
-  }, [props.calcTestScore, props.setTestConcluded, endTest, timeLeft, correctlyInputWords]);
+  }, [props.setTestConcluded, endTest, timeLeft]);
 
   // Re-render when test-time-controls button is clicked
   useEffect(() => {
@@ -281,6 +279,7 @@ const TypeTest = (props) => {
         setLeftShiftPressed={setLeftShiftPressed}
         setRightShiftPressed={setRightShiftPressed}
         controlPanelOpen={props.controlPanelOpen}
+        resetStatistics={resetStatistics}
       />
       <Keyboard
         playing={props.playing}

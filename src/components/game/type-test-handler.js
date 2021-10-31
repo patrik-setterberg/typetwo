@@ -130,26 +130,57 @@ const TypeTestHandler = (props) => {
     }
   });
 
-  const [testScore, setTestScore] = useState(0);
+  // Raw test results.
+  const [rawResults, setRawResults] = useState({
+    totalAttemptedWords: 0,
+    correctlyInputWords: 0,
+    totalInputChars: 0,
+    correctlyInputChars: 0,
+    uncorrectedErrors: 0,
+  });
 
-  function calcTestScore (correctWordCount /* totalTypedCharsCount, correctTypedCharsCount */) {
-    // Calculate words per minute.
-    let wpm = correctWordCount * (60 / testLength);
-    setTestScore(wpm);
+  // State object containing calculated test results as well as raw test results.
+  const [testResults, setTestResults] = useState({
+    wpm: 0,
+    wordAccuracy: 0,
+    letterAccuracy: 0,
+    raw: {},
+  });
 
-    /** https://www.speedtypingonline.com/typing-equations DO SOMETHING LIKE THIS INSTEAD
-     * We want to calculate net WPM = gross WPM - (uncorrected errors / time)
-     * where
-     * gross WPM = (all typed entries / 5) / time.
-     * We also want accuracy which is correct entries / all typed entries.
-     */
+  function calcTestResults (results) {
+    let wordsPerMin = 0;
+    let wordAcc = 0;
+    let letterAcc = 0;
+
+    // Calculate typed words per minute, rounded to integer.
+    // https://www.speedtypingonline.com/typing-equations
+    wordsPerMin = Math.round(((results.totalInputChars / 5) - results.uncorrectedErrors) / (testLength / 60));
+
+    // Calculate accuracy in per cent.
+    wordAcc = (results.correctlyInputWords / results.totalAttemptedWords) * 100;
+    letterAcc = (results.correctlyInputChars / results.totalInputChars) * 100;
+
+    setTestResults({
+      wpm: wordsPerMin > 0 ? wordsPerMin : 0, // Can be a negative number if uncorrectedErrors > correctlyInputChars.
+      wordAccuracy: wordAcc,
+      letterAccuracy: !Number.isNaN(letterAcc) ? letterAcc : 0, // Can be NaN if totalInputChars is 0.
+      raw: results,
+    });
   }
 
+  // Calculate test results when rawResults update (which happens when test ends).
   useEffect(() => {
-    if (testConcluded === true && testScore > highestScore) {
-      setHighestScore(testScore);
+    if (testConcluded === true) {
+      calcTestResults(rawResults);
     }
-  }, [testConcluded, testScore, highestScore, setHighestScore]);
+  }, [rawResults]);
+
+  // Check and possibly update highestScore.
+  useEffect(() => {
+    if (testConcluded === true && testResults.wpm > highestScore) {
+      setHighestScore(testResults.wpm);
+    }
+  }, [testConcluded, testResults, highestScore, setHighestScore]);
 
   // Highest score cookies.
   useEffect(() => {
@@ -179,17 +210,17 @@ const TypeTestHandler = (props) => {
       {testConcluded ?
         /* Render score screen if test has concluded. */
         <ScoreScreen
-        testScore={testScore}
         setTestConcluded={setTestConcluded}
         testConcluded={testConcluded}
         highestScore={highestScore}
         controlPanelOpen={controlPanelOpen}
+        testResults={testResults}
         />
         : /* Otherwise render type test. */
         <TypeTest
           playing={playing}
           setPlaying={setPlaying}
-          calcTestScore={calcTestScore}
+          setRawResults={setRawResults}
           testLength={testLength}
           testConcluded={testConcluded}
           setTestConcluded={setTestConcluded}
